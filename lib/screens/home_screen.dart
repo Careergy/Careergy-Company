@@ -1,7 +1,8 @@
-import 'package:careergy_mobile/providers/auth_provider.dart';
+import 'package:careergy_mobile/widgets/sidebar_button.dart';
+
+import '../providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:careergy_mobile/widgets/sidebar_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,15 +11,34 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context, listen: false);
 
-    return Center(
-      child: Column(
-        children: [
-          Text(auth.auth.currentUser!.displayName ?? ''),
-          Text(auth.auth.currentUser!.email ?? ''),
-          ElevatedButton(onPressed: auth.logout, child: const Text('Logout'))
-        ],
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
+    return Row(
+      children: [
+        Drawer(
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7),
+            child: Column(
+              children: [
+                SidebarButton(btnName: 'First'),
+                SidebarButton(btnName: 'Second'),
+                SidebarButton(btnName: 'Third'),
+                SidebarButton(btnName: 'Fourth'),
+              ],
+            ),
+          ),
+        ),
+        Center(
+          child: Column(
+            children: [
+              Text(auth.auth.currentUser!.displayName ?? ''),
+              Text(auth.auth.currentUser!.email ?? ''),
+              ElevatedButton(
+                  onPressed: auth.logout, child: const Text('Logout'))
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+        ),
+      ],
     );
   }
 }
