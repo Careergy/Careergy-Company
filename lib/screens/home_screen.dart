@@ -1,7 +1,7 @@
 import 'package:careergy_mobile/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:careergy_mobile/widgets/sidebar_widget.dart';
+import 'package:careergy_mobile/widgets/sidebar_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
