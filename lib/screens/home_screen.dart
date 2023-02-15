@@ -1,6 +1,7 @@
 import 'package:careergy_mobile/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:careergy_mobile/widgets/sidebar_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,12 +13,12 @@ class HomeScreen extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Text(auth.auth.currentUser!.displayName?? ''),
-          Text(auth.auth.currentUser!.email?? ''),
-          ElevatedButton(onPressed: auth.logout , child: const Text('Logout'))
+          Text(auth.auth.currentUser!.displayName ?? ''),
+          Text(auth.auth.currentUser!.email ?? ''),
+          ElevatedButton(onPressed: auth.logout, child: const Text('Logout'))
         ],
         mainAxisAlignment: MainAxisAlignment.center,
       ),
-      );
+    );
   }
 }
