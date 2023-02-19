@@ -19,10 +19,10 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 7),
             child: Column(
               children: [
-                SidebarButton(btnName: 'First'),
-                SidebarButton(btnName: 'Second'),
-                SidebarButton(btnName: 'Third'),
-                SidebarButton(btnName: 'Fourth'),
+                SidebarButton(btnName: 'Profile'),
+                SidebarButton(btnName: 'Search'),
+                SidebarButton(btnName: 'Jobs'),
+                SidebarButton(btnName: 'Applicants List'),
               ],
             ),
           ),

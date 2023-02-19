@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-class AppointmentScreen extends StatefulWidget {
-  const AppointmentScreen({super.key});
+class postJobScreen extends StatefulWidget {
+  const postJobScreen({super.key});
 
   @override
-  State<AppointmentScreen> createState() => _AppointmentScreenState();
+  State<postJobScreen> createState() => _postJobScreenState();
 }
 
-class _AppointmentScreenState extends State<AppointmentScreen> {
+class _postJobScreenState extends State<postJobScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +21,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
               Text(
-                'Jobs Screen',
+                'Post a Job Screen',
               ),
             ],
           ),

@@ -24,9 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Careergy',
-        theme: ThemeData(
-          primaryColor: const Color.fromARGB(255, 34, 22, 112)
-        ),
+        theme: ThemeData(primaryColor: const Color.fromARGB(255, 34, 22, 112)),
         home: MultiProvider(
           providers: [
             ChangeNotifierProvider.value(
@@ -36,13 +34,14 @@ class MyApp extends StatelessWidget {
           child: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
-              if (snapshot.hasData || false) { // to save time add (|| true)
+              if (snapshot.hasData || false) {
+                // to save time add (|| true)
                 return MyHomePage(title: 'Careergy');
               } else {
                 return AuthScreen();
               }
-            },),
-
+            },
+          ),
         ));
   }
 }
