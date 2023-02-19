@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
     return Row(
       children: [
         Drawer(
+          backgroundColor: Colors.blueGrey.shade100,
           elevation: 3,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 7),
