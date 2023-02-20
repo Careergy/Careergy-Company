@@ -14,7 +14,7 @@ class _postJobScreenState extends State<postJobScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-      title: Text('Search'),
+      title: Text('posts'),
     )
         // body: SingleChildScrollView(
         //   child: Padding(

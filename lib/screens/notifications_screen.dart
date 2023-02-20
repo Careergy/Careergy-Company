@@ -14,7 +14,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-      title: Text('Search'),
+      title: Text('Notifications'),
     )
         // body: SingleChildScrollView(
         //   child: Padding(
