@@ -1,3 +1,7 @@
+import 'package:careergy_mobile/screens/notifications_screen.dart';
+import 'package:careergy_mobile/screens/post_job_screen.dart';
+import 'package:careergy_mobile/screens/profile_screen.dart';
+import 'package:careergy_mobile/screens/search_screen.dart';
 import 'package:careergy_mobile/widgets/sidebar_button.dart';
 
 import '../providers/auth_provider.dart';
@@ -14,16 +18,72 @@ class HomeScreen extends StatelessWidget {
     return Row(
       children: [
         Drawer(
-          backgroundColor: Colors.blueGrey.shade100,
           elevation: 3,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 7),
             child: Column(
               children: [
-                SidebarButton(btnName: 'Profile'),
-                SidebarButton(btnName: 'Search'),
-                SidebarButton(btnName: 'Jobs'),
-                SidebarButton(btnName: 'Applicants List'),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const profileScreen()),
+                      );
+                    },
+                    child: const Text('Profile',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.blueAccent, //background color
+                        padding:
+                            EdgeInsets.all(20) //content padding inside button
+
+                        )),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchScreen()),
+                      );
+                    },
+                    child: const Text('Search',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.blueAccent, //background color
+                        padding:
+                            EdgeInsets.all(20) //content padding inside button
+                        )),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationsScreen()),
+                      );
+                    },
+                    child: const Text('notification',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.blueAccent, //background color
+                        padding:
+                            EdgeInsets.all(20) //content padding inside button
+                        )),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const postJobScreen()),
+                      );
+                    },
+                    child: const Text('posts',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.blueAccent, //background color
+                        padding:
+                            EdgeInsets.all(20) //content padding inside button
+                        )),
               ],
             ),
           ),

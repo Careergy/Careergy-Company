@@ -13,20 +13,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Text(
-                'Notifications Screen',
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+        appBar: AppBar(
+      title: Text('Search'),
+    )
+        // body: SingleChildScrollView(
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       crossAxisAlignment: CrossAxisAlignment.center,
+        //       children: const [
+        //         Text(
+        //           'Notifications Screen',
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        );
   }
 }
