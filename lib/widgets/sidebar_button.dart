@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class SidebarButton extends StatelessWidget {
   final String btnName;
   final String? routeName;
+  Function func;
   bool selected;
 
   SidebarButton(
       {super.key,
       required this.btnName,
       this.routeName,
-      this.selected = false});
+      this.selected = false,
+      required this.func});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class SidebarButton extends StatelessWidget {
           color: Color.fromRGBO(0, 0, 0, 0),
           margin: EdgeInsets.symmetric(horizontal: 3, vertical: 2),
           child: ElevatedButton(
-            onPressed: () => null,
+            onPressed: () => func(routeName),
             child: Text(btnName,
                 textAlign: TextAlign.start,
                 style: TextStyle(
