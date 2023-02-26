@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:careergy_mobile/constants.dart';
 
 class SidebarButton extends StatelessWidget {
   final String btnName;
@@ -27,13 +28,11 @@ class SidebarButton extends StatelessWidget {
             child: Text(btnName,
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    color: selected
-                        ? Color.fromRGBO(255, 255, 255, 1)
-                        : Color.fromRGBO(34, 22, 112, 0.6))),
+                    color:
+                        selected ? Color.fromRGBO(255, 255, 255, 1) : kBlue)),
             style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(selected
-                    ? Color.fromRGBO(34, 22, 112, 0.6)
-                    : Color.fromRGBO(255, 255, 255, 1)),
+                backgroundColor: MaterialStatePropertyAll(
+                    selected ? kBlue : Color.fromRGBO(255, 255, 255, 1)),
                 alignment: Alignment.centerLeft),
           ),
         ),

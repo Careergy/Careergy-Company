@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import './screens/auth/auth_screen.dart';
+import 'constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Careergy | Admin',
-      theme: ThemeData(primaryColor: const Color.fromARGB(255, 34, 22, 112)),
+      title: 'Careergy | Company',
+      theme: ThemeData(primaryColor: kBlue),
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(
