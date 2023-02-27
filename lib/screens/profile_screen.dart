@@ -1,3 +1,4 @@
+import 'package:careergy_mobile/widgets/sidebar_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -109,18 +110,6 @@ class _profileScreenState extends State<profileScreen> {
                     ),
                   ],
                 ),
-                // ElevatedButton(
-                //     onPressed: () => setState(() {
-                //           SizedBox(
-                //             height: media.size.height -
-                //                 AppBar().preferredSize.height,
-                //             width: media.size.width * 0.8,
-                //             child: currentPage == '/editProfile'
-                //                 ? const editProfileScreen()
-                //                 : const Center(),
-                //           );
-                //         }),
-                //     child: Text("edit"))
                 ElevatedButton(
                     child: const Text('Edit'),
                     onPressed: () {
@@ -144,5 +133,11 @@ class _profileScreenState extends State<profileScreen> {
         ],
       ),
     );
+  }
+
+  void switchPage(String page) {
+    setState(() {
+      currentPage = page;
+    });
   }
 }
