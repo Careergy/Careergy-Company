@@ -1,3 +1,4 @@
+import 'package:careergy_mobile/screens/edit_profile_screen.dart';
 import 'package:careergy_mobile/screens/notifications_screen.dart';
 import 'package:careergy_mobile/screens/profile_screen.dart';
 import 'package:careergy_mobile/screens/search_screen.dart';
@@ -60,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? NotificationsScreen()
                   : currentPage == '/search'
                       ? SearchScreen()
-                      : Center(),
+                      : currentPage == '/editProfile'
+                          ? editProfileScreen()
+                          : Center(),
         )
       ],
     );

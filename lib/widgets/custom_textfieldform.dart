@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 // also has a validator to check if the input is empty or not.
 // aslo has a theme that works with ios and android.
 class CustomTextField extends StatelessWidget {
-  final String label;
-  final String hint;
+  String label;
+  String hint;
   Function onChanged;
   Function validator;
 
