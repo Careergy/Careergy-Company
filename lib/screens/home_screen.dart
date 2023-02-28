@@ -1,4 +1,6 @@
+import 'package:careergy_mobile/screens/dashboard_screen.dart';
 import 'package:careergy_mobile/screens/edit_profile_screen.dart';
+import 'package:careergy_mobile/screens/jobs_screen.dart';
 import 'package:careergy_mobile/screens/notifications_screen.dart';
 import 'package:careergy_mobile/screens/profile_screen.dart';
 import 'package:careergy_mobile/screens/search_screen.dart';
@@ -12,7 +14,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState('/profile');
+  State<HomeScreen> createState() => _HomeScreenState('/dashboard');
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -27,27 +29,37 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       children: [
         Drawer(
-          elevation: 3,
+          elevation: 5,
           width: media.size.width * 0.2,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 7),
             child: Column(
               children: [
                 SidebarButton(
-                    btnName: 'Profile',
-                    routeName: '/profile',
+                    btnName: 'Dashboard',
+                    routeName: '/dashboard',
                     func: switchPage,
-                    selected: currentPage == '/profile'),
+                    selected: currentPage == '/dashboard'),
                 SidebarButton(
                     btnName: 'Notification',
                     routeName: '/notification',
                     func: switchPage,
                     selected: currentPage == '/notification'),
                 SidebarButton(
+                    btnName: 'Jobs',
+                    routeName: '/jobs',
+                    func: switchPage,
+                    selected: currentPage == '/jobs'),
+                SidebarButton(
                     btnName: 'Search',
                     routeName: '/search',
                     func: switchPage,
                     selected: currentPage == '/search'),
+                SidebarButton(
+                    btnName: 'Profile',
+                    routeName: '/profile',
+                    func: switchPage,
+                    selected: currentPage == '/profile'),
               ],
             ),
           ),
@@ -63,7 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? SearchScreen()
                       : currentPage == '/editProfile'
                           ? editProfileScreen()
-                          : Center(),
+                          : currentPage == '/dashboard'
+                            ? DashboardScreen()
+                            : currentPage == '/jobs'
+                              ? JobsScreen()
+                              : Center(),
         )
       ],
     );

@@ -25,15 +25,23 @@ class SidebarButton extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 3, vertical: 2),
           child: ElevatedButton(
             onPressed: () => func(routeName),
-            child: Text(btnName,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color:
-                        selected ? Color.fromRGBO(255, 255, 255, 1) : kBlue)),
+            child: Text(
+              btnName,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                color:
+                    selected ? const Color.fromRGBO(255, 255, 255, 1) : kBlue,
+              ),
+            ),
             style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
-                    selected ? kBlue : Color.fromRGBO(255, 255, 255, 1)),
-                alignment: Alignment.centerLeft),
+              backgroundColor: MaterialStatePropertyAll(
+                selected ? kBlue : const Color.fromRGBO(255, 255, 255, 0),
+              ),
+              shadowColor: MaterialStatePropertyAll(
+                selected ? null : const Color.fromRGBO(255, 255, 255, 0),
+              ),
+              alignment: Alignment.centerLeft,
+            ),
           ),
         ),
       ],
