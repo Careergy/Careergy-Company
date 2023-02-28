@@ -40,11 +40,11 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData || false) {
               // to save time add (|| true)
-              return MyHomePage(
+              return const MyHomePage(
                 title: 'Careergy',
               );
             } else {
-              return AuthScreen();
+              return const AuthScreen();
             }
           },
         ),

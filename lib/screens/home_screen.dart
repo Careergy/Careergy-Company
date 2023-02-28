@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState('/dashboard');
+  State<HomeScreen> createState() => _HomeScreenState('/search'); // to make things easier change the default page.
 }
 
 class _HomeScreenState extends State<HomeScreen> {
