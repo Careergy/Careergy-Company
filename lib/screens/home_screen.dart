@@ -1,5 +1,4 @@
 import 'package:careergy_mobile/screens/dashboard_screen.dart';
-import 'package:careergy_mobile/screens/edit_profile_screen.dart';
 import 'package:careergy_mobile/screens/jobs_screen.dart';
 import 'package:careergy_mobile/screens/notifications_screen.dart';
 import 'package:careergy_mobile/screens/profile_screen.dart';
@@ -73,11 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? NotificationsScreen()
                   : currentPage == '/search'
                       ? SearchScreen()
-                      : currentPage == '/editProfile'
-                          ? editProfileScreen()
-                          : currentPage == '/dashboard'
-                            ? DashboardScreen()
-                            : currentPage == '/jobs'
+                      : currentPage == '/dashboard'
+                          ? DashboardScreen()
+                          : currentPage == '/jobs'
                               ? JobsScreen()
                               : Center(),
         )
