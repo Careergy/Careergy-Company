@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   String label;
   String hint;
-  Function onChanged;
-  Function validator;
+  // Function onChanged;
+  // Function validator;
 
   CustomTextField({
     super.key,
     required this.label,
     required this.hint,
-    required this.onChanged,
-    required this.validator,
+    // required this.onChanged,
+    // required this.validator,
   });
 
   @override
@@ -32,7 +32,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
             //make the border color black
-            color: Colors.red,
+            color: Colors.grey,
           ),
         ),
         border: OutlineInputBorder(
@@ -41,9 +41,9 @@ class CustomTextField extends StatelessWidget {
         focusColor: Colors.black,
         fillColor: Colors.black,
       ),
-      validator: (value) => validator(value),
-      //TODO: check correctnes of this line
-      onChanged: (value) => onChanged(value),
+      // validator: (value) => validator(value),
+      // //TODO: check correctnes of this line
+      // onChanged: (value) => onChanged(value),
     );
   }
 }
