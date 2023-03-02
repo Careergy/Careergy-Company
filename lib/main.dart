@@ -76,17 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           PopupMenuButton<int>(
-            child: const Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Icon(Icons.menu),
-            ),
             itemBuilder: (context) => [
               // PopupMenuItem 2
               PopupMenuItem(
                 value: 2,
                 // row with two children
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.chrome_reader_mode),
                     SizedBox(
                       width: 10,
@@ -102,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: 3,
                 // row with two children
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.logout_rounded),
                     SizedBox(
                       width: 10,
@@ -131,6 +127,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 auth.logout();
               }
             },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: Icon(Icons.menu),
+            ),
           ),
         ],
       ),

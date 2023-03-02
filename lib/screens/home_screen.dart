@@ -64,22 +64,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+        const SizedBox(width: 1,),
         SizedBox(
           height: media.size.height - AppBar().preferredSize.height,
-          width: media.size.width * 0.8,
+          width: (media.size.width * 0.8) - 1,
           child: currentPage == '/profile'
-              ? profileScreen()
+              ? const profileScreen()
               : currentPage == '/notification'
-                  ? NotificationsScreen()
+                  ? const NotificationsScreen()
                   : currentPage == '/search'
-                      ? SearchScreen()
+                      ? const SearchScreen()
                       : currentPage == '/editProfile'
-                          ? editProfileScreen()
+                          ? const editProfileScreen()
                           : currentPage == '/dashboard'
-                            ? DashboardScreen()
+                            ? const DashboardScreen()
                             : currentPage == '/jobs'
-                              ? JobsScreen()
-                              : Center(),
+                              ? const JobsScreen()
+                              : const Center(),
         )
       ],
     );
