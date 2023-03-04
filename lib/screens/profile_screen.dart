@@ -12,8 +12,10 @@ import '../widgets/custom_drawer.dart';
 import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:open_file/open_file.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+
+// import 'package:file_picker/file_picker.dart';
+// import 'package:open_file/open_file.dart';
 
 class profileScreen extends StatefulWidget {
   const profileScreen({super.key});
@@ -27,9 +29,6 @@ class _profileScreenState extends State<profileScreen> {
   _profileScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final media = MediaQuery.of(context);
-    bool check = true;
     return currentPage == '/editProfile'
         ? editProfile()
         : Scaffold(
@@ -181,6 +180,8 @@ class editProfile extends StatefulWidget {
 
 class _editProfileState extends State<editProfile> {
   String? currentPage;
+  late FutureBuilder<Image?> photo;
+
   _editProfileState(this.currentPage);
   @override
   Widget build(BuildContext context) {
@@ -214,11 +215,9 @@ class _editProfileState extends State<editProfile> {
                                 ),
                                 SizedBox(
                                   width: 300,
-                                  child: Flexible(
-                                    child: CustomTextField(
-                                      label: "Email",
-                                      hint: "Enter Email",
-                                    ),
+                                  child: CustomTextField(
+                                    label: "Email",
+                                    hint: "Enter Email",
                                   ),
                                 ),
                                 const SizedBox(
@@ -235,11 +234,9 @@ class _editProfileState extends State<editProfile> {
                                 ),
                                 SizedBox(
                                   width: 200,
-                                  child: Flexible(
-                                    child: CustomTextField(
-                                      label: "Phone Number",
-                                      hint: "Enter Phone",
-                                    ),
+                                  child: CustomTextField(
+                                    label: "Phone Number",
+                                    hint: "Enter Phone",
                                   ),
                                 ),
                               ],
@@ -260,16 +257,29 @@ class _editProfileState extends State<editProfile> {
                                   child: Stack(
                                     children: [
                                       ClipOval(
-                                        child: Image(
-                                          image: AssetImage(
-                                              '/avatarPlaceholder.png'),
-                                        ),
-                                      ),
+                                          child: FutureBuilder<Image?>(
+                                        future:
+                                            pickFile(), // 👈 Your future function here
+
+                                        builder: (_, snapshot) {
+                                          if (snapshot.hasError)
+                                            return Text(
+                                                'Error = ${snapshot.error}');
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Image(
+                                              image: AssetImage(
+                                                  '/avatarPlaceholder.png'),
+                                            );
+                                          }
+                                          return photo;
+                                        },
+                                      )),
                                       Positioned(
                                         bottom: 15,
                                         right: 20,
                                         child: MaterialButton(
-                                          onPressed: () => {_pickFile()},
+                                          onPressed: () => {photo = pickFile()},
                                           child: Icon(
                                             Icons.camera_alt,
                                             size: 30,
@@ -310,12 +320,10 @@ class _editProfileState extends State<editProfile> {
                             ),
                             SizedBox(
                               width: 500,
-                              child: Flexible(
-                                child: CustomTextField(
-                                  label: "About Company",
-                                  hint: "Enter Bio",
-                                  maxLines: 10,
-                                ),
+                              child: CustomTextField(
+                                label: "About Company",
+                                hint: "Enter Bio",
+                                maxLines: 10,
                               ),
                             ),
                           ],
@@ -354,19 +362,13 @@ class _editProfileState extends State<editProfile> {
           );
   }
 
-  void _pickFile() async {
-    // opens storage to pick files and the picked file or files
-    // are assigned into result and if no file is chosen result is null.
-    // you can also toggle "allowMultiple" true or false depending on your need
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+  Future<Image?> pickFile() async {
+    Image? result = await ImagePickerWeb.getImageAsWidget();
 
-    // if no file is picked
-    if (result == null) return;
-
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(result.files.first.name);
-    print(result.files.first.size);
-    print(result.files.first.path);
+    return result;
   }
+
+  // void _openFile(PlatformFile file) {
+  //   OpenFile.open(file.path);
+  // }
 }
