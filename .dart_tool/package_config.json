@@ -134,6 +134,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "image_picker_web",
+      "rootUri": "file:///C:/Users/aqeel/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_web-3.0.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "intl",
       "rootUri": "file:///C:/Users/aqeel/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.17.0",
       "packageUri": "lib/",
@@ -254,7 +260,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-03-01T09:40:02.891170Z",
+  "generated": "2023-03-04T18:42:20.065495Z",
   "generator": "pub",
   "generatorVersion": "2.19.1"
 }

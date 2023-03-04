@@ -141,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
           height: 35,
           child: ElevatedButton(
             onPressed: () => Navigator.of(context).pushNamed('/support'),
-            child: const Text('Support',style: TextStyle(fontSize: 16)),
+            child: const Text('Support', style: TextStyle(fontSize: 16)),
             // style: ButtonStyle(),
           ),
         ),
@@ -149,8 +149,5 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
       body: const HomeScreen(),
     );
-
-    
-
   }
 }
