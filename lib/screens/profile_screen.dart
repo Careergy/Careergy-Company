@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:ui';
 
 import 'package:careergy_mobile/constants.dart';
@@ -147,25 +148,26 @@ class _profileScreenState extends State<profileScreen> {
                           ),
                         ],
                       ),
-                      ElevatedButton(
-                          child: const Text('Edit'),
-                          onPressed: () {
-                            setState(() {
-                              currentPage = '/editProfile';
-                            });
-                          })
                     ],
                   ),
                 ),
               ],
             ),
-          );
-  }
+            bottomNavigationBar: Container(
+              padding: EdgeInsets.all(32),
+              // transformAlignment: Alignment.bottomRight,
+              margin: EdgeInsets.only(left: 800, right: 60),
 
-  void switchPage(String page) {
-    setState(() {
-      currentPage = page;
-    });
+              child: ElevatedButton(
+                  child: const Text('Edit'),
+                  onPressed: () {
+                    setState(() {
+                      currentPage = '/editProfile';
+                      // get profile info from database and show them
+                    });
+                  }),
+            ),
+          );
   }
 }
 //................Edit profile screen ...................
@@ -180,7 +182,9 @@ class editProfile extends StatefulWidget {
 
 class _editProfileState extends State<editProfile> {
   String? currentPage;
-  late FutureBuilder<Image?> photo;
+  Image? photo = Image(
+    image: AssetImage('/avatarPlaceholder.png'),
+  );
 
   _editProfileState(this.currentPage);
   @override
@@ -205,7 +209,7 @@ class _editProfileState extends State<editProfile> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Edit Email',
+                                  'Email*',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
@@ -224,7 +228,7 @@ class _editProfileState extends State<editProfile> {
                                   height: 30,
                                 ),
                                 Text(
-                                  'Edit Phone Number',
+                                  'Phone Number*',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
@@ -254,32 +258,21 @@ class _editProfileState extends State<editProfile> {
                               children: <Widget>[
                                 Container(
                                   height: 240,
+                                  width: 240,
                                   child: Stack(
                                     children: [
                                       ClipOval(
-                                          child: FutureBuilder<Image?>(
-                                        future:
-                                            pickFile(), // 👈 Your future function here
-
-                                        builder: (_, snapshot) {
-                                          if (snapshot.hasError)
-                                            return Text(
-                                                'Error = ${snapshot.error}');
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return Image(
-                                              image: AssetImage(
-                                                  '/avatarPlaceholder.png'),
-                                            );
-                                          }
-                                          return photo;
-                                        },
-                                      )),
+                                        child: FittedBox(
+                                          child: photo,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
                                       Positioned(
                                         bottom: 15,
                                         right: 20,
                                         child: MaterialButton(
-                                          onPressed: () => {photo = pickFile()},
+                                          minWidth: 30,
+                                          onPressed: () => {pickFile()},
                                           child: Icon(
                                             Icons.camera_alt,
                                             size: 30,
@@ -292,11 +285,53 @@ class _editProfileState extends State<editProfile> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Edit Company Name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Company Name*',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 250,
+                                            child: CustomTextField(
+                                              label: "Company Name",
+                                              hint: "Enter Company Name",
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Abbreviation (Optional)',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          SizedBox(
+                                            width: 150,
+                                            child: CustomTextField(
+                                              label: "Abbreviation",
+                                              hint:
+                                                  "Enter Company Abbreviation",
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -311,7 +346,7 @@ class _editProfileState extends State<editProfile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Edit About Company',
+                              'About Company*',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
@@ -330,7 +365,7 @@ class _editProfileState extends State<editProfile> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(32.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -339,9 +374,13 @@ class _editProfileState extends State<editProfile> {
                               onPressed: () {
                                 setState(() {
                                   currentPage = '/profile';
+                                  // save the image in the database
                                 });
                               },
                               child: const Text('Save'),
+                            ),
+                            SizedBox(
+                              width: 10,
                             ),
                             TextButton(
                               onPressed: () {
@@ -362,13 +401,12 @@ class _editProfileState extends State<editProfile> {
           );
   }
 
-  Future<Image?> pickFile() async {
+  Future<void> pickFile() async {
     Image? result = await ImagePickerWeb.getImageAsWidget();
-
-    return result;
+    setState(() {
+      if (result != null) {
+        photo = result;
+      }
+    });
   }
-
-  // void _openFile(PlatformFile file) {
-  //   OpenFile.open(file.path);
-  // }
 }
