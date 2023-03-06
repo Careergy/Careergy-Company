@@ -6,30 +6,18 @@ class postJobScreen extends StatefulWidget {
   const postJobScreen({super.key});
 
   @override
-  State<postJobScreen> createState() => _postJobScreenState();
+  State<postJobScreen> createState() => _postJobScreenState('/post_offer');
 }
 
 class _postJobScreenState extends State<postJobScreen> {
+  String? currentPage;
+  _postJobScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-      title: Text('posts'),
-    )
-        // body: SingleChildScrollView(
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: Column(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       crossAxisAlignment: CrossAxisAlignment.center,
-        //       children: const [
-        //         Text(
-        //           'Post a Job Screen',
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        );
+      body: ListView(children: [
+        Text("post an offer"),
+      ]),
+    );
   }
 }
