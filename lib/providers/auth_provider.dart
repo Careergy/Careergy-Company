@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/user.dart' as usr;
 import 'package:flutter/material.dart';
 
 class AuthProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  late final usr.User? user;
 
   FirebaseAuth get auth {
     return _auth;
@@ -39,7 +37,7 @@ class AuthProvider with ChangeNotifier {
             password: password,
           );
       
-      _db.collection('users').doc(credential.user!.uid).set({
+      _db.collection('companies').doc(credential.user!.uid).set({
         'name' : name,
         'email' : emailAddress,
         'phone' : phone
