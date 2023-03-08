@@ -1,7 +1,11 @@
+// import 'dart:html';
+// import 'dart:ui';
+
 import 'dart:html';
-import 'dart:ui';
+import 'dart:typed_data';
 
 import 'package:careergy_mobile/constants.dart';
+import 'package:careergy_mobile/models/company.dart';
 import 'package:careergy_mobile/widgets/custom_textfieldform.dart';
 import 'package:careergy_mobile/widgets/sidebar_button.dart';
 import 'package:flutter/material.dart';
@@ -30,144 +34,159 @@ class _profileScreenState extends State<profileScreen> {
   _profileScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
-    return currentPage == '/editProfile'
-        ? editProfile()
-        : Scaffold(
-            body: ListView(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
+    final info = Provider.of<Company>(context);
+
+    return FutureBuilder(
+        future: Provider.of<Company>(context).getCompanyInfo(),
+        builder: (ctx, snapshot) {
+          return currentPage == '/editProfile'
+              ? const editProfile()
+              : Scaffold(
+                  body: ListView(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsets.only(top: 50, bottom: 30, right: 50),
-                            child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  'Email',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                                 Padding(
-                                  padding: EdgeInsets.only(left: 15),
-                                  child: Text(
-                                    'email@gmail.com',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 20),
+                                  padding: const EdgeInsets.only(
+                                      top: 50, bottom: 30, right: 50),
+                                  child: Column(
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Email',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          info.email,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      const Text(
+                                        'Phone Number',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          info.phone ?? 'Not Availabla',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      const Text(
+                                        'About Company',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: SizedBox(
+                                          width: 500,
+                                          child: Text(
+                                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  'Phone Number',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                const SizedBox(
-                                  height: 20,
+                                  width: 20,
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 15),
-                                  child: Text(
-                                    '0551234566',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  'About Company',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 15),
-                                  child: SizedBox(
-                                    width: 500,
-                                    child: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 20),
-                                    ),
+                                  padding: const EdgeInsets.only(
+                                      top: 50, bottom: 30, right: 50, left: 30),
+                                  child: Column(
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: CircleAvatar(
+                                          radius: 120,
+                                          child: ClipOval(
+                                            child: (info.hasPhoto)
+                                                ? info.photo
+                                                : const Image(
+                                                    image: AssetImage(
+                                                        '/avatarPlaceholder.png'),
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          info.name,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 50, bottom: 30, right: 50, left: 30),
-                            child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  radius: 120,
-                                  child: ClipOval(
-                                    child: Image(
-                                      image:
-                                          AssetImage('/avatarPlaceholder.png'),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Company Name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            bottomNavigationBar: Container(
-              padding: EdgeInsets.all(32),
-              // transformAlignment: Alignment.bottomRight,
-              margin: EdgeInsets.only(left: 800, right: 60),
+                  bottomNavigationBar: Container(
+                    padding: const EdgeInsets.all(32),
+                    // transformAlignment: Alignment.bottomRight,
+                    margin: const EdgeInsets.only(left: 800, right: 60),
 
-              child: ElevatedButton(
-                  child: const Text('Edit'),
-                  onPressed: () {
-                    setState(() {
-                      currentPage = '/editProfile';
-                      // get profile info from database and show them
-                    });
-                  }),
-            ),
-          );
+                    child: ElevatedButton(
+                        child: const Text('Edit'),
+                        onPressed: () {
+                          setState(() {
+                            currentPage = '/editProfile';
+                            // get profile info from database and show them
+                          });
+                        }),
+                  ),
+                );
+        });
   }
 }
 //................Edit profile screen ...................
@@ -181,16 +200,25 @@ class editProfile extends StatefulWidget {
 }
 
 class _editProfileState extends State<editProfile> {
+  Map<String, dynamic> _infoData = {
+    'email': '',
+    'name': '',
+    'phone': '',
+    'photoUrl': null
+  };
+  bool _isLoading = false;
   String? currentPage;
-  Image? photo = Image(
+  Image? photo = const Image(
     image: AssetImage('/avatarPlaceholder.png'),
   );
 
   _editProfileState(this.currentPage);
   @override
   Widget build(BuildContext context) {
+    final info = Provider.of<Company>(context);
+    photo = info.photo;
     return currentPage == '/profile'
-        ? profileScreen()
+        ? const profileScreen()
         : Scaffold(
             body: ListView(
               children: [
@@ -203,12 +231,12 @@ class _editProfileState extends State<editProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 top: 100, bottom: 30, right: 50, left: 30),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Email*',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -222,12 +250,15 @@ class _editProfileState extends State<editProfile> {
                                   child: CustomTextField(
                                     label: "Email",
                                     hint: "Enter Email",
+                                    onChanged: (value) {
+                                      _infoData['email'] = value;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 30,
                                 ),
-                                Text(
+                                const Text(
                                   'Phone Number*',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -241,6 +272,9 @@ class _editProfileState extends State<editProfile> {
                                   child: CustomTextField(
                                     label: "Phone Number",
                                     hint: "Enter Phone",
+                                    onChanged: (value) {
+                                      _infoData['phone'] = value;
+                                    },
                                   ),
                                 ),
                               ],
@@ -250,22 +284,22 @@ class _editProfileState extends State<editProfile> {
                             width: 20,
                           ),
                           Padding(
-                            padding:
-                                EdgeInsets.only(top: 50, bottom: 30, right: 50),
+                            padding: const EdgeInsets.only(
+                                top: 50, bottom: 30, right: 50),
                             child: Column(
                               // mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Container(
+                                SizedBox(
                                   height: 240,
                                   width: 240,
                                   child: Stack(
                                     children: [
                                       ClipOval(
-                                        child: FittedBox(
-                                          child: photo,
-                                          fit: BoxFit.contain,
-                                        ),
+                                        child: photo ??
+                                            const Image(
+                                                image: AssetImage(
+                                                    '/avatarPlaceholder.png')),
                                       ),
                                       Positioned(
                                         bottom: 15,
@@ -273,7 +307,7 @@ class _editProfileState extends State<editProfile> {
                                         child: MaterialButton(
                                           minWidth: 30,
                                           onPressed: () => {pickFile()},
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.camera_alt,
                                             size: 30,
                                             color: kBlue,
@@ -289,13 +323,13 @@ class _editProfileState extends State<editProfile> {
                                     children: [
                                       Column(
                                         children: [
-                                          Text(
+                                          const Text(
                                             'Company Name*',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           SizedBox(
@@ -303,22 +337,25 @@ class _editProfileState extends State<editProfile> {
                                             child: CustomTextField(
                                               label: "Company Name",
                                               hint: "Enter Company Name",
+                                              onChanged: (value) {
+                                                _infoData['name'] = value;
+                                              },
                                             ),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       Column(
                                         children: [
-                                          Text(
+                                          const Text(
                                             'Abbreviation (Optional)',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 13),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 15,
                                           ),
                                           SizedBox(
@@ -327,6 +364,7 @@ class _editProfileState extends State<editProfile> {
                                               label: "Abbreviation",
                                               hint:
                                                   "Enter Company Abbreviation",
+                                              onChanged: (value) {},
                                             ),
                                           ),
                                         ],
@@ -340,12 +378,12 @@ class _editProfileState extends State<editProfile> {
                         ],
                       ),
                       Padding(
-                        padding:
-                            EdgeInsets.only(left: 30, bottom: 30, right: 50),
+                        padding: const EdgeInsets.only(
+                            left: 30, bottom: 30, right: 50),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'About Company*',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
@@ -359,6 +397,9 @@ class _editProfileState extends State<editProfile> {
                                 label: "About Company",
                                 hint: "Enter Bio",
                                 maxLines: 10,
+                                onChanged: (value) {
+                                  
+                                },
                               ),
                             ),
                           ],
@@ -371,15 +412,23 @@ class _editProfileState extends State<editProfile> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 setState(() {
+                                  _isLoading = true;
+                                });
+                                _infoData['photoUrl'] = photo;
+                                await info.setCompanyInfo(_infoData);
+                                setState(() {
+                                  _isLoading = false;
                                   currentPage = '/profile';
                                   // save the image in the database
                                 });
                               },
-                              child: const Text('Save'),
+                              child: _isLoading
+                                  ? const CircularProgressIndicator()
+                                  : const Text('Save'),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             TextButton(
