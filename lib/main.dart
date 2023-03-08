@@ -1,15 +1,18 @@
-import 'package:careergy_mobile/screens/profile_screen.dart';
-import 'package:careergy_mobile/screens/support_screen.dart';
-
-import '../models/user.dart';
-import '../providers/auth_provider.dart';
-import '../screens/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
+
+import './screens/profile_screen.dart';
+import './screens/support_screen.dart';
 import './screens/auth/auth_screen.dart';
+import '../screens/home_screen.dart';
+
+import './models/company.dart';
+import '../models/user.dart';
+import '../providers/auth_provider.dart';
+
+import 'firebase_options.dart';
 import 'constants.dart';
 
 Future<void> main() async {
@@ -26,34 +29,44 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Careergy | Company',
-      theme: ThemeData(primaryColor: kBlue),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(
-            value: AuthProvider(),
-          ),
-        ],
-        child: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData || false) {
-              // to save time add (|| true)
-              return MyHomePage(
-                title: 'Careergy',
-              );
-            } else {
-              return AuthScreen();
-            }
-          },
-        ),
-      ),
-      routes: {
-        '/profile': (ctx) => const profileScreen(),
-        '/support': (ctx) => const SupportScreen(),
-      },
-    );
+    return StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData || false) {
+            return MaterialApp(
+              title: 'Careergy | Company',
+              theme: ThemeData(primaryColor: kBlue),
+              home: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider.value(
+                    value: AuthProvider(),
+                  ),
+                  ChangeNotifierProvider.value(
+                    value: Company(),
+                  ),
+                ],
+                child: const MyHomePage(
+                  title: 'Careergy',
+                ),
+              ),
+              routes: {
+                '/profile': (ctx) => const profileScreen(),
+                '/support': (ctx) => const SupportScreen(),
+              },
+            );
+          } else {
+            return MaterialApp(
+              home: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider.value(
+                    value: AuthProvider(),
+                  ),
+                ],
+                child: const AuthScreen(),
+              ),
+            );
+          }
+        });
   }
 }
 
@@ -76,17 +89,13 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           PopupMenuButton<int>(
-            child: const Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Icon(Icons.menu),
-            ),
             itemBuilder: (context) => [
               // PopupMenuItem 2
               PopupMenuItem(
                 value: 2,
                 // row with two children
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.chrome_reader_mode),
                     SizedBox(
                       width: 10,
@@ -102,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: 3,
                 // row with two children
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.logout_rounded),
                     SizedBox(
                       width: 10,
@@ -115,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ],
-            offset: Offset(0, 100),
+            offset: const Offset(0, 100),
             color: Theme.of(context).primaryColor,
             elevation: 2,
             // shape: CircleBorder(eccentricity: 20),
@@ -131,6 +140,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 auth.logout();
               }
             },
+            child: const Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Icon(Icons.menu),
+            ),
           ),
         ],
       ),
@@ -141,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
           height: 35,
           child: ElevatedButton(
             onPressed: () => Navigator.of(context).pushNamed('/support'),
-            child: const Text('Support',style: TextStyle(fontSize: 16)),
+            child: const Text('Support', style: TextStyle(fontSize: 16)),
             // style: ButtonStyle(),
           ),
         ),
@@ -149,8 +162,5 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
       body: const HomeScreen(),
     );
-
-    
-
   }
 }

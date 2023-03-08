@@ -39,7 +39,7 @@ class AuthProvider with ChangeNotifier {
             password: password,
           );
       
-      _db.collection('users').doc(credential.user!.uid).set({
+      _db.collection('companies').doc(credential.user!.uid).set({
         'name' : name,
         'email' : emailAddress,
         'phone' : phone
