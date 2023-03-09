@@ -1,7 +1,8 @@
 // import 'dart:html';
 // import 'dart:ui';
 
-import 'dart:html';
+// import 'dart:html';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:careergy_mobile/constants.dart';
@@ -19,7 +20,7 @@ import 'package:provider/provider.dart';
 
 import 'package:image_picker_web/image_picker_web.dart';
 
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 // import 'package:open_file/open_file.dart';
 
 class profileScreen extends StatefulWidget {
@@ -207,16 +208,31 @@ class _editProfileState extends State<editProfile> {
     'photoUrl': null
   };
   bool _isLoading = false;
+  bool _isInitialized = false;
   String? currentPage;
-  Image? photo = const Image(
-    image: AssetImage('/avatarPlaceholder.png'),
-  );
+  Image? photo;
+
+  TextEditingController? nameCtrl;
+  TextEditingController? emailCtrl;
+  TextEditingController? phoneCtrl;
 
   _editProfileState(this.currentPage);
   @override
   Widget build(BuildContext context) {
     final info = Provider.of<Company>(context);
-    photo = info.photo;
+    if (!_isInitialized) {
+      nameCtrl =
+          TextEditingController.fromValue(TextEditingValue(text: info.name));
+      emailCtrl =
+          TextEditingController.fromValue(TextEditingValue(text: info.email));
+      phoneCtrl = TextEditingController.fromValue(
+          TextEditingValue(text: info.phone ?? ''));
+      _isInitialized = true;
+    }
+    if (photo == null) {
+      print('object');
+      photo = info.photo ?? const Image(image: AssetImage('/avatarPlaceholder.png'));
+    }
     return currentPage == '/profile'
         ? const profileScreen()
         : Scaffold(
@@ -253,6 +269,7 @@ class _editProfileState extends State<editProfile> {
                                     onChanged: (value) {
                                       _infoData['email'] = value;
                                     },
+                                    controller: emailCtrl,
                                   ),
                                 ),
                                 const SizedBox(
@@ -275,6 +292,7 @@ class _editProfileState extends State<editProfile> {
                                     onChanged: (value) {
                                       _infoData['phone'] = value;
                                     },
+                                    controller: phoneCtrl,
                                   ),
                                 ),
                               ],
@@ -306,7 +324,12 @@ class _editProfileState extends State<editProfile> {
                                         right: 20,
                                         child: MaterialButton(
                                           minWidth: 30,
-                                          onPressed: () => {pickFile()},
+                                          onPressed: () {
+                                            setState(() {
+                                              pickFile();
+                                              print(photo);
+                                            });
+                                          },
                                           child: const Icon(
                                             Icons.camera_alt,
                                             size: 30,
@@ -340,6 +363,7 @@ class _editProfileState extends State<editProfile> {
                                               onChanged: (value) {
                                                 _infoData['name'] = value;
                                               },
+                                              controller: nameCtrl,
                                             ),
                                           ),
                                         ],
@@ -397,9 +421,7 @@ class _editProfileState extends State<editProfile> {
                                 label: "About Company",
                                 hint: "Enter Bio",
                                 maxLines: 10,
-                                onChanged: (value) {
-                                  
-                                },
+                                onChanged: (value) {},
                               ),
                             ),
                           ],
@@ -416,7 +438,11 @@ class _editProfileState extends State<editProfile> {
                                 setState(() {
                                   _isLoading = true;
                                 });
-                                _infoData['photoUrl'] = photo;
+                                _infoData['name'] = nameCtrl!.text;
+                                _infoData['email'] = emailCtrl!.text;
+                                _infoData['phone'] = phoneCtrl!.text;
+
+                                // print(_infoData);
                                 await info.setCompanyInfo(_infoData);
                                 setState(() {
                                   _isLoading = false;
@@ -451,11 +477,29 @@ class _editProfileState extends State<editProfile> {
   }
 
   Future<void> pickFile() async {
-    Image? result = await ImagePickerWeb.getImageAsWidget();
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpng']);
+
+    // final result2 = await
+
+    if (result == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('No File Selected!')));
+      return;
+    }
+
+    final Uint8List? bytes = result.files.single.bytes;
+    final fileName = result.files.single.name;
+
+    _infoData['photoUrl'] = {
+      'bytes': bytes,
+      'fileName': fileName,
+    };
+
     setState(() {
-      if (result != null) {
-        photo = result;
-      }
+      photo = Image.memory(bytes!);
     });
   }
 }

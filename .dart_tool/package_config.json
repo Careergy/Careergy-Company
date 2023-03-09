@@ -68,6 +68,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "ffi",
+      "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/ffi-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "file_picker",
+      "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-5.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "firebase_auth",
       "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth-4.2.9",
       "packageUri": "lib/",
@@ -132,6 +144,12 @@
       "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_test",
@@ -278,13 +296,19 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "win32",
+      "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/win32-3.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "careergy_mobile",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-03-08T05:18:59.252494Z",
+  "generated": "2023-03-09T07:12:35.715293Z",
   "generator": "pub",
   "generatorVersion": "2.19.3"
 }

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:careergy_mobile/services/storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,12 +9,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class Company with ChangeNotifier {
   late final String uid;
-  late final String name;
-  late final String email;
-  late final String? phone;
-  late final String photoUrl;
+  late String name;
+  late String email;
+  late String? phone;
+  late String photoUrl;
   late Image? photo;
-  late final String? token;
+  late String? token;
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,7 +27,7 @@ class Company with ChangeNotifier {
   bool get hasPhoto {
     if (photo == null) {
       return false;
-    }else {
+    } else {
       return true;
     }
   }
@@ -53,17 +54,50 @@ class Company with ChangeNotifier {
     notifyListeners();
   }
 
-  Future setCompanyInfo(Map<String,dynamic> info) async {
+  Future setCompanyInfo(Map<String, dynamic> info) async {
     if (uid == null) {
       return;
     }
-    Image img = info["photoUrl"] as Image;
-    String imgName = Timestamp.now().toString()+uid+'.jpg';
-    info["photoUrl"] = imgName;
+
     final ref = db.collection('companies').doc(uid);
-    await ref.set(info).onError((e, _) => print("Error writing document: $e"));
-    final imagesRef = fs.child("photos/$imgName");
-    
+
+    if (info['photoUrl'] == null) {
+      await ref.set({
+        'name': info['name'],
+        'email': info['email'],
+        'phone': info['phone'],
+        'photoUrl': photoUrl,
+      }).onError((e, _) => print("Error writing document: $e"));
+      name = info['name'];
+      email = info['email'];
+      phone = info['phone'];
+      notifyListeners();
+      return;
+    }
+
+    await ref.set({
+      'name': info['name'],
+      'email': info['email'],
+      'phone': info['phone'],
+      'photoUrl': info['photoUrl']['fileName'],
+    }).onError((e, _) => print("Error writing document: $e"));
+    final String fileName = await Storage()
+        .uploadFile(
+            'photos/', info['photoUrl']['bytes'], info['photoUrl']['fileName'])
+        .onError((error, stackTrace) => print(error));
+    await Storage().deleteFile('photos/', photoUrl);
+    await ref.set({
+      'name': info['name'],
+      'email': info['email'],
+      'phone': info['phone'],
+      'photoUrl': fileName,
+    }).onError((e, _) => print("Error writing document: $e"));
+    name = info['name'];
+    email = info['email'];
+    phone = info['phone'];
+    photoUrl = fileName;
+    await getAvatar();
+    notifyListeners();
   }
 
   Future getAvatar() async {

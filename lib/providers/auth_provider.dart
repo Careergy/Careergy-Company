@@ -17,6 +17,10 @@ class AuthProvider with ChangeNotifier {
   //sign in with email & password
   Future login(String emailAddress, String password) async {
     try {
+      final result = await _db.collection('companies').where('email',isEqualTo: emailAddress).get().then((value) => value);
+      if (result.docs.isEmpty) {
+        throw Exception('User is not a company!');
+      }
       await _auth.signInWithEmailAndPassword(email: emailAddress, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
