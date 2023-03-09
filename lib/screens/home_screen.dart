@@ -1,5 +1,4 @@
 import 'package:careergy_mobile/screens/dashboard_screen.dart';
-import 'package:careergy_mobile/screens/edit_profile_screen.dart';
 import 'package:careergy_mobile/screens/jobs_screen.dart';
 import 'package:careergy_mobile/screens/notifications_screen.dart';
 import 'package:careergy_mobile/screens/profile_screen.dart';
@@ -64,24 +63,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        const SizedBox(width: 1,),
+        const SizedBox(
+          width: 1,
+        ),
         SizedBox(
           height: media.size.height - AppBar().preferredSize.height,
-          width: (media.size.width * 0.8) -1,
+          width: (media.size.width * 0.8) - 1,
           child: currentPage == '/profile'
               ? const profileScreen()
               : currentPage == '/notification'
                   ? const NotificationsScreen()
                   : currentPage == '/search'
                       ? const SearchScreen()
-                      : currentPage == '/editProfile'
-                          ? const editProfileScreen()
-                          : currentPage == '/dashboard'
-                            ? const DashboardScreen()
-                            : currentPage == '/jobs'
+                      : currentPage == '/dashboard'
+                          ? const DashboardScreen()
+                          : currentPage == '/jobs'
                               ? const JobsScreen()
                               : const Center(),
-        )
+        ),
       ],
     );
   }
