@@ -6,18 +6,10 @@ import 'package:provider/provider.dart';
 import './screens/profile_screen.dart';
 import './screens/support_screen.dart';
 import './screens/auth/auth_screen.dart';
-import '../screens/home_screen.dart';
+import './screens/home_screen.dart';
 
 import './models/company.dart';
-import './models/user.dart' as usr;
 import './providers/auth_provider.dart';
-
-import 'firebase_options.dart';
-import '../screens/home_screen.dart';
-
-import './models/company.dart';
-import '../models/user.dart';
-import '../providers/auth_provider.dart';
 
 import 'firebase_options.dart';
 import 'constants.dart';
@@ -37,81 +29,44 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData || false) {
-            return MaterialApp(
-              title: 'Careergy | Company',
-              theme: ThemeData(primaryColor: kBlue),
-              home: MultiProvider(
-                providers: [
-                  ChangeNotifierProvider.value(
-                    value: AuthProvider(),
-                  ),
-                  ChangeNotifierProvider.value(
-                    value: Company(),
-                  ),
-                ],
-                child: const MyHomePage(
-                  title: 'Careergy',
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData || false) {
+          return MaterialApp(
+            title: 'Careergy | Company',
+            theme: ThemeData(primaryColor: kBlue),
+            home: MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: AuthProvider(),
                 ),
-              ),
-              routes: {
-                '/profile': (ctx) => const profileScreen(),
-                '/support': (ctx) => const SupportScreen(),
-              },
-            );
-          } else {
-            return MaterialApp(
-              home: MultiProvider(
-                providers: [
-                  ChangeNotifierProvider.value(
-                    value: AuthProvider(),
-                  ),
-                ],
-                child: const AuthScreen(),
-              ),
-            );
-          }
-        });
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData || false) {
-            return MaterialApp(
-              title: 'Careergy | Company',
-              theme: ThemeData(primaryColor: kBlue),
-              home: MultiProvider(
-                providers: [
-                  ChangeNotifierProvider.value(
-                    value: AuthProvider(),
-                  ),
-                  ChangeNotifierProvider.value(
-                    value: Company(),
-                  ),
-                ],
-                child: const MyHomePage(
-                  title: 'Careergy',
+                ChangeNotifierProvider.value(
+                  value: Company(),
                 ),
+              ],
+              child: const MyHomePage(
+                title: 'Careergy',
               ),
-              routes: {
-                '/profile': (ctx) => const profileScreen(),
-                '/support': (ctx) => const SupportScreen(),
-              },
-            );
-          } else {
-            return MaterialApp(
-              home: MultiProvider(
-                providers: [
-                  ChangeNotifierProvider.value(
-                    value: AuthProvider(),
-                  ),
-                ],
-                child: const AuthScreen(),
-              ),
-            );
-          }
-        });
+            ),
+            routes: {
+              '/profile': (ctx) => const profileScreen(),
+              '/support': (ctx) => const SupportScreen(),
+            },
+          );
+        } else {
+          return MaterialApp(
+            home: MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: AuthProvider(),
+                ),
+              ],
+              child: const AuthScreen(),
+            ),
+          );
+        }
+      },
+    );
   }
 }
 
@@ -186,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             },
             child: const Padding(
-              padding: const EdgeInsets.only(right: 20.0),
+              padding: EdgeInsets.only(right: 20.0),
               child: Icon(Icons.menu),
             ),
           ),
