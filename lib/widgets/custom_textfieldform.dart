@@ -7,15 +7,17 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   String label;
   String hint;
-  Function onChanged;
-  Function validator;
+  int? maxLines;
+  Function? onChanged;
+  Function? validator;
 
   CustomTextField({
     super.key,
     required this.label,
     required this.hint,
-    required this.onChanged,
-    required this.validator,
+    this.maxLines,
+    this.onChanged,
+    this.validator,
   });
 
   @override
@@ -23,8 +25,9 @@ class CustomTextField extends StatelessWidget {
     // A custom text field form that has a label and a hint text.
 // also has a validator to check if the input is empty or not.
 // aslo has a theme that works with ios and android.
-    return TextFormField(
+    return TextField(
       cursorColor: kBlue,
+      maxLines: maxLines,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
@@ -32,7 +35,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
             //make the border color black
-            color: Colors.red,
+            color: Colors.grey,
           ),
         ),
         border: OutlineInputBorder(
@@ -41,9 +44,9 @@ class CustomTextField extends StatelessWidget {
         focusColor: Colors.black,
         fillColor: Colors.black,
       ),
-      validator: (value) => validator(value),
-      //TODO: check correctnes of this line
-      onChanged: (value) => onChanged(value),
+      // validator: (value) => validator(value),
+      // //TODO: check correctnes of this line
+      // onChanged: (value) => onChanged(value),
     );
   }
 }
