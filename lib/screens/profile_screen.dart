@@ -231,7 +231,7 @@ class _editProfileState extends State<editProfile> {
     }
     if (photo == null) {
       print('object');
-      photo = info.photo ?? const Image(image: AssetImage('/avatarPlaceholder.png'));
+      photo = info.hasPhoto ? info.photo : const Image(image: AssetImage('/avatarPlaceholder.png'));
     }
     return currentPage == '/profile'
         ? const profileScreen()
@@ -480,7 +480,7 @@ class _editProfileState extends State<editProfile> {
     final result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
-        allowedExtensions: ['png', 'jpg', 'jpng']);
+        allowedExtensions: ['png', 'jpg', 'jpeg']);
 
     // final result2 = await
 

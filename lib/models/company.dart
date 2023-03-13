@@ -25,7 +25,7 @@ class Company with ChangeNotifier {
   }
 
   bool get hasPhoto {
-    if (photo == null) {
+    if (photoUrl.isEmpty) {
       return false;
     } else {
       return true;
