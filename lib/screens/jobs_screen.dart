@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../constants.dart';
 import '../widgets/custom_textfieldform.dart';
+import 'jobs_list.dart';
 
 class JobsScreen extends StatefulWidget {
   const JobsScreen({super.key});
@@ -15,19 +16,30 @@ class JobsScreen extends StatefulWidget {
 class _JobsScreenState extends State<JobsScreen> {
   String? currentPage;
   _JobsScreenState(this.currentPage);
+
+  final List posts = [
+    'Job Title: Software \nYears of Experience : 5 \nSalary : 5000 \nDescription : Flutter developer',
+    'Job Title: Mechanical \nYears of Experience : 3 \nSalary : 6000 \nDescription : Work in sites',
+    'Job Title: Petrolium \nYears of Experience : 2 \nSalary : 4000 \nDescription : Dhahran site',
+    'Job Title: Software \nYears of Experience : 5 \nSalary : 5000 \nDescription : Flutter developer',
+    'Job Title: Mechanical \nYears of Experience : 3 \nSalary : 6000 \nDescription : Work in sites',
+    'Job Title: Petrolium \nYears of Experience : 2 \nSalary : 4000 \nDescription : Dhahran site'
+  ];
   @override
   Widget build(BuildContext context) {
     return currentPage == '/new_job'
         ? NewJobScreen()
         : Scaffold(
-            body: ListView(children: [
-              Text("post a job"),
-              ElevatedButton(
-                  onPressed: () => setState(() {
-                        currentPage = '/new_job';
-                      }),
-                  child: Icon(Icons.add))
-            ]),
+            body: ListView.builder(
+                itemCount: posts.length,
+                itemBuilder: (context, Index) {
+                  return jobsList(child: posts[Index], onTap: () {});
+                }),
+            floatingActionButton: ElevatedButton(
+                onPressed: () => setState(() {
+                      currentPage = '/new_job';
+                    }),
+                child: Icon(Icons.add)),
           );
   }
 }
@@ -101,40 +113,6 @@ class _NewJobScreenState extends State<NewJobScreen> {
                         ),
                         const SizedBox(
                           width: 20,
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(top: 50, bottom: 30, right: 50),
-                          child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                height: 240,
-                                width: 240,
-                                child: Stack(
-                                  children: [
-                                    ClipOval(
-                                      child: photo,
-                                    ),
-                                    Positioned(
-                                      bottom: 15,
-                                      right: 20,
-                                      child: MaterialButton(
-                                        minWidth: 30,
-                                        onPressed: () => {},
-                                        child: Icon(
-                                          Icons.camera_alt,
-                                          size: 30,
-                                          color: kBlue,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ],
                     ),
