@@ -38,8 +38,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search'),
-        // backgroundColor: Color.fromRGBO(0,0,0,0),
+        title: const Text('Search for Applicants', style: TextStyle(color: Colors.black45)),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.black26,
+        toolbarHeight: 30,
       ),
       body: SizedBox(
         width: double.infinity,
