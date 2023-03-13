@@ -75,10 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? const NotificationsScreen()
                   : currentPage == '/search'
                       ? const SearchScreen()
-                      : currentPage == '/dashboard'
-                          ? const DashboardScreen()
-                          : currentPage == '/jobs'
-                              ? const JobsScreen()
+                      : currentPage == '/jobs'
+                          ? const JobsScreen()
+                          : currentPage == '/dashboard'
+                              ? const DashboardScreen()
                               : const Center(),
         ),
       ],
