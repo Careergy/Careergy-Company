@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../constants.dart';
+import '../models/job.dart';
 import '../widgets/custom_textfieldform.dart';
 import 'jobs_list.dart';
 
@@ -15,9 +16,10 @@ class JobsScreen extends StatefulWidget {
 
 class _JobsScreenState extends State<JobsScreen> {
   String? currentPage;
+
   _JobsScreenState(this.currentPage);
 
-  final List posts = [
+  final posts = [
     'Job Title: Software \nYears of Experience : 5 \nSalary : 5000 \nDescription : Flutter developer',
     'Job Title: Mechanical \nYears of Experience : 3 \nSalary : 6000 \nDescription : Work in sites',
     'Job Title: Petrolium \nYears of Experience : 2 \nSalary : 4000 \nDescription : Dhahran site',
@@ -25,16 +27,102 @@ class _JobsScreenState extends State<JobsScreen> {
     'Job Title: Mechanical \nYears of Experience : 3 \nSalary : 6000 \nDescription : Work in sites',
     'Job Title: Petrolium \nYears of Experience : 2 \nSalary : 4000 \nDescription : Dhahran site'
   ];
+  List<Job>? jobs = [
+    Job(
+        JobID: 1,
+        jobTitle: "Flutter develober",
+        yearsOfExperience: "1",
+        major: "Software Engineer",
+        descreption: "descreption1"),
+    Job(
+        JobID: 2,
+        jobTitle: "Accountant",
+        yearsOfExperience: "0",
+        major: "Accountant",
+        descreption: "descreption2"),
+    Job(
+        JobID: 3,
+        jobTitle: "Math Teacher",
+        yearsOfExperience: "0",
+        major: "Teacher",
+        descreption:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        city: "dammam"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return currentPage == '/new_job'
         ? NewJobScreen()
         : Scaffold(
-            body: ListView.builder(
-                itemCount: posts.length,
-                itemBuilder: (context, Index) {
-                  return jobsList(child: posts[Index], onTap: () {});
-                }),
+            body: Column(
+              children: [
+                Container(
+                  height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 50,
+                        child: Text(
+                          'ID',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: Text(
+                          'Job Title',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Experience Years',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Major',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 80,
+                        child: Text(
+                          'City',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          'Description',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ListView.builder(
+                    itemCount: jobs!.length,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, Index) {
+                      return jobsList(job: jobs![Index], onTap: () {});
+                    }),
+              ],
+            ),
             floatingActionButton: ElevatedButton(
                 onPressed: () => setState(() {
                       currentPage = '/new_job';
@@ -53,7 +141,17 @@ class NewJobScreen extends StatefulWidget {
 
 class _NewJobScreenState extends State<NewJobScreen> {
   String? currentPage;
-  Image? photo = Image.asset('/avatarPlaceholder.png');
+  List<String> _years = ['0', '1', '2', '3', '4', '5'];
+  String? _selectedYear;
+
+  List<String> _majors = [
+    'Software Engineer',
+    'Accountant',
+    'Mechanical Engineer',
+    'Marketer',
+    'Teacher'
+  ];
+  String? _selectedMajor;
   _NewJobScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
@@ -93,21 +191,74 @@ class _NewJobScreenState extends State<NewJobScreen> {
                               const SizedBox(
                                 height: 30,
                               ),
-                              Text(
-                                'Target Employee Type*',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Years of experience*',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  Text(
+                                    'Employee Major*',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: 200,
-                                child: CustomTextField(
-                                  label: "Type",
-                                  hint: "Enter Type",
-                                ),
-                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 200,
+                                    child: DropdownButton(
+                                      alignment: Alignment.center,
+                                      borderRadius: BorderRadius.circular(10),
+                                      hint: Text(
+                                          'Please choose a year'), // Not necessary for Option 1
+                                      value: _selectedYear,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          _selectedYear = newValue;
+                                        });
+                                      },
+                                      items: _years.map((year) {
+                                        return DropdownMenuItem(
+                                          child: new Text(year),
+                                          value: year,
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 200,
+                                    child: DropdownButton(
+                                      alignment: Alignment.center,
+                                      borderRadius: BorderRadius.circular(10),
+                                      hint: Text(
+                                          'Please choose a major'), // Not necessary for Option 1
+                                      value: _selectedMajor,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          _selectedMajor = newValue;
+                                        });
+                                      },
+                                      items: _majors.map((major) {
+                                        return DropdownMenuItem(
+                                          child: new Text(major),
+                                          value: major,
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
