@@ -111,6 +111,14 @@ class _JobsScreenState extends State<JobsScreen> {
                               fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ),
+                      SizedBox(
+                        width: 100,
+                        child: Text(
+                          'Activation',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
                 ),
