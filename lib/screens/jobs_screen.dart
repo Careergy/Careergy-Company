@@ -19,29 +19,21 @@ class _JobsScreenState extends State<JobsScreen> {
 
   _JobsScreenState(this.currentPage);
 
-  final posts = [
-    'Job Title: Software \nYears of Experience : 5 \nSalary : 5000 \nDescription : Flutter developer',
-    'Job Title: Mechanical \nYears of Experience : 3 \nSalary : 6000 \nDescription : Work in sites',
-    'Job Title: Petrolium \nYears of Experience : 2 \nSalary : 4000 \nDescription : Dhahran site',
-    'Job Title: Software \nYears of Experience : 5 \nSalary : 5000 \nDescription : Flutter developer',
-    'Job Title: Mechanical \nYears of Experience : 3 \nSalary : 6000 \nDescription : Work in sites',
-    'Job Title: Petrolium \nYears of Experience : 2 \nSalary : 4000 \nDescription : Dhahran site'
-  ];
   List<Job>? jobs = [
     Job(
-        JobID: 1,
+        jobID: 1,
         jobTitle: "Flutter develober",
         yearsOfExperience: "1",
         major: "Software Engineer",
         descreption: "descreption1"),
     Job(
-        JobID: 2,
+        jobID: 2,
         jobTitle: "Accountant",
         yearsOfExperience: "0",
         major: "Accountant",
         descreption: "descreption2"),
     Job(
-        JobID: 3,
+        jobID: 3,
         jobTitle: "Math Teacher",
         yearsOfExperience: "0",
         major: "Teacher",
@@ -127,7 +119,7 @@ class _JobsScreenState extends State<JobsScreen> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, Index) {
-                      return jobsList(job: jobs![Index], onTap: () {});
+                      return JobsList(job: jobs![Index], onTap: () {});
                     }),
               ],
             ),

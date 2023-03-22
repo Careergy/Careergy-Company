@@ -2,18 +2,20 @@ import 'package:careergy_mobile/constants.dart';
 import 'package:careergy_mobile/models/job.dart';
 import 'package:flutter/material.dart';
 
-class jobsList extends StatefulWidget {
+class JobsList extends StatefulWidget {
   final Job job;
-  jobsList({required this.job, required Null Function() onTap});
+  JobsList({required this.job, required Null Function() onTap});
 
   @override
-  State<jobsList> createState() => _jobsListState();
+  State<JobsList> createState() => _JobsListState();
 }
 
-class _jobsListState extends State<jobsList> {
+class _JobsListState extends State<JobsList> {
   @override
   bool isActivated = true;
   bool isHovering = false;
+  int MAX_CHARS = 80;
+
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4),
@@ -33,7 +35,7 @@ class _jobsListState extends State<jobsList> {
             SizedBox(
               width: 50,
               child: Text(
-                "${widget.job.JobID}",
+                "${widget.job.jobID}",
                 style: TextStyle(fontSize: 15),
               ),
             ),
@@ -70,7 +72,9 @@ class _jobsListState extends State<jobsList> {
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Text(
-                  widget.job.descreption,
+                  widget.job.descreption.length > MAX_CHARS
+                      ? widget.job.descreption.substring(0, 80) + " ..show more"
+                      : widget.job.descreption,
                   style: TextStyle(fontSize: 15),
                 ),
               ),
