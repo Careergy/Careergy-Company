@@ -1,0 +1,27 @@
+2023/03/25-06:54:38.606 6a07 Creating DB /private/var/folders/f2/y_v6b9j15vxblbxchg5z7l_c0000gn/T/flutter_tools.jNNweb/flutter_tools_chrome_device.7dijsu/Default/IndexedDB/http_localhost_61506.indexeddb.leveldb since it was missing.
+2023/03/25-06:54:38.621 6a07 Reusing MANIFEST /private/var/folders/f2/y_v6b9j15vxblbxchg5z7l_c0000gn/T/flutter_tools.jNNweb/flutter_tools_chrome_device.7dijsu/Default/IndexedDB/http_localhost_61506.indexeddb.leveldb/MANIFEST-000001
+2023/03/25-06:54:38.647 b203 Level-0 table #5: started
+2023/03/25-06:54:38.651 b203 Level-0 table #5: 1222 bytes OK
+2023/03/25-06:54:38.659 b203 Delete type=0 #3
+2023/03/25-06:54:38.659 6a07 Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/03/25-06:59:09.735 1d583 Level-0 table #7: started
+2023/03/25-06:59:09.748 1d583 Level-0 table #7: 4594 bytes OK
+2023/03/25-06:59:09.759 1d583 Delete type=0 #4
+2023/03/25-06:59:09.759 6a07 Manual compaction at level-0 from '\x00\x04\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x05\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/03/25-06:59:26.761 1d583 Level-0 table #9: started
+2023/03/25-06:59:26.768 1d583 Level-0 table #9: 3201 bytes OK
+2023/03/25-06:59:26.779 1d583 Delete type=0 #6
+2023/03/25-06:59:26.779 6a07 Manual compaction at level-0 from '\x00\x05\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x06\x00\x00\x00' @ 0 : 0; will stop at '\x00\x05\x00\x00\x05' @ 201 : 1
+2023/03/25-06:59:26.779 6a07 Compacting 1@0 + 1@1 files
+2023/03/25-06:59:26.783 6a07 Generated table #10@0: 70 keys, 3226 bytes
+2023/03/25-06:59:26.783 6a07 Compacted 1@0 + 1@1 files => 3226 bytes
+2023/03/25-06:59:26.790 6a07 compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/03/25-06:59:26.790 6a07 Delete type=2 #9
+2023/03/25-06:59:26.790 6a07 Manual compaction at level-0 from '\x00\x05\x00\x00\x05' @ 201 : 1 .. '\x00\x06\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/03/25-07:00:06.784 8b03 Compacting 1@1 + 1@2 files
+2023/03/25-07:00:06.790 8b03 Generated table #11@1: 40 keys, 2905 bytes
+2023/03/25-07:00:06.790 8b03 Compacted 1@1 + 1@2 files => 2905 bytes
+2023/03/25-07:00:06.799 8b03 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/03/25-07:00:06.799 8b03 Delete type=2 #7
+2023/03/25-07:00:06.799 8b03 Delete type=2 #10
+2023/03/25-07:00:06.799 8b03 Delete type=2 #5

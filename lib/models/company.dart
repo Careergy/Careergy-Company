@@ -13,7 +13,7 @@ class Company with ChangeNotifier {
   late String email;
   late String? phone;
   late String photoUrl;
-  late Image? photo;
+  Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
   late String? token;
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -25,7 +25,7 @@ class Company with ChangeNotifier {
   }
 
   bool get hasPhoto {
-    if (photoUrl.isEmpty) {
+    if (photo == null) {
       return false;
     } else {
       return true;

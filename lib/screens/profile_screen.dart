@@ -144,12 +144,13 @@ class _profileScreenState extends State<profileScreen> {
                                         child: CircleAvatar(
                                           radius: 120,
                                           child: ClipOval(
-                                            child: (info.hasPhoto)
-                                                ? info.photo
-                                                : const Image(
-                                                    image: AssetImage(
-                                                        '/avatarPlaceholder.png'),
-                                                  ),
+                                            child: info.photo
+                                            // (info.hasPhoto && false)
+                                            //     ? info.photo
+                                            //     : const Image(
+                                            //         image: AssetImage(
+                                            //             '/avatarPlaceholder.png'),
+                                            //       ),
                                           ),
                                         ),
                                       ),
