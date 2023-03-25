@@ -1,3 +1,4 @@
+import 'package:careergy_mobile/providers/keywords_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import '../constants.dart';
 import '../models/job.dart';
 import '../widgets/custom_textfieldform.dart';
+import '../widgets/autocomplete_custom_textfield.dart';
 import 'jobs_list.dart';
 
 class JobsScreen extends StatefulWidget {
@@ -21,19 +23,19 @@ class _JobsScreenState extends State<JobsScreen> {
 
   List<Job>? jobs = [
     Job(
-        jobID: 1,
+        jobID: '1',
         jobTitle: "Flutter develober",
         yearsOfExperience: "1",
         major: "Software Engineer",
         descreption: "descreption1"),
     Job(
-        jobID: 2,
+        jobID: '2',
         jobTitle: "Accountant",
         yearsOfExperience: "0",
         major: "Accountant",
         descreption: "descreption2"),
     Job(
-        jobID: 3,
+        jobID: '3',
         jobTitle: "Math Teacher",
         yearsOfExperience: "0",
         major: "Teacher",
@@ -54,7 +56,7 @@ class _JobsScreenState extends State<JobsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                    children: const [
                       SizedBox(
                         width: 50,
                         child: Text(
@@ -141,189 +143,310 @@ class NewJobScreen extends StatefulWidget {
 
 class _NewJobScreenState extends State<NewJobScreen> {
   String? currentPage;
-  List<String> _years = ['0', '1', '2', '3', '4', '5'];
+  final List<String> _years = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
+  late List items = [];
   String? _selectedYear;
 
-  List<String> _majors = [
-    'Software Engineer',
-    'Accountant',
-    'Mechanical Engineer',
-    'Marketer',
-    'Teacher'
-  ];
-  String? _selectedMajor;
+  String major = '';
+  String title = '';
+  String? city;
+
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  Map<String, List<String>> _kOptions = {
+    'job_titles': [],
+    'majors': [],
+  };
+  late String listType = '';
+
+  var _isLoading = false;
+
+  Future<Map<String, List<String>?>> getKeywords(String type) async {
+    if (_kOptions.isEmpty || (type != listType)) {
+      _kOptions[type] = await Keywords().getKeywords(type);
+      listType = type;
+    }
+    setState(() {});
+    print(_kOptions);
+    return _kOptions;
+  }
+
+  late final Future myFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Assign that variable your Future.
+    myFuture = getCities();
+  }
+
+  Future<void> getCities() async {
+    items = await Keywords().getKeywords('locations');
+  }
+
+  // List<String> _majors = [
+  //   'Software Engineer',
+  //   'Accountant',
+  //   'Mechanical Engineer',
+  //   'Marketer',
+  //   'Teacher'
+  // ];
+  // String? _selectedMajor;
   _NewJobScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
+    getCities();
     return currentPage == '/jobs'
         ? JobsScreen()
-        : Scaffold(
-            body: ListView(children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 100, bottom: 30, right: 50, left: 30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Job Title*',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: 300,
-                                child: CustomTextField(
-                                  label: "Title",
-                                  hint: "Enter Title",
+        : FutureBuilder(
+            future: myFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                print(items);
+                return Scaffold(
+                  body: ListView(children: [
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 100,
+                                      bottom: 30,
+                                      right: 50,
+                                      left: 40),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                'Job Title*',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 300,
+                                                child:
+                                                    AutoCompleteCustomTextField(
+                                                  label: "Title",
+                                                  hint: "Enter Title",
+                                                  entry: title,
+                                                  kOptions: _kOptions,
+                                                  getKeywords: getKeywords,
+                                                  keysDoc: 'job_titles',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            width: 40,
+                                          ),
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                'Major*',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 300,
+                                                child:
+                                                    AutoCompleteCustomTextField(
+                                                  label: "Major",
+                                                  hint: "Enter Major",
+                                                  entry: major,
+                                                  kOptions: _kOptions,
+                                                  getKeywords: getKeywords,
+                                                  keysDoc: 'majors',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      Row(
+                                        children: const [
+                                          Text(
+                                            'Years of experience*',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                          ),
+                                          Text(
+                                            'City*',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 200,
+                                            child: DropdownButton(
+                                              alignment: Alignment.center,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              hint: const Text(
+                                                  'Please choose a year'), // Not necessary for Option 1
+                                              value: _selectedYear,
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  _selectedYear = newValue;
+                                                });
+                                              },
+                                              items: _years.map((year) {
+                                                return DropdownMenuItem(
+                                                  value: year,
+                                                  child: Text(year),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 200,
+                                            child: DropdownButton(
+                                              alignment: Alignment.center,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              hint: const Text(
+                                                  'Please choose a City'), // Not necessary for Option 1
+                                              value: city,
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  city = newValue.toString();
+                                                });
+                                              },
+                                              items: items
+                                                  .map(
+                                                    (e) => DropdownMenuItem(
+                                                      value: e,
+                                                      child: Text(
+                                                            e
+                                                                .toString()
+                                                                .substring(0, 1)
+                                                                .toUpperCase() +
+                                                            e
+                                                                .toString()
+                                                                .substring(1),
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Years of experience*',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
-                                  Text(
-                                    'Employee Major*',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 200,
-                                    child: DropdownButton(
-                                      alignment: Alignment.center,
-                                      borderRadius: BorderRadius.circular(10),
-                                      hint: Text(
-                                          'Please choose a year'), // Not necessary for Option 1
-                                      value: _selectedYear,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          _selectedYear = newValue;
-                                        });
-                                      },
-                                      items: _years.map((year) {
-                                        return DropdownMenuItem(
-                                          child: new Text(year),
-                                          value: year,
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 200,
-                                    child: DropdownButton(
-                                      alignment: Alignment.center,
-                                      borderRadius: BorderRadius.circular(10),
-                                      hint: Text(
-                                          'Please choose a major'), // Not necessary for Option 1
-                                      value: _selectedMajor,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          _selectedMajor = newValue;
-                                        });
-                                      },
-                                      items: _majors.map((major) {
-                                        return DropdownMenuItem(
-                                          child: new Text(major),
-                                          value: major,
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 30, bottom: 30, right: 50),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Job Description*',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: 500,
-                            child: CustomTextField(
-                              label: "Job description",
-                              hint: "Enter descritpion",
-                              maxLines: 10,
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 30, bottom: 30, right: 50),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Job Description*',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 500,
+                                    child: CustomTextField(
+                                      label: "Job description",
+                                      hint: "Enter descritpion",
+                                      maxLines: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      if (!_formKey.currentState!.validate()) {
+                                        // Invalid!
+                                        return;
+                                      }
+                                      _formKey.currentState!.save();
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
+
+                                      setState(() {
+                                        currentPage = '/jobs';
+                                        // save job info in the database
+                                      });
+                                    },
+                                    child: const Text('add'),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        currentPage = '/jobs';
+                                      });
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                currentPage = '/jobs';
-                                // save job info in the database
-                              });
-                            },
-                            child: const Text('add'),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                currentPage = '/jobs';
-                              });
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ]),
+                  ]),
+                );
+              }
+            },
           );
   }
 }

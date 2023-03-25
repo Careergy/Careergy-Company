@@ -1,5 +1,5 @@
 class Job {
-  int jobID = 0;
+  String jobID;
   String jobTitle;
   String yearsOfExperience;
   String major;
