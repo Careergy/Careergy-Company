@@ -21,7 +21,7 @@ class Post with ChangeNotifier {
       'city': job.city,
       'descreption': job.descreption,
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-      'active' : true
+      'active': true
     });
     notifyListeners();
   }
@@ -56,6 +56,15 @@ class Post with ChangeNotifier {
       onError: (e) => print(e),
     );
     return list;
+  }
+
+  Future deletePost(String id) async {
+    final ref = db.collection('posts').doc(id);
+    try {
+      await ref.delete();
+    } catch (e) {
+      throw FirebaseException(plugin: e.toString());
+    }
   }
 
   Future toggleStatus(String? id) async {

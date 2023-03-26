@@ -58,6 +58,11 @@ class _JobsScreenState extends State<JobsScreen> {
   //       city: "dammam"),
   // ];
 
+  Future refresh() async {
+    await getPosts();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return currentPage == '/new_job'
@@ -143,7 +148,7 @@ class _JobsScreenState extends State<JobsScreen> {
                           shrinkWrap: true,
                           reverse: true,
                           itemBuilder: (context, Index) {
-                            return JobsList(job: jobs[Index], onTap: () {});
+                            return JobsList(job: jobs[Index], refresh: refresh);
                           }),
                     ],
                   ),
@@ -178,10 +183,6 @@ class _NewJobScreenState extends State<NewJobScreen> {
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
 
-  // String major = '';
-  // String title = '';
-  // String description = '';
-
   final GlobalKey<FormState> _formKey = GlobalKey();
   Map<String, List<String>> _kOptions = {
     'job_titles': [],
@@ -206,7 +207,6 @@ class _NewJobScreenState extends State<NewJobScreen> {
   @override
   void initState() {
     super.initState();
-
     // Assign that variable your Future.
     myFuture = getCities();
   }
@@ -215,14 +215,6 @@ class _NewJobScreenState extends State<NewJobScreen> {
     items = await Keywords().getKeywords('locations');
   }
 
-  // List<String> _majors = [
-  //   'Software Engineer',
-  //   'Accountant',
-  //   'Mechanical Engineer',
-  //   'Marketer',
-  //   'Teacher'
-  // ];
-  // String? _selectedMajor;
   _NewJobScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
@@ -250,10 +242,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 100,
-                                      bottom: 30,
-                                      right: 50,
-                                      left: 40),
+                                      top: 10, bottom: 30, right: 50, left: 30),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -455,7 +444,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                               _selectedYear ?? '',
                                           major: major.text,
                                           descreption: description.text,
-                                          city: city ?? '', 
+                                          city: city ?? '',
                                           isActive: true));
                                       setState(() {
                                         _isLoading = false;

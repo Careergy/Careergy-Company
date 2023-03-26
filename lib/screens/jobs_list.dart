@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class JobsList extends StatefulWidget {
   final Job job;
-  JobsList({required this.job, required Null Function() onTap});
+  final Function refresh;
+  JobsList({required this.job, required this.refresh});
 
   @override
   State<JobsList> createState() => _JobsListState();
@@ -16,7 +17,53 @@ class _JobsListState extends State<JobsList> {
   bool isHovering = false;
   int MAX_CHARS = 80;
   bool isLoading = false;
+  bool deleteIsLoading = false;
+  bool deleteIsHovering = false;
 
+  Future<void> _deleteConfirm(String? id) async {
+    bool isLoading = false;
+    if (id == null) {
+      return;
+    }
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Warning!'),
+        content: const Text('Confirm Delete?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.red)),
+            onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
+              await Post().deletePost(id);
+              setState(() {
+                isLoading = false;
+                Navigator.of(ctx).pop();
+              });
+              widget.refresh();
+            },
+            child: isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : const Text(
+                    'Confirm',
+                    style: TextStyle(color: Colors.white),
+                  ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4),
@@ -82,41 +129,69 @@ class _JobsListState extends State<JobsList> {
               ),
             ),
             SizedBox(
-              width: 100,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: widget.job.isActive
-                        ? (isHovering ? Colors.green.shade400 : Colors.green)
-                        : (isHovering ? Colors.red.shade400 : Colors.red),
-                    borderRadius: BorderRadius.circular(10)),
-                child: TextButton(
-                  child: isLoading
-                      ? const CircularProgressIndicator()
-                      : widget.job.isActive
-                          ? const Text(
-                              "Deactivate",
-                              style: TextStyle(color: Colors.white),
-                            )
+              width: 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: widget.job.isActive
+                            ? (isHovering
+                                ? Colors.green.shade400
+                                : Colors.green)
+                            : (isHovering ? Colors.red : Colors.red.shade300),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextButton(
+                      child: isLoading
+                          ? const CircularProgressIndicator()
+                          : widget.job.isActive
+                              ? const Text(
+                                  "Deactivate",
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              : const Text(
+                                  "Activate",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await Post().toggleStatus(widget.job.id);
+                        setState(() {
+                          isLoading = false;
+                          widget.job.isActive = !widget.job.isActive;
+                        });
+                      },
+                      onHover: (value) {
+                        setState(() {
+                          isHovering = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextButton(
+                      child: deleteIsLoading
+                          ? const CircularProgressIndicator()
                           : const Text(
-                              "Activate",
+                              "Delete",
                               style: TextStyle(color: Colors.white),
                             ),
-                  onPressed: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await Post().toggleStatus(widget.job.id);
-                    setState(() {
-                      isLoading = false;
-                      widget.job.isActive = !widget.job.isActive;
-                    });
-                  },
-                  onHover: (value) {
-                    setState(() {
-                      isHovering = value;
-                    });
-                  },
-                ),
+                      onPressed: () async {
+                        await _deleteConfirm(widget.job.id);
+                      },
+                      onHover: (value) {
+                        setState(() {
+                          deleteIsHovering = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
             )
           ],
