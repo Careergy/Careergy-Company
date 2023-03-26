@@ -1,5 +1,6 @@
 import 'package:careergy_mobile/constants.dart';
 import 'package:careergy_mobile/models/job.dart';
+import 'package:careergy_mobile/providers/post_provider.dart';
 import 'package:flutter/material.dart';
 
 class JobsList extends StatefulWidget {
@@ -12,9 +13,9 @@ class JobsList extends StatefulWidget {
 
 class _JobsListState extends State<JobsList> {
   @override
-  bool isActivated = true;
   bool isHovering = false;
   int MAX_CHARS = 80;
+  bool isLoading = false;
 
   Widget build(BuildContext context) {
     return Padding(
@@ -33,38 +34,39 @@ class _JobsListState extends State<JobsList> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              width: 50,
+              width: 80,
               child: Text(
-                "${widget.job.jobID}",
-                style: TextStyle(fontSize: 15),
+                "${widget.job.dt!.toLocal()}".substring(0, 11) +
+                    "\n${widget.job.dt!.toLocal().hour}:${widget.job.dt!.toLocal().minute}:${widget.job.dt!.toLocal().second}",
+                style: const TextStyle(fontSize: 15),
               ),
             ),
             SizedBox(
               width: 100,
               child: Text(
                 widget.job.jobTitle,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
             SizedBox(
               width: 80,
               child: Text(
                 widget.job.yearsOfExperience,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
             SizedBox(
               width: 80,
               child: Text(
                 widget.job.major,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
             SizedBox(
               width: 80,
               child: Text(
-                widget.job.city ?? "not specified",
-                style: TextStyle(fontSize: 15),
+                widget.job.city != '' ? widget.job.city : "not specified",
+                style: const TextStyle(fontSize: 15),
               ),
             ),
             SizedBox(
@@ -75,7 +77,7 @@ class _JobsListState extends State<JobsList> {
                   widget.job.descreption.length > MAX_CHARS
                       ? widget.job.descreption.substring(0, 80) + " ..show more"
                       : widget.job.descreption,
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
             ),
@@ -83,22 +85,31 @@ class _JobsListState extends State<JobsList> {
               width: 100,
               child: Container(
                 decoration: BoxDecoration(
-                    color: isActivated
+                    color: widget.job.isActive
                         ? (isHovering ? Colors.green.shade400 : Colors.green)
                         : (isHovering ? Colors.red.shade400 : Colors.red),
                     borderRadius: BorderRadius.circular(10)),
                 child: TextButton(
-                  child: isActivated
-                      ? Text(
-                          "Deactivate",
-                          style: TextStyle(color: Colors.white),
-                        )
-                      : Text(
-                          "Activate",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                  onPressed: () {
-                    setState(() => isActivated = !isActivated);
+                  child: isLoading
+                      ? const CircularProgressIndicator()
+                      : widget.job.isActive
+                          ? const Text(
+                              "Deactivate",
+                              style: TextStyle(color: Colors.white),
+                            )
+                          : const Text(
+                              "Activate",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await Post().toggleStatus(widget.job.id);
+                    setState(() {
+                      isLoading = false;
+                      widget.job.isActive = !widget.job.isActive;
+                    });
                   },
                   onHover: (value) {
                     setState(() {

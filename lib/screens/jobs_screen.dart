@@ -1,4 +1,5 @@
 import 'package:careergy_mobile/providers/keywords_provider.dart';
+import 'package:careergy_mobile/providers/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -21,115 +22,139 @@ class _JobsScreenState extends State<JobsScreen> {
 
   _JobsScreenState(this.currentPage);
 
-  List<Job>? jobs = [
-    Job(
-        jobID: '1',
-        jobTitle: "Flutter develober",
-        yearsOfExperience: "1",
-        major: "Software Engineer",
-        descreption: "descreption1"),
-    Job(
-        jobID: '2',
-        jobTitle: "Accountant",
-        yearsOfExperience: "0",
-        major: "Accountant",
-        descreption: "descreption2"),
-    Job(
-        jobID: '3',
-        jobTitle: "Math Teacher",
-        yearsOfExperience: "0",
-        major: "Teacher",
-        descreption:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        city: "dammam"),
-  ];
+  late List jobs = [];
+  late final Future myFuture;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myFuture = getPosts();
+  }
+
+  Future getPosts() async {
+    jobs = await Post().getPosts() as List;
+  }
+
+  // List<Job>? jobs = [
+  //   Job(
+  //       jobTitle: "Flutter develober",
+  //       yearsOfExperience: "1",
+  //       major: "Software Engineer",
+  //       descreption: "descreption1",
+  //       city: "dammam"),
+  //   Job(
+  //       jobTitle: "Accountant",
+  //       yearsOfExperience: "0",
+  //       major: "Accountant",
+  //       descreption: "descreption2",
+  //       city: "dammam"),
+  //   Job(
+  //       jobTitle: "Math Teacher",
+  //       yearsOfExperience: "0",
+  //       major: "Teacher",
+  //       descreption:
+  //           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  //       city: "dammam"),
+  // ];
 
   @override
   Widget build(BuildContext context) {
     return currentPage == '/new_job'
-        ? NewJobScreen()
-        : Scaffold(
-            body: Column(
-              children: [
-                Container(
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      SizedBox(
-                        width: 50,
-                        child: Text(
-                          'ID',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+        ? const NewJobScreen()
+        : FutureBuilder(
+            future: myFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                // print(jobs[0]);
+                return Scaffold(
+                  body: Column(
+                    children: [
+                      Container(
+                        height: 100,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                              width: 50,
+                              child: Text(
+                                'Date',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 100,
+                              child: Text(
+                                'Job Title',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: Text(
+                                'Experience Years',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: Text(
+                                'Major',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: Text(
+                                'City',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 200,
+                              child: Text(
+                                'Description',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 100,
+                              child: Text(
+                                'Action',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        width: 100,
-                        child: Text(
-                          'Job Title',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 80,
-                        child: Text(
-                          'Experience Years',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 80,
-                        child: Text(
-                          'Major',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 80,
-                        child: Text(
-                          'City',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: Text(
-                          'Description',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        child: Text(
-                          'Activation',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                      ListView.builder(
+                          itemCount: jobs.length,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          reverse: true,
+                          itemBuilder: (context, Index) {
+                            return JobsList(job: jobs[Index], onTap: () {});
+                          }),
                     ],
                   ),
-                ),
-                ListView.builder(
-                    itemCount: jobs!.length,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, Index) {
-                      return JobsList(job: jobs![Index], onTap: () {});
-                    }),
-              ],
-            ),
-            floatingActionButton: ElevatedButton(
-                onPressed: () => setState(() {
-                      currentPage = '/new_job';
-                    }),
-                child: Icon(Icons.add)),
+                  floatingActionButton: ElevatedButton(
+                      onPressed: () => setState(() {
+                            currentPage = '/new_job';
+                          }),
+                      child: const Icon(Icons.add)),
+                );
+              }
+            },
           );
   }
 }
@@ -145,11 +170,17 @@ class _NewJobScreenState extends State<NewJobScreen> {
   String? currentPage;
   final List<String> _years = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
   late List items = [];
-  String? _selectedYear;
 
-  String major = '';
-  String title = '';
+  String? _selectedYear;
   String? city;
+
+  TextEditingController major = TextEditingController();
+  TextEditingController title = TextEditingController();
+  TextEditingController description = TextEditingController();
+
+  // String major = '';
+  // String title = '';
+  // String description = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   Map<String, List<String>> _kOptions = {
@@ -197,7 +228,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
   Widget build(BuildContext context) {
     getCities();
     return currentPage == '/jobs'
-        ? JobsScreen()
+        ? const JobsScreen()
         : FutureBuilder(
             future: myFuture,
             builder: (context, snapshot) {
@@ -246,7 +277,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                     AutoCompleteCustomTextField(
                                                   label: "Title",
                                                   hint: "Enter Title",
-                                                  entry: title,
+                                                  controller: title,
                                                   kOptions: _kOptions,
                                                   getKeywords: getKeywords,
                                                   keysDoc: 'job_titles',
@@ -274,7 +305,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                     AutoCompleteCustomTextField(
                                                   label: "Major",
                                                   hint: "Enter Major",
-                                                  entry: major,
+                                                  controller: major,
                                                   kOptions: _kOptions,
                                                   getKeywords: getKeywords,
                                                   keysDoc: 'majors',
@@ -352,7 +383,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                     (e) => DropdownMenuItem(
                                                       value: e,
                                                       child: Text(
-                                                            e
+                                                        e
                                                                 .toString()
                                                                 .substring(0, 1)
                                                                 .toUpperCase() +
@@ -396,6 +427,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                       label: "Job description",
                                       hint: "Enter descritpion",
                                       maxLines: 10,
+                                      controller: description,
                                     ),
                                   ),
                                 ],
@@ -417,8 +449,16 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                       setState(() {
                                         _isLoading = true;
                                       });
-
+                                      await Post().postJob(Job(
+                                          jobTitle: title.text,
+                                          yearsOfExperience:
+                                              _selectedYear ?? '',
+                                          major: major.text,
+                                          descreption: description.text,
+                                          city: city ?? '', 
+                                          isActive: true));
                                       setState(() {
+                                        _isLoading = false;
                                         currentPage = '/jobs';
                                         // save job info in the database
                                       });

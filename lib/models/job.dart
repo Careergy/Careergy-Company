@@ -1,15 +1,19 @@
 class Job {
-  String jobID;
+  String? id;
   String jobTitle;
   String yearsOfExperience;
   String major;
   String descreption;
-  String? city;
+  String city;
+  DateTime? dt;
+  bool isActive;
   Job(
-      {required this.jobID,
+      {this.id,
+      this.dt,
       required this.jobTitle,
       required this.yearsOfExperience,
       required this.major,
       required this.descreption,
-      this.city});
+      required this.city,
+       this.isActive = true});
 }

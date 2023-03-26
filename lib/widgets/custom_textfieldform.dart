@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   String label;
   String hint;
+  TextEditingController? controller;
   int? maxLines;
   Function? onChanged;
   Function? validator;
 
   CustomTextField({
     super.key,
+    this.controller,
     required this.label,
     required this.hint,
     this.maxLines,
@@ -28,6 +30,7 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       cursorColor: kBlue,
       maxLines: maxLines,
+      controller: controller,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
@@ -46,7 +49,7 @@ class CustomTextField extends StatelessWidget {
       ),
       // validator: (value) => validator(value),
       // //TODO: check correctnes of this line
-      // onChanged: (value) => onChanged(value),
+      // onChanged: (value) => this.value = value,
     );
   }
 }

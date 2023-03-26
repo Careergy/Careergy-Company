@@ -7,26 +7,31 @@ import 'package:flutter/material.dart';
 class AutoCompleteCustomTextField extends StatefulWidget {
   String? hint;
 
-  AutoCompleteCustomTextField(
-      {super.key,
-      this.hint,
-      required this.kOptions,
-      required this.entry,
-      required this.getKeywords,
-      required this.keysDoc,
-      required this.label});
+  AutoCompleteCustomTextField({
+    super.key,
+    this.hint,
+    required this.kOptions,
+    this.entry,
+    required this.getKeywords,
+    required this.keysDoc,
+    required this.label,
+    this.controller,
+  });
 
   late Map<String, List<String>?> kOptions;
-  late String entry;
+  late String? entry;
   final Function getKeywords;
   final String label;
   final String keysDoc;
+  TextEditingController? controller;
 
   @override
-  State<AutoCompleteCustomTextField> createState() => _AutoCompleteCustomTextFieldState();
+  State<AutoCompleteCustomTextField> createState() =>
+      _AutoCompleteCustomTextFieldState();
 }
 
-class _AutoCompleteCustomTextFieldState extends State<AutoCompleteCustomTextField> {
+class _AutoCompleteCustomTextFieldState
+    extends State<AutoCompleteCustomTextField> {
   int? maxLines;
 
   Function? onChanged;
@@ -50,7 +55,7 @@ class _AutoCompleteCustomTextFieldState extends State<AutoCompleteCustomTextFiel
         });
       },
       onSelected: (String selection) {
-        widget.entry = selection;
+        widget.controller!.text = selection;
         setState(() {});
         debugPrint('You just selected $selection');
       },
