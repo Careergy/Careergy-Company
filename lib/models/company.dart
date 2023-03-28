@@ -13,7 +13,7 @@ class Company with ChangeNotifier {
   late String email;
   late String? phone;
   late String photoUrl;
-  late Image? photo;
+  Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
   late String? token;
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
