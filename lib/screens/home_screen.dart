@@ -78,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       : currentPage == '/dashboard'
                           ? const DashboardScreen()
                           : currentPage == '/jobs'
-                              ? const JobsScreen()
+                              ? JobsScreen(
+                                  isEditing: false,
+                                )
                               : const Center(),
         ),
       ],

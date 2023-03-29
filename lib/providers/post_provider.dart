@@ -51,11 +51,67 @@ class Post with ChangeNotifier {
             ));
           }
         }
+
         // print(list[0].city);
       },
       onError: (e) => print(e),
     );
     return list;
+  }
+
+  Future<Job?> getPostInfo(id) async {
+    final ref = db.collection('posts');
+    Job? job;
+    await ref.where('uid', isEqualTo: auth.currentUser!.uid).get().then(
+      (doc) {
+        final data = doc.docs as Map<String, dynamic>;
+        if (data.isNotEmpty) {
+          job = Job(
+            id: id,
+            jobTitle: data['job_title'],
+            major: data['major'],
+            yearsOfExperience: data['experience_years'],
+            city: data['city'],
+            descreption: data['descreption'],
+            dt: DateTime.fromMillisecondsSinceEpoch(
+                int.parse(data['timestamp'])),
+            isActive: data['active'],
+          );
+          // for (var value in data) {
+          //   job = Job(
+          //     id: value.id,
+          //     jobTitle: value['job_title'],
+          //     major: value['major'],
+          //     yearsOfExperience: value['experience_years'],
+          //     city: value['city'],
+          //     descreption: value['descreption'],
+          //     dt: DateTime.fromMillisecondsSinceEpoch(
+          //         int.parse(value['timestamp'])),
+          //     isActive: value['active'],
+          //   );
+          // }
+        }
+
+        // print(list[0].city);
+      },
+      onError: (e) => print(e),
+    );
+    return job;
+  }
+
+  Future editJob(Job job) async {
+    final ref = db.collection('posts');
+    await ref.doc(ref.id).update({
+      'uid': auth.currentUser!.uid,
+      'job_title': job.jobTitle,
+      'major': job.major,
+      'experience_years': job.yearsOfExperience,
+      'city': job.city,
+      'descreption': job.descreption,
+      'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+      'active': true
+    });
+    notifyListeners();
   }
 
   Future deletePost(String id) async {

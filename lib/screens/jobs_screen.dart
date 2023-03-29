@@ -3,6 +3,7 @@ import 'package:careergy_mobile/providers/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../models/job.dart';
@@ -11,7 +12,8 @@ import '../widgets/autocomplete_custom_textfield.dart';
 import 'jobs_list.dart';
 
 class JobsScreen extends StatefulWidget {
-  const JobsScreen({super.key});
+  bool isEditing;
+  JobsScreen({super.key, required this.isEditing});
 
   @override
   State<JobsScreen> createState() => _JobsScreenState('/jobs');
@@ -57,16 +59,30 @@ class _JobsScreenState extends State<JobsScreen> {
   //           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   //       city: "dammam"),
   // ];
-
+  bool jobClicked = false;
   Future refresh() async {
     await getPosts();
     setState(() {});
   }
 
+  Future clicked(id) async {
+    await getPosts();
+    setState(() {});
+  }
+
+  Future editingPage() async {
+    setState(() {
+      currentPage = '/new_job';
+      jobClicked = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return currentPage == '/new_job'
-        ? const NewJobScreen()
+        ? NewJobScreen(
+            isEditing: jobClicked,
+          )
         : FutureBuilder(
             future: myFuture,
             builder: (context, snapshot) {
@@ -148,13 +164,19 @@ class _JobsScreenState extends State<JobsScreen> {
                           shrinkWrap: true,
                           reverse: true,
                           itemBuilder: (context, Index) {
-                            return JobsList(job: jobs[Index], refresh: refresh);
+                            return JobsList(
+                              job: jobs[Index],
+                              refresh: refresh,
+                              clicked: clicked,
+                              editingPage: editingPage,
+                            );
                           }),
                     ],
                   ),
                   floatingActionButton: ElevatedButton(
                       onPressed: () => setState(() {
                             currentPage = '/new_job';
+                            widget.isEditing = false;
                           }),
                       child: const Icon(Icons.add)),
                 );
@@ -165,7 +187,10 @@ class _JobsScreenState extends State<JobsScreen> {
 }
 
 class NewJobScreen extends StatefulWidget {
-  const NewJobScreen({super.key});
+  String? id;
+  bool isEditing;
+
+  NewJobScreen({super.key, this.id, required this.isEditing});
 
   @override
   State<NewJobScreen> createState() => _NewJobScreenState('/new_job');
@@ -191,36 +216,54 @@ class _NewJobScreenState extends State<NewJobScreen> {
   late String listType = '';
 
   var _isLoading = false;
-
   Future<Map<String, List<String>?>> getKeywords(String type) async {
     if (_kOptions.isEmpty || (type != listType)) {
       _kOptions[type] = await Keywords().getKeywords(type);
       listType = type;
     }
+
     setState(() {});
     print(_kOptions);
     return _kOptions;
   }
 
+  late Job jobs;
   late final Future myFuture;
 
   @override
   void initState() {
     super.initState();
     // Assign that variable your Future.
-    myFuture = getCities();
+    myFuture = () {
+      getCities();
+      getPostInfo();
+    } as Future;
   }
 
   Future<void> getCities() async {
     items = await Keywords().getKeywords('locations');
   }
 
+  Future getPostInfo() async {
+    jobs = await Post().getPostInfo(widget.id) as Job;
+  }
+
   _NewJobScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
     getCities();
+    final info = Provider.of<Job>(context);
+
+    if (widget.isEditing) {
+      major =
+          TextEditingController.fromValue(TextEditingValue(text: info.major));
+      title = TextEditingController.fromValue(
+          TextEditingValue(text: info.jobTitle));
+      description = TextEditingController.fromValue(
+          TextEditingValue(text: info.descreption));
+    }
     return currentPage == '/jobs'
-        ? const JobsScreen()
+        ? JobsScreen(isEditing: false)
         : FutureBuilder(
             future: myFuture,
             builder: (context, snapshot) {
@@ -438,21 +481,35 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                       setState(() {
                                         _isLoading = true;
                                       });
-                                      await Post().postJob(Job(
-                                          jobTitle: title.text,
-                                          yearsOfExperience:
-                                              _selectedYear ?? '',
-                                          major: major.text,
-                                          descreption: description.text,
-                                          city: city ?? '',
-                                          isActive: true));
+                                      if (widget.isEditing) {
+                                        await Post().editJob(Job(
+                                            jobTitle: title.text,
+                                            yearsOfExperience:
+                                                _selectedYear ?? '',
+                                            major: major.text,
+                                            descreption: description.text,
+                                            city: city ?? '',
+                                            isActive: true));
+                                      } else {
+                                        await Post().postJob(Job(
+                                            id: widget.id,
+                                            jobTitle: title.text,
+                                            yearsOfExperience:
+                                                _selectedYear ?? '',
+                                            major: major.text,
+                                            descreption: description.text,
+                                            city: city ?? '',
+                                            isActive: true));
+                                      }
                                       setState(() {
                                         _isLoading = false;
                                         currentPage = '/jobs';
                                         // save job info in the database
                                       });
                                     },
-                                    child: const Text('add'),
+                                    child: widget.isEditing
+                                        ? const Text('save')
+                                        : const Text('add'),
                                   ),
                                   const SizedBox(
                                     width: 10,
