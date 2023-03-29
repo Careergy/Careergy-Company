@@ -66,7 +66,6 @@ class _JobsScreenState extends State<JobsScreen> {
   }
 
   Future clicked(id) async {
-    await getPosts();
     setState(() {});
   }
 
@@ -245,7 +244,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
   }
 
   Future getPostInfo() async {
-    jobs = await Post().getPostInfo(widget.id) as Job;
+    if (widget.id != null) jobs = await Post().getPostInfo(widget.id) as Job;
   }
 
   _NewJobScreenState(this.currentPage);

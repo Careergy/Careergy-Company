@@ -77,22 +77,7 @@ class Post with ChangeNotifier {
                 int.parse(data['timestamp'])),
             isActive: data['active'],
           );
-          // for (var value in data) {
-          //   job = Job(
-          //     id: value.id,
-          //     jobTitle: value['job_title'],
-          //     major: value['major'],
-          //     yearsOfExperience: value['experience_years'],
-          //     city: value['city'],
-          //     descreption: value['descreption'],
-          //     dt: DateTime.fromMillisecondsSinceEpoch(
-          //         int.parse(value['timestamp'])),
-          //     isActive: value['active'],
-          //   );
-          // }
         }
-
-        // print(list[0].city);
       },
       onError: (e) => print(e),
     );
