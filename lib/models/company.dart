@@ -14,6 +14,7 @@ class Company with ChangeNotifier {
   late String? phone;
   late String photoUrl;
   Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
+  late String bio;
   late String? token;
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -47,6 +48,7 @@ class Company with ChangeNotifier {
         email = data['email'] ?? '';
         phone = data['phone'] ?? '';
         photoUrl = data['photoUrl'] ?? '';
+        bio = data['bio']??'';
       },
       onError: (e) => print("Error getting document: $e"),
     );
@@ -66,11 +68,13 @@ class Company with ChangeNotifier {
         'name': info['name'],
         'email': info['email'],
         'phone': info['phone'],
+        'bio' : info['bio']??'',
         'photoUrl': photoUrl,
       }).onError((e, _) => print("Error writing document: $e"));
       name = info['name'];
       email = info['email'];
       phone = info['phone'];
+      bio = info['bio']??'';
       notifyListeners();
       return;
     }
