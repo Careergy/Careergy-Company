@@ -31,7 +31,7 @@ class Post with ChangeNotifier {
     List<Job> list = [];
     await ref
         .where('uid', isEqualTo: auth.currentUser!.uid)
-        .orderBy('timestamp')
+        .orderBy('timestamp', descending: true)
         .get()
         .then(
       (doc) {
@@ -59,45 +59,45 @@ class Post with ChangeNotifier {
     return list;
   }
 
-  Future<Job?> getPostInfo(id) async {
-    final ref = db.collection('posts');
-    Job? job;
-    await ref.where('uid', isEqualTo: auth.currentUser!.uid).get().then(
-      (doc) {
-        final data = doc.docs as Map<String, dynamic>;
-        if (data.isNotEmpty) {
-          job = Job(
-            id: id,
-            jobTitle: data['job_title'],
-            major: data['major'],
-            yearsOfExperience: data['experience_years'],
-            city: data['city'],
-            descreption: data['descreption'],
-            dt: DateTime.fromMillisecondsSinceEpoch(
-                int.parse(data['timestamp'])),
-            isActive: data['active'],
-          );
-        }
-      },
-      onError: (e) => print(e),
-    );
-    return job;
-  }
+  // Future<Job?> getPostInfo(id) async {
+  //   final ref = db.collection('posts');
+  //   Job? job;
+  //   await ref.where('uid', isEqualTo: auth.currentUser!.uid).get().then(
+  //     (doc) {
+  //       final data = doc.docs as Map<String, dynamic>;
+  //       if (data.isNotEmpty) {
+  //         job = Job(
+  //           id: id,
+  //           jobTitle: data['job_title'],
+  //           major: data['major'],
+  //           yearsOfExperience: data['experience_years'],
+  //           city: data['city'],
+  //           descreption: data['descreption'],
+  //           dt: DateTime.fromMillisecondsSinceEpoch(
+  //               int.parse(data['timestamp'])),
+  //           isActive: data['active'],
+  //         );
+  //       }
+  //     },
+  //     onError: (e) => print(e),
+  //   );
+  //   return job;
+  // }
 
-  Future editJob(Job job) async {
-    final ref = db.collection('posts');
-    await ref.doc(ref.id).update({
-      'uid': auth.currentUser!.uid,
-      'job_title': job.jobTitle,
-      'major': job.major,
-      'experience_years': job.yearsOfExperience,
-      'city': job.city,
-      'descreption': job.descreption,
-      'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-      'active': true
-    });
-    notifyListeners();
-  }
+  // Future editJob(Job job) async {
+  //   final ref = db.collection('posts');
+  //   await ref.doc(ref.id).update({
+  //     'uid': auth.currentUser!.uid,
+  //     'job_title': job.jobTitle,
+  //     'major': job.major,
+  //     'experience_years': job.yearsOfExperience,
+  //     'city': job.city,
+  //     'descreption': job.descreption,
+  //     'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+  //     'active': true
+  //   });
+  //   notifyListeners();
+  // }
 
   Future deletePost(String id) async {
     final ref = db.collection('posts').doc(id);
@@ -131,5 +131,16 @@ class Post with ChangeNotifier {
     }
     print(map);
     await ref.set(map);
+  }
+
+  Future editPost(Job job) async {
+    final ref = db.collection('posts').doc(job.id);
+    await ref.update({
+      'job_title': job.jobTitle,
+      'major': job.major,
+      'experience_years': job.yearsOfExperience,
+      'city': job.city,
+      'descreption': job.descreption,
+    }).onError((error, stackTrace) => print(error));
   }
 }

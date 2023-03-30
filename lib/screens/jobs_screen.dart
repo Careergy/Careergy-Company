@@ -12,8 +12,7 @@ import '../widgets/autocomplete_custom_textfield.dart';
 import 'jobs_list.dart';
 
 class JobsScreen extends StatefulWidget {
-  bool isEditing;
-  JobsScreen({super.key, required this.isEditing});
+  const JobsScreen({super.key});
 
   @override
   State<JobsScreen> createState() => _JobsScreenState('/jobs');
@@ -59,29 +58,25 @@ class _JobsScreenState extends State<JobsScreen> {
   //           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   //       city: "dammam"),
   // ];
-  bool jobClicked = false;
+
   Future refresh() async {
     await getPosts();
     setState(() {});
   }
 
-  Future clicked(id) async {
+  Job? editJob;
+  Future editingPage(Job job) async {
+    currentPage = '/new_job';
+    editJob = job;
     setState(() {});
-  }
-
-  Future editingPage() async {
-    setState(() {
-      currentPage = '/new_job';
-      jobClicked = true;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return currentPage == '/new_job'
-        ? NewJobScreen(
-            isEditing: jobClicked,
-          )
+        ? editJob != null
+            ? NewJobScreen(job: editJob)
+            : NewJobScreen()
         : FutureBuilder(
             future: myFuture,
             builder: (context, snapshot) {
@@ -157,25 +152,24 @@ class _JobsScreenState extends State<JobsScreen> {
                           ],
                         ),
                       ),
-                      ListView.builder(
-                          itemCount: jobs.length,
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          reverse: true,
-                          itemBuilder: (context, Index) {
-                            return JobsList(
-                              job: jobs[Index],
-                              refresh: refresh,
-                              clicked: clicked,
-                              editingPage: editingPage,
-                            );
-                          }),
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: jobs.length,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemBuilder: (context, Index) {
+                              return JobsList(
+                                job: jobs[Index],
+                                refresh: refresh,
+                                editingPage: editingPage,
+                              );
+                            }),
+                      ),
                     ],
                   ),
                   floatingActionButton: ElevatedButton(
                       onPressed: () => setState(() {
                             currentPage = '/new_job';
-                            widget.isEditing = false;
                           }),
                       child: const Icon(Icons.add)),
                 );
@@ -186,10 +180,9 @@ class _JobsScreenState extends State<JobsScreen> {
 }
 
 class NewJobScreen extends StatefulWidget {
-  String? id;
-  bool isEditing;
+  NewJobScreen({super.key, this.job});
 
-  NewJobScreen({super.key, this.id, required this.isEditing});
+  Job? job;
 
   @override
   State<NewJobScreen> createState() => _NewJobScreenState('/new_job');
@@ -226,50 +219,45 @@ class _NewJobScreenState extends State<NewJobScreen> {
     return _kOptions;
   }
 
-  late Job jobs;
+  bool isLoaded = false;
   late final Future myFuture;
 
   @override
   void initState() {
     super.initState();
     // Assign that variable your Future.
-    myFuture = () {
-      getCities();
-      getPostInfo();
-    } as Future;
+    myFuture = getCities();
   }
 
   Future<void> getCities() async {
     items = await Keywords().getKeywords('locations');
   }
 
-  Future getPostInfo() async {
-    if (widget.id != null) jobs = await Post().getPostInfo(widget.id) as Job;
-  }
-
   _NewJobScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
     getCities();
-    final info = Provider.of<Job>(context);
 
-    if (widget.isEditing) {
-      major =
-          TextEditingController.fromValue(TextEditingValue(text: info.major));
+    if ((widget.job != null) && !isLoaded) {
+      major = TextEditingController.fromValue(
+          TextEditingValue(text: widget.job!.major));
       title = TextEditingController.fromValue(
-          TextEditingValue(text: info.jobTitle));
+          TextEditingValue(text: widget.job!.jobTitle));
       description = TextEditingController.fromValue(
-          TextEditingValue(text: info.descreption));
+          TextEditingValue(text: widget.job!.descreption));
+      city = widget.job!.city;
+      _selectedYear = widget.job!.yearsOfExperience;
+      isLoaded = true;
     }
     return currentPage == '/jobs'
-        ? JobsScreen(isEditing: false)
+        ? const JobsScreen()
         : FutureBuilder(
             future: myFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else {
-                print(items);
+                // print(items);
                 return Scaffold(
                   body: ListView(children: [
                     Container(
@@ -480,25 +468,26 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                       setState(() {
                                         _isLoading = true;
                                       });
-                                      if (widget.isEditing) {
-                                        await Post().editJob(Job(
-                                            jobTitle: title.text,
-                                            yearsOfExperience:
-                                                _selectedYear ?? '',
-                                            major: major.text,
-                                            descreption: description.text,
-                                            city: city ?? '',
-                                            isActive: true));
+                                      if (widget.job != null) {
+                                        await Post().editPost(Job(
+                                          id: widget.job!.id,
+                                          jobTitle: title.text,
+                                          yearsOfExperience:
+                                              _selectedYear ?? '',
+                                          major: major.text,
+                                          descreption: description.text,
+                                          city: city ?? '',
+                                        ));
                                       } else {
                                         await Post().postJob(Job(
-                                            id: widget.id,
-                                            jobTitle: title.text,
-                                            yearsOfExperience:
-                                                _selectedYear ?? '',
-                                            major: major.text,
-                                            descreption: description.text,
-                                            city: city ?? '',
-                                            isActive: true));
+                                          jobTitle: title.text,
+                                          yearsOfExperience:
+                                              _selectedYear ?? '',
+                                          major: major.text,
+                                          descreption: description.text,
+                                          city: city ?? '',
+                                          isActive: true,
+                                        ));
                                       }
                                       setState(() {
                                         _isLoading = false;
@@ -506,9 +495,9 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                         // save job info in the database
                                       });
                                     },
-                                    child: widget.isEditing
-                                        ? const Text('save')
-                                        : const Text('add'),
+                                    child: widget.job != null
+                                        ? _isLoading ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 3,) : const Text('Save')
+                                        : _isLoading ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 3,) : const Text('Add'),
                                   ),
                                   const SizedBox(
                                     width: 10,

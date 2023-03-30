@@ -83,6 +83,7 @@ class Company with ChangeNotifier {
       'name': info['name'],
       'email': info['email'],
       'phone': info['phone'],
+      'bio' : info['bio']??'',
       'photoUrl': info['photoUrl']['fileName'],
     }).onError((e, _) => print("Error writing document: $e"));
     final String fileName = await Storage()
@@ -91,15 +92,13 @@ class Company with ChangeNotifier {
         .onError((error, stackTrace) => print(error));
     await Storage().deleteFile('photos/', photoUrl);
     await ref.set({
-      'name': info['name'],
-      'email': info['email'],
-      'phone': info['phone'],
       'photoUrl': fileName,
-    }).onError((e, _) => print("Error writing document: $e"));
+    }, SetOptions(merge: true)).onError((e, _) => print("Error writing document: $e"));
     name = info['name'];
     email = info['email'];
     phone = info['phone'];
     photoUrl = fileName;
+    bio = info['bio']??'';
     await getAvatar();
     notifyListeners();
   }

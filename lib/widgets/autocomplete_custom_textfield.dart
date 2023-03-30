@@ -38,12 +38,22 @@ class _AutoCompleteCustomTextFieldState
 
   Function? validator;
 
+  bool isLoaded = false;
+
+  Future getKeys() async {
+    widget.kOptions = await widget.getKeywords(widget.keysDoc);
+  }
+
   @override
   Widget build(BuildContext context) {
     // A custom text field form that has a label and a hint text.
 // also has a validator to check if the input is empty or not.
 // aslo has a theme that works with ios and android.
     final deviceSize = MediaQuery.of(context).size;
+    if (!isLoaded) {
+      getKeys();
+      isLoaded = true;
+    }
     return Autocomplete(
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text == '') {
@@ -54,6 +64,7 @@ class _AutoCompleteCustomTextFieldState
           return option.contains(textEditingValue.text.toLowerCase());
         });
       },
+      initialValue: TextEditingValue(text: widget.controller!.text),
       onSelected: (String selection) {
         widget.controller!.text = selection;
         setState(() {});

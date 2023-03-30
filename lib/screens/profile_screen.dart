@@ -114,13 +114,18 @@ class _profileScreenState extends State<profileScreen> {
                                         height: 20,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 15),
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
                                         child: SizedBox(
                                           width: 500,
                                           child: Text(
-                                            info.bio == '' ? 'No Bio' : info.bio,
+                                            info.bio == ''
+                                                ? 'No Bio'
+                                                : info.bio,
                                             style: TextStyle(
-                                                fontWeight: info.bio == ''? FontWeight.w100 : FontWeight.normal,
+                                                fontWeight: info.bio == ''
+                                                    ? FontWeight.w100
+                                                    : FontWeight.normal,
                                                 fontSize: 20),
                                           ),
                                         ),
@@ -143,15 +148,14 @@ class _profileScreenState extends State<profileScreen> {
                                         fit: BoxFit.fill,
                                         child: CircleAvatar(
                                           radius: 120,
-                                          child: ClipOval(
-                                            child: info.photo
-                                            // (info.hasPhoto && false)
-                                            //     ? info.photo
-                                            //     : const Image(
-                                            //         image: AssetImage(
-                                            //             '/avatarPlaceholder.png'),
-                                            //       ),
-                                          ),
+                                          child: ClipOval(child: info.photo
+                                              // (info.hasPhoto && false)
+                                              //     ? info.photo
+                                              //     : const Image(
+                                              //         image: AssetImage(
+                                              //             '/avatarPlaceholder.png'),
+                                              //       ),
+                                              ),
                                         ),
                                       ),
                                       Padding(
@@ -216,6 +220,7 @@ class _editProfileState extends State<editProfile> {
   TextEditingController? nameCtrl;
   TextEditingController? emailCtrl;
   TextEditingController? phoneCtrl;
+  TextEditingController? bioCtrl;
 
   _editProfileState(this.currentPage);
   @override
@@ -228,11 +233,14 @@ class _editProfileState extends State<editProfile> {
           TextEditingController.fromValue(TextEditingValue(text: info.email));
       phoneCtrl = TextEditingController.fromValue(
           TextEditingValue(text: info.phone ?? ''));
+      bioCtrl = TextEditingController.fromValue(TextEditingValue(text: info.bio));
       _isInitialized = true;
     }
     if (photo == null) {
       print('object');
-      photo = info.hasPhoto ? info.photo : const Image(image: AssetImage('/avatarPlaceholder.png'));
+      photo = info.hasPhoto
+          ? info.photo
+          : const Image(image: AssetImage('/avatarPlaceholder.png'));
     }
     return currentPage == '/profile'
         ? const profileScreen()
@@ -425,6 +433,7 @@ class _editProfileState extends State<editProfile> {
                                 onChanged: (value) {
                                   _infoData['bio'] = value;
                                 },
+                                controller: bioCtrl,
                               ),
                             ),
                           ],
