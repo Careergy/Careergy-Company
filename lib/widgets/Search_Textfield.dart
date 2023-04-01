@@ -62,7 +62,7 @@ class _SearchTextfieldState extends State<SearchTextfield> {
               return Align(
                 alignment: Alignment.topLeft,
                 child: Container(
-                  width: 200,
+                  width: 250,
                   height: deviceSize.height * 0.3,
                   child: ListView.builder(
                     padding: EdgeInsets.all(3),
@@ -80,7 +80,7 @@ class _SearchTextfieldState extends State<SearchTextfield> {
                                     .substring(0, 1)
                                     .toUpperCase() +
                                 option.toString().substring(1)),
-                            tileColor: Color.fromARGB(255, 165, 183, 192),
+                            tileColor: Color.fromARGB(255, 170, 201, 216),
                           ),
                         ),
                       );
@@ -103,7 +103,8 @@ class _SearchTextfieldState extends State<SearchTextfield> {
             height: 35,
             child: Scrollbar(
               scrollbarOrientation: ScrollbarOrientation.bottom,
-              thickness: 5,controller: _scrollController,
+              thickness: 5,
+              controller: _scrollController,
               child: SingleChildScrollView(
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,

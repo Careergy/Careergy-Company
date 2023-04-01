@@ -131,7 +131,7 @@ class _SearchAreaState extends State<SearchArea> {
     final deviceSize = MediaQuery.of(context).size;
     return Container(
       width: deviceSize.width * 0.8,
-      height: deviceSize.height * 0.27,
+      height: deviceSize.height * 0.32,
       padding: const EdgeInsets.all(10.0),
       child: Form(
         key: _formKey,

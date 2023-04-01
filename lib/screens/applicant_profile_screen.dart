@@ -107,6 +107,7 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                   SizedBox(
                                     height: 30,
                                   ),
+                                  const Divider(),
                                   Center(
                                     child: ToggleButtons(
                                       borderRadius: BorderRadius.circular(10),
@@ -164,6 +165,28 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               const Text(
+                                                'About',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 500,
+                                                child: Text(
+                                                  'info.bio',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 20),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              const Text(
                                                 'Email',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -201,8 +224,265 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                               const SizedBox(
                                                 height: 30,
                                               ),
+                                            ],
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 50),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        'job Title',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'info.job_titles1',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                      Text(
+                                                        'info.job_titles2',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    width: 100,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        'Level',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'info.level1',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                      Text(
+                                                        'info.level2',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              const Divider(),
+                                              Row(
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        'Major',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'info.major1',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                      Text(
+                                                        'info.major2',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    width: 100,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        'Major Skills',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'info.major_skills1',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                      Text(
+                                                        'info.major_skills2',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 20),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 30,
+                                              ),
+                                              const Divider(),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    'Soft Skills',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Text(
+                                                    'info.soft_skills1',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 20),
+                                                  ),
+                                                  Text(
+                                                    'info.soft_skills2',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 20),
+                                                  ),
+                                                  Text(
+                                                    'info.soft_skills3',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 20),
+                                                  ),
+                                                ],
+                                              ),
+                                              const Divider(),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    'Intrests',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Text(
+                                                    'info.intrests1',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 20),
+                                                  ),
+                                                  Text(
+                                                    'info.intrests2',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 20),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 30,
+                                                  ),
+                                                  const Text(
+                                                    'preferred locations',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Text(
+                                                    'info.locations1',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 20),
+                                                  ),
+                                                  Text(
+                                                    'info.locations2',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 20),
+                                                  ),
+                                                ],
+                                              ),
+                                              const Divider(),
                                               const Text(
-                                                'About',
+                                                'Attachments',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20),
@@ -210,20 +490,60 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                               const SizedBox(
                                                 height: 20,
                                               ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                        color: kBlue)),
+                                                child: ListTile(
+                                                  title:
+                                                      Text('Attachment1.pdf'),
+                                                  leading: CircleAvatar(
+                                                    backgroundColor: kBlue,
+                                                    child: InkWell(
+                                                      onTap: () {},
+                                                      child: ClipOval(
+                                                        child: Icon(
+                                                          Icons.download,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                               SizedBox(
-                                                width: 500,
-                                                child: Text(
-                                                  'info.bio',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: 20),
+                                                height: 5,
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                        color: kBlue)),
+                                                child: ListTile(
+                                                  title:
+                                                      Text('Attachment2.pdf'),
+                                                  leading: CircleAvatar(
+                                                    backgroundColor: kBlue,
+                                                    child: InkWell(
+                                                      onTap: () {},
+                                                      child: ClipOval(
+                                                        child: Icon(
+                                                          Icons.download,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
                                         )
-                                      : Text('Applicant'),
                                 ],
                               ),
                             ),
