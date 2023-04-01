@@ -38,7 +38,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search for Applicants', style: TextStyle(color: Colors.black45)),
+        title: const Text('Search for Applicants',
+            style: TextStyle(color: Colors.black45)),
         backgroundColor: Colors.white,
         shadowColor: Colors.black26,
         toolbarHeight: 30,
@@ -218,10 +219,14 @@ class _SearchAreaState extends State<SearchArea> {
 }
 
 class SearchResultArea extends StatefulWidget {
-  SearchResultArea({super.key, required this.userList});
+  SearchResultArea({
+    super.key,
+    this.userList,
+    this.viewApplicant,
+  });
 
-  late List userList;
-
+  late List? userList;
+  final Function? viewApplicant;
   @override
   State<SearchResultArea> createState() => _SearchResultAreaState();
 }
@@ -237,29 +242,34 @@ class _SearchResultAreaState extends State<SearchResultArea> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.userList.isEmpty
+    return widget.userList!.isEmpty
         ? const Center(child: Text('No Results'))
         : Container(
-          height: MediaQuery.of(context).size.height *0.4,
-          width: (MediaQuery.of(context).size.width *0.8) -1,
-          child: Scrollbar(
+            height: MediaQuery.of(context).size.height * 0.4,
+            width: (MediaQuery.of(context).size.width * 0.8) - 1,
+            child: Scrollbar(
               controller: _scrollController,
               child: SingleChildScrollView(
                 controller: _scrollController,
                 child: ListView.builder(
-                  itemCount: widget.userList.length,
+                  itemCount: widget.userList!.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     // print(widget.userList);
                     return ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 6),
                       leading: const CircleAvatar(),
-                      title: Text(widget.userList[index]['name']),
+                      title: Text(widget.userList![index]['name']),
+                      onTap: () async {
+                        // await widget.viewApplicant!(widget.userList![index]['uid']);
+                        await widget.viewApplicant!();
+                      },
                     );
                   },
                 ),
               ),
             ),
-        );
+          );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:careergy_mobile/screens/applicant_profile_screen.dart';
 import 'package:careergy_mobile/screens/dashboard_screen.dart';
 import 'package:careergy_mobile/screens/edit_profile_screen.dart';
 import 'package:careergy_mobile/screens/jobs_screen.dart';
@@ -14,7 +15,8 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState('/search'); // to make things easier change the default page.
+  State<HomeScreen> createState() => _HomeScreenState(
+      '/search'); // to make things easier change the default page.
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -60,11 +62,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     routeName: '/profile',
                     func: switchPage,
                     selected: currentPage == '/profile'),
+                SidebarButton(
+                    btnName: 'applicant',
+                    routeName: '/applicant_profile',
+                    func: switchPage,
+                    selected: currentPage == '/applicant_profile'),
               ],
             ),
           ),
         ),
-        const SizedBox(width: 1,),
+        const SizedBox(
+          width: 1,
+        ),
         SizedBox(
           height: media.size.height - AppBar().preferredSize.height,
           width: (media.size.width * 0.8) - 1,
@@ -77,10 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       : currentPage == '/editProfile'
                           ? const editProfileScreen()
                           : currentPage == '/dashboard'
-                            ? const DashboardScreen()
-                            : currentPage == '/jobs'
-                              ? const JobsScreen()
-                              : const Center(),
+                              ? const DashboardScreen()
+                              : currentPage == '/jobs'
+                                  ? const JobsScreen()
+                                  : currentPage == '/applicant_profile'
+                                      ? const ApplicantProfileScreen()
+                                      : const Center(),
         )
       ],
     );
