@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2023/03/28-13:21:47.577 1a6c Reusing MANIFEST C:\Users\aqeel\AppData\Local\Temp\flutter_tools.7d6e7f99\flutter_tools_chrome_device.28f1ca81\Default\Site Characteristics Database/MANIFEST-000001
 2023/03/28-13:21:47.583 1a6c Recovering log #10
 2023/03/28-13:21:47.583 1a6c Reusing old log C:\Users\aqeel\AppData\Local\Temp\flutter_tools.7d6e7f99\flutter_tools_chrome_device.28f1ca81\Default\Site Characteristics Database/000010.log 
+=======
+2023/03/26-07:03:31.129 6510 Reusing MANIFEST C:\Users\aqeel\AppData\Local\Temp\flutter_tools.ca230c46\flutter_tools_chrome_device.40bc327f\Default\Site Characteristics Database/MANIFEST-000001
+2023/03/26-07:03:31.134 6510 Recovering log #10
+2023/03/26-07:03:31.134 6510 Reusing old log C:\Users\aqeel\AppData\Local\Temp\flutter_tools.ca230c46\flutter_tools_chrome_device.40bc327f\Default\Site Characteristics Database/000010.log 
+>>>>>>> dashboard_branch
