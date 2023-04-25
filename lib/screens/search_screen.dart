@@ -1,9 +1,7 @@
-import 'package:careergy_mobile/screens/applicant_profile_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:textfield_tags/textfield_tags.dart';
+
+import '../screens/applicant_profile_screen.dart';
 
 import '../models/applicant.dart';
 import '../providers/keywords_provider.dart';
@@ -40,13 +38,6 @@ class _SearchScreenState extends State<SearchScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Search for Applicants',
-              style: TextStyle(color: Colors.black45)),
-          backgroundColor: Colors.white,
-          shadowColor: Colors.black26,
-          toolbarHeight: 30,
-        ),
         body: SizedBox(
           width: double.infinity,
           height: double.infinity,
@@ -125,7 +116,7 @@ class _SearchAreaState extends State<SearchArea> {
       _isLoading = true;
     });
     // print(_searchData['job_titles']);
-    widget.getSearchResults(_searchData);
+    await widget.getSearchResults(_searchData);
     setState(() {
       _isLoading = false;
     });
@@ -169,11 +160,20 @@ class _SearchAreaState extends State<SearchArea> {
               child: Column(
                 children: [
                   SearchTextfield(
-                      kOptions: _kOptions,
-                      getKeywords: getKeywords,
-                      keysDoc: 'level',
-                      label: 'Level:',
-                      entriesList: _searchData['level'] as List<String>),
+                    kOptions: _kOptions,
+                    getKeywords: getKeywords,
+                    keysDoc: 'level',
+                    label: 'Level:',
+                    entriesList: _searchData['level'] as List<String>,
+                  ),
+                  TextFieldTags(
+                    inputfieldBuilder:
+                        (context, tec, fn, error, onChanged, onSubmitted) {
+                          return (context, sc, tags, onDeleteTag) {
+                            return TextField();
+                          };
+                        },
+                  )
                 ],
               ),
             ),
@@ -261,7 +261,7 @@ class _SearchResultAreaState extends State<SearchResultArea> {
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 6),
                       leading: ClipOval(
-                        child:  widget.userList![index].photo,
+                        child: widget.userList![index].photo,
                       ),
                       title: Text(widget.userList![index].name),
                       subtitle: Text(widget.userList![index].bio!.length > 20

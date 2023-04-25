@@ -1,7 +1,6 @@
 // import 'dart:html';
 // import 'dart:ui';
 
-// import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -248,7 +247,7 @@ class _editProfileState extends State<editProfile> {
             body: ListView(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -257,7 +256,7 @@ class _editProfileState extends State<editProfile> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 100, bottom: 30, right: 50, left: 30),
+                                bottom: 30, right: 50, left: 30),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

@@ -40,10 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     func: switchPage,
                     selected: currentPage == '/dashboard'),
                 SidebarButton(
-                    btnName: 'Notification',
-                    routeName: '/notification',
+                    btnName: 'Applications',
+                    routeName: '/applications',
                     func: switchPage,
-                    selected: currentPage == '/notification'),
+                    selected: currentPage == '/applications'),
                 SidebarButton(
                     btnName: 'Jobs',
                     routeName: '/jobs',
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: (media.size.width * 0.8) - 1,
           child: currentPage == '/profile'
               ? const profileScreen()
-              : currentPage == '/notification'
+              : currentPage == '/applications'
                   ? const NotificationsScreen()
                   : currentPage == '/search'
                       ? const SearchScreen()
