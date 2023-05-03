@@ -43,7 +43,8 @@ dependencies:
   firebase_auth_web: ^5.2.9
   file_picker: ^5.2.5
   textfield_tags: ^2.0.2
-  
+  syncfusion_flutter_calendar: ^21.1.41
+  flutter_time_picker_spinner: ^2.0.0
  
 
 dev_dependencies:
