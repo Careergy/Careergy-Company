@@ -23,24 +23,25 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    String? selectedDate;
-    String? _selectedFromTime = TimeOfDay.now().format(context);
-    String? _selectedToTime = TimeOfDay.now().format(context);
+  String? selectedDate;
+  String? _selectedFromTime;
+  String? _selectedToTime;
+  TimeOfDay? selectedTime;
 
-    displayTimeDialog(selectedTime) {
-      final TimeOfDay? time = TimeOfDay.now();
-      showTimePicker(context: context, initialTime: TimeOfDay.now());
-      if (time != null) {
-        setState(() {
-          selectedTime = time.format(context);
-          print(selectedTime);
-        });
-      }
-      return selectedTime;
+  Future<TimeOfDay?> displayTimeDialog() async {
+    TimeOfDay? time;
+
+    time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (time != null) {
+      // selectedTime = time.format(context);
+      print(selectedTime);
     }
 
+    return time as Future<TimeOfDay?>;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     TextEditingController description = TextEditingController();
 
     return MaterialApp(
@@ -119,30 +120,29 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            _selectedFromTime =
-                                displayTimeDialog(_selectedFromTime);
-                          });
+                          displayTimeDialog().then((value) =>
+                              {_selectedFromTime = value?.format(context)});
+                          setState(() {});
                         },
                         child: Text('from')),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(_selectedFromTime!),
+                    Text(_selectedFromTime != null ? "$_selectedFromTime" : ""),
                     SizedBox(
                       width: 35,
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            displayTimeDialog(_selectedToTime);
-                          });
+                          displayTimeDialog().then((value) =>
+                              {_selectedToTime = value?.format(context)});
+                          setState(() {});
                         },
                         child: Text('to')),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(_selectedToTime!),
+                    Text(_selectedToTime != null ? "$_selectedToTime" : ""),
                     SizedBox(
                       width: 10,
                     ),
