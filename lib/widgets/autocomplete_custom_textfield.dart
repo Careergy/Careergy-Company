@@ -4,6 +4,16 @@ import 'package:flutter/material.dart';
 // A custom text field form that has a label and a hint text.
 // also has a validator to check if the input is empty or not.
 // aslo has a theme that works with ios and android.
+
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
+}
+
 class AutoCompleteCustomTextField extends StatefulWidget {
   String? hint;
 
@@ -88,9 +98,7 @@ class _AutoCompleteCustomTextFieldState
                     child: ListTile(
                       mouseCursor: MouseCursor.defer,
                       hoverColor: Colors.white,
-                      title: Text(
-                          option.toString().substring(0, 1).toUpperCase() +
-                              option.toString().substring(1)),
+                      title: Text(option.toTitleCase()),
                       tileColor: const Color.fromARGB(255, 165, 183, 192),
                     ),
                   ),

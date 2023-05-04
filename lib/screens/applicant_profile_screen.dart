@@ -84,12 +84,6 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 30),
                                         ),
-                                        Text(
-                                          widget.applicant!.major ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 25),
-                                        ),
                                       ],
                                     ),
                                   ),

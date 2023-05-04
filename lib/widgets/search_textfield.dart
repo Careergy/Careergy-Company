@@ -21,6 +21,11 @@ class SearchTextfield extends StatefulWidget {
   State<SearchTextfield> createState() => _SearchTextfieldState();
 }
 
+extension StringCasingExtension on String {
+  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+}
+
 class _SearchTextfieldState extends State<SearchTextfield> {
   void deleteItem(int index) {
     setState(() {
@@ -61,11 +66,11 @@ class _SearchTextfieldState extends State<SearchTextfield> {
             optionsViewBuilder: (context, onSelected, options) {
               return Align(
                 alignment: Alignment.topLeft,
-                child: Container(
+                child: SizedBox(
                   width: 250,
                   height: deviceSize.height * 0.3,
                   child: ListView.builder(
-                    padding: EdgeInsets.all(3),
+                    padding: const EdgeInsets.all(3),
                     itemCount: options.length,
                     itemBuilder: (context, index) {
                       final option = options.elementAt(index);
@@ -75,12 +80,8 @@ class _SearchTextfieldState extends State<SearchTextfield> {
                           child: ListTile(
                             mouseCursor: MouseCursor.defer,
                             hoverColor: Colors.white,
-                            title: Text(option
-                                    .toString()
-                                    .substring(0, 1)
-                                    .toUpperCase() +
-                                option.toString().substring(1)),
-                            tileColor: Color.fromARGB(255, 170, 201, 216),
+                            title: Text(option.toTitleCase()),
+                            tileColor: const Color.fromARGB(255, 170, 201, 216),
                           ),
                         ),
                       );
@@ -98,7 +99,7 @@ class _SearchTextfieldState extends State<SearchTextfield> {
               decoration: InputDecoration(labelText: widget.label),
             ),
           ),
-          Container(
+          SizedBox(
             width: ((deviceSize.width * 0.8) / 3) - 1,
             height: 35,
             child: Scrollbar(

@@ -2,7 +2,8 @@ import 'package:careergy_mobile/screens/dashboard_screen.dart';
 import 'package:careergy_mobile/screens/jobs_screen.dart';
 import 'package:careergy_mobile/screens/notifications_screen.dart';
 import 'package:careergy_mobile/screens/profile_screen.dart';
-import 'package:careergy_mobile/screens/search_screen.dart';
+// import 'package:careergy_mobile/screens/search_screen.dart';
+import './applicant_search_screan.dart';
 import 'package:careergy_mobile/widgets/sidebar_button.dart';
 
 import '../providers/auth_provider.dart';
@@ -13,7 +14,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState('/dashboard');
+  State<HomeScreen> createState() => _HomeScreenState('/search');
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
+    // final auth = Provider.of<AuthProvider>(context, listen: false);
     final media = MediaQuery.of(context);
     return Row(
       children: [
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
               : currentPage == '/applications'
                   ? const NotificationsScreen()
                   : currentPage == '/search'
-                      ? const SearchScreen()
+                      ? const ApplicantSearchScreen()
                       : currentPage == '/dashboard'
                           ? const DashboardScreen()
                           : currentPage == '/jobs'

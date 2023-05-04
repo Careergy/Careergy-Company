@@ -13,20 +13,17 @@ class Applicant with ChangeNotifier {
   late final String? phone;
   late final String? photoUrl;
   late String? bio;
-  late String? major;
   late Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
   late Map<String, dynamic>? briefcv;
 
-  Applicant(
-      {required this.uid,
-      required this.name,
-      required this.email,
-      this.phone,
-      this.photoUrl,
-      this.bio,
-      this.major}) {
-    getAvatar();
-  }
+  Applicant({
+    required this.uid,
+    required this.name,
+    required this.email,
+    this.phone,
+    this.photoUrl,
+    this.bio,
+  }) {}
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final fs = FirebaseStorage.instance.ref();
@@ -43,11 +40,9 @@ class Applicant with ChangeNotifier {
         email: data['email'] ?? '',
         bio: data['bio'] ?? '',
         phone: data['phone'] ?? '',
-        major: data['major'] ?? '',
         photoUrl: id,
       );
     }, onError: (e) => print(e));
-    await applicant!.getAvatar();
     final ref2 = db.collection('briefcvs').doc(id);
     await ref2.get().then((value) => applicant!.briefcv = value.data(),
         onError: (e) => print(e));
@@ -55,79 +50,88 @@ class Applicant with ChangeNotifier {
     return applicant;
   }
 
-  static Future getSearchResults(List<String> jobTitles, List<String> locations,
-      List<String> levels) async {
+  static Future getSearchResults(
+      List<String>? majors,
+      List<String>? jobTitles,
+      List<String>? majorSkills,
+      List<String>? softSkills,
+      List<String>? interests,
+      List<String>? locations) async {
     final FirebaseFirestore db = FirebaseFirestore.instance;
-    final List<Applicant> list = [];
+    final List<String> list = [];
     final ref = db.collection('briefcvs');
-    final List<String> uids1 = [];
-    final List<String> uids2 = [];
-    final List<String> uids3 = [];
 
-    if (jobTitles.isNotEmpty) {
-      await ref
-          .where('job_title', arrayContainsAny: [...jobTitles])
-          // .where('level', arrayContainsAny: ['',...levels])
-          // .where('location', arrayContainsAny: ['',...locations])
-          .get()
-          .then((value) async {
-            for (var i = 0; i < value.docs.length; i++) {
-              if (!uids1.contains(value.docs[i].id)) {
-                uids1.add(value.docs[i].id);
-              }
-            }
-          })
-          .catchError((err) => print(err));
+    final majorsRes =
+        await ref.where('majors', arrayContainsAny: ['', ...?majors]).get();
+    final jobTitRes = await ref
+        .where('job_title', arrayContainsAny: ['', ...?jobTitles]).get();
+    final majSkiRes = await ref
+        .where('major_skills', arrayContainsAny: ['', ...?majorSkills]).get();
+    final sofSkiRes = await ref
+        .where('soft_skills', arrayContainsAny: ['', ...?softSkills]).get();
+    final intresRes = await ref
+        .where('intrests', arrayContainsAny: ['', ...?interests]).get();
+    final preLocRes = await ref.where('prefered_locations',
+        arrayContainsAny: ['', ...?locations]).get();
+
+    List list1 = [];
+    majorsRes.docs.forEach((el) => list1.add(el.id));
+    List list2 = [];
+    jobTitRes.docs.forEach((el) => list2.add(el.id));
+    List list3 = [];
+    majSkiRes.docs.forEach((el) => list3.add(el.id));
+    List list4 = [];
+    sofSkiRes.docs.forEach((el) => list4.add(el.id));
+    List list5 = [];
+    intresRes.docs.forEach((el) => list5.add(el.id));
+    List list6 = [];
+    preLocRes.docs.forEach((el) => list6.add(el.id));
+
+    if (list2.isNotEmpty) {
+      list1.addAll(list2.where((element) => !list1.contains(element)));
+    }
+    if (list3.isNotEmpty) {
+      list1.addAll(list3.where((element) => !list1.contains(element)));
+    }
+    if (list4.isNotEmpty) {
+      list1.addAll(list4.where((element) => !list1.contains(element)));
+    }
+    if (list5.isNotEmpty) {
+      list1.addAll(list5.where((element) => !list1.contains(element)));
+    }
+    if (list6.isNotEmpty) {
+      list1.addAll(list6.where((element) => !list1.contains(element)));
     }
 
-    if (levels.isNotEmpty) {
-      await ref
-          // .where('job_title', arrayContainsAny: ['', ...job_titles])
-          .where('level', arrayContainsAny: [...levels])
-          // .where('location', arrayContainsAny: ['',...locations])
-          .get()
-          .then((value) async {
-            for (var i = 0; i < value.docs.length; i++) {
-              if (!uids2.contains(value.docs[i].id)) {
-                uids2.add(value.docs[i].id);
-              }
-            }
-          })
-          .catchError((err) => print(err));
+    if (list2.isNotEmpty) {
+      list1.removeWhere((element) => !list2.contains(element));
+    }
+    if (list3.isNotEmpty) {
+      list1.removeWhere((element) => !list3.contains(element));
+    }
+    if (list4.isNotEmpty) {
+      list1.removeWhere((element) => !list4.contains(element));
+    }
+    if (list5.isNotEmpty) {
+      list1.removeWhere((element) => !list5.contains(element));
+    }
+    if (list6.isNotEmpty) {
+      list1.removeWhere((element) => !list6.contains(element));
     }
 
-    if (locations.isNotEmpty) {
-      await ref
-          // .where('job_title', arrayContainsAny: ['', ...job_titles])
-          // .where('level', arrayContainsAny: ['',...levels])
-          .where('location', arrayContainsAny: [...locations])
-          .get()
-          .then((value) async {
-            for (var i = 0; i < value.docs.length; i++) {
-              if (!uids3.contains(value.docs[i].id)) {
-                uids3.add(value.docs[i].id);
-              }
-            }
-          })
-          .catchError((err) => print(err));
-    }
+    // print(list1);
+    // print(list2);
+    // print(list3);
+    // print(list4);
+    // print(list5);
+    // print(list6);
 
-    // print(uids1);
-    // print(locations);
-    // print(levels);
-
-    if (levels.isNotEmpty) {
-      uids1.removeWhere((element) => !uids2.contains(element));
-    }
-    if (locations.isNotEmpty) {
-      uids1.removeWhere((element) => !uids3.contains(element));
-    }
-
+    List<Applicant> applicantList = [];
     final ref2 = db.collection('users');
-    for (var element in uids1) {
+    for (var element in list1) {
       await ref2.doc(element).get().then(
         (DocumentSnapshot doc) {
-          print(doc.get('name').toString());
+          // print(doc.get('name').toString());
           Applicant tmp = Applicant(
             uid: element,
             email: doc.data().toString().contains('email')
@@ -142,53 +146,16 @@ class Applicant with ChangeNotifier {
             bio: doc.data().toString().contains('bio')
                 ? doc.get('bio').toString()
                 : '',
-            photoUrl: element,
+            photoUrl: doc.data().toString().contains('photoUrl')
+                ? doc.get('photoUrl').toString()
+                : '',
           );
-          list.add(tmp);
+          applicantList.add(tmp);
         },
         onError: (e) => print("Error getting document: $e"),
       );
     }
-
-    print(list);
-    return list;
-  }
-
-  Future getAvatar() async {
-    final imagesRef = fs.child("photos/$photoUrl");
-    try {
-      print(imagesRef.fullPath);
-      const oneMegabyte = 1024 * 512;
-      final Uint8List? data = await imagesRef.getData(oneMegabyte);
-      final String url = await imagesRef.getDownloadURL();
-      print(url);
-      // // Data for "images/island.jpg" is returned, use this as needed.
-      if (data != null) {
-        photo = Image.memory(data);
-        return;
-      } else {
-        photo = Image.network(
-          url,
-          loadingBuilder: (BuildContext context, Widget child,
-              ImageChunkEvent? loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes!
-                    : null,
-              ),
-            );
-          },
-        );
-        return;
-      }
-    } on FirebaseException catch (e) {
-      // Handle any errors.
-      print('Avatar $e');
-    }
+    // print(list);
+    return applicantList;
   }
 }

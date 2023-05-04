@@ -20,6 +20,11 @@ class JobsList extends StatefulWidget {
   State<JobsList> createState() => _JobsListState();
 }
 
+extension StringCasingExtension on String {
+  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+}
+
 class _JobsListState extends State<JobsList> {
   @override
   _JobsListState();
@@ -105,7 +110,7 @@ class _JobsListState extends State<JobsList> {
               SizedBox(
                 width: 100,
                 child: Text(
-                  widget.job.jobTitle,
+                  widget.job.jobTitle.toTitleCase(),
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
@@ -119,14 +124,14 @@ class _JobsListState extends State<JobsList> {
               SizedBox(
                 width: 80,
                 child: Text(
-                  widget.job.major,
+                  widget.job.major.toTitleCase(),
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
               SizedBox(
                 width: 80,
                 child: Text(
-                  widget.job.city != '' ? widget.job.city : "not specified",
+                  widget.job.city != '' ? widget.job.city.toTitleCase() : "Not Specified",
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
