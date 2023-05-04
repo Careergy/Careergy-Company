@@ -45,6 +45,7 @@ dependencies:
   textfield_tags: ^2.0.2
   syncfusion_flutter_calendar: ^21.1.41
   flutter_time_picker_spinner: ^2.0.0
+  toggle_switch: ^2.1.0
  
 
 dev_dependencies:

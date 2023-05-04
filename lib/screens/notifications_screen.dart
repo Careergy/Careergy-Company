@@ -1,11 +1,14 @@
+import 'package:careergy_mobile/screens/appointment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:careergy_mobile/models/Applicant.dart';
 
 import '../constants.dart';
 import '../widgets/custom_textfieldform.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -15,186 +18,96 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  CalendarController _calendarController = CalendarController();
+  late List<Applicant> userList = [];
 
-  @override
-  initState() {
-    _calendarController.displayDate = DateTime.now();
-    super.initState();
-  }
-
-  String? selectedDate;
-  String? _selectedFromTime;
-  String? _selectedToTime;
-  TimeOfDay? selectedTime;
-
-  Future<TimeOfDay?> displayTimeDialog(helpText) async {
-    TimeOfDay? time;
-
-    time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      helpText: helpText,
-    );
-    if (time != null) {
-      // selectedTime = time.format(context);
-      print(selectedTime);
-    }
-    setState(() {});
-    return time;
-  }
+  List<Applicant> applicantList = [
+    // Applicant(
+    //     name: "Mohatdy Alehlal",
+    //     email: "Mohtady.Alhelal@gmail.com",
+    //     phone: "0566304423",
+    //     photoUrl: ""),
+    // Applicant(
+    //     name: "Aqeel Almosa",
+    //     email: "Aqeel.Almosa@gmail.com",
+    //     phone: "0500000000",
+    //     photoUrl: "")
+  ];
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController description = TextEditingController();
-
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Approvement Form",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: Text(
-                    "Interview Date",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: kBlue),
-                      borderRadius: BorderRadius.circular(10)),
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: (MediaQuery.of(context).size.width * 0.8) - 1,
-                  child: SfCalendar(
-                    view: CalendarView.month,
-                    showNavigationArrow: true,
-                    controller: _calendarController,
-                    initialSelectedDate: DateTime.now(),
-                    minDate: DateTime.now(),
-                    selectionDecoration: BoxDecoration(
-                        border: Border.all(color: kBlue, width: 3)),
-                    timeZone: 'Central America Standard Time',
-                    onTap: (calendarTapDetails) {
-                      setState(() {
-                        // selectedDate = DateFormat.yMMMMEEEEd()
-                        //     .format(calendarTapDetails.date!);
-
-                        _calendarController.displayDate =
-                            calendarTapDetails.date;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Selected Date: ',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 35,
-                    ),
-                    Text(
-                      "${_calendarController.displayDate!.day} / ${_calendarController.displayDate!.month} / ${_calendarController.displayDate!.year}",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal,
+        // body: ListView.builder(
+        //   itemCount: applicantList.length,
+        //   itemBuilder: (context, index) {
+        //     Applicant applicant = applicantList[index];
+        body: InkWell(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width * 0.3) - 1,
+                    child: ListTile(
+                      title: Text("Aqeel Almosa"),
+                      subtitle: Text('aqeelalmosa@gmail.com'),
+                      leading: CircleAvatar(
+                        child: ClipOval(
+                            child: Image.asset("/avatarPlaceholder.png")),
+                        radius: 50,
                       ),
                     ),
-                    SizedBox(
-                      width: 35,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            displayTimeDialog('From').then((value) =>
-                                {_selectedFromTime = value?.format(context)});
-                          });
-                        },
-                        child: Text('from')),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(_selectedFromTime != null
-                        ? "$_selectedFromTime"
-                        : "Any Time"),
-                    SizedBox(
-                      width: 35,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            displayTimeDialog('To').then((value) =>
-                                {_selectedToTime = value?.format(context)});
-                          });
-                        },
-                        child: Text('to')),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(_selectedToTime != null
-                        ? "$_selectedToTime"
-                        : "Any Time"),
-                    SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 35,
-                ),
-                SizedBox(
-                  width: 500,
-                  child: CustomTextField(
-                    label: "Approve description",
-                    hint:
-                        "Enter approve description and interview description (e.g. Congratulations!! our company approved you, you have only one step to be our employee)",
-                    maxLines: 10,
-                    controller: description,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("Cancel"),
+                        onPressed: () {},
+                        child: Text("Decline"),
                       ),
                       SizedBox(
                         width: 15,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Send"),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AppointmentScreen()),
+                          );
+                        },
+                        child: Text("Accept"),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  // ToggleSwitch(
+                  //   minHeight: 40.0,
+                  //   minWidth: 100.0,
+                  //   initialLabelIndex: 0,
+                  //   cornerRadius: 20.0,
+                  //   activeFgColor: Colors.white,
+                  //   inactiveBgColor: Colors.grey,
+                  //   inactiveFgColor: Colors.white,
+                  //   totalSwitches: 3,
+                  //   labels: ["Pending", "Accept", "Decline"],
+                  //   borderWidth: 2.0,
+                  //   borderColor: [Colors.white],
+                  //   activeBgColors: [
+                  //     [Colors.orange],
+                  //     [Color.fromARGB(255, 33, 194, 38)],
+                  //     [Color.fromARGB(255, 235, 57, 45)]
+                  //   ],
+                  // ),
+                ],
+              ),
             ),
           ),
+          onTap: () {
+            print("object");
+          },
         ),
       ),
     );
