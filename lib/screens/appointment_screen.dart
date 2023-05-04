@@ -28,16 +28,20 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   String? _selectedToTime;
   TimeOfDay? selectedTime;
 
-  Future<TimeOfDay?> displayTimeDialog() async {
+  Future<TimeOfDay?> displayTimeDialog(helpText) async {
     TimeOfDay? time;
 
-    time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      helpText: helpText,
+    );
     if (time != null) {
       // selectedTime = time.format(context);
       print(selectedTime);
     }
-
-    return time as Future<TimeOfDay?>;
+    setState(() {});
+    return time;
   }
 
   @override
@@ -120,29 +124,35 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          displayTimeDialog().then((value) =>
-                              {_selectedFromTime = value?.format(context)});
-                          setState(() {});
+                          setState(() {
+                            displayTimeDialog('From').then((value) =>
+                                {_selectedFromTime = value?.format(context)});
+                          });
                         },
                         child: Text('from')),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(_selectedFromTime != null ? "$_selectedFromTime" : ""),
+                    Text(_selectedFromTime != null
+                        ? "$_selectedFromTime"
+                        : "Any Time"),
                     SizedBox(
                       width: 35,
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          displayTimeDialog().then((value) =>
-                              {_selectedToTime = value?.format(context)});
-                          setState(() {});
+                          setState(() {
+                            displayTimeDialog('To').then((value) =>
+                                {_selectedToTime = value?.format(context)});
+                          });
                         },
                         child: Text('to')),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(_selectedToTime != null ? "$_selectedToTime" : ""),
+                    Text(_selectedToTime != null
+                        ? "$_selectedToTime"
+                        : "Any Time"),
                     SizedBox(
                       width: 10,
                     ),
