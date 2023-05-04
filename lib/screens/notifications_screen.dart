@@ -23,6 +23,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         itemCount: applicantList.length,
         itemBuilder: (context, index) {
           Applicant applicant = applicantList[index];
+          int Status;
+          if (=="Accept")
+          {
+            Status=1;
+          }
+          else if (=="Decline")
+          {
+            Status=2;
+          }
+          else
+          {
+            Status=0;
+          }
           return InkWell(
             child: Card(
               child: Padding(
@@ -45,7 +58,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ToggleSwitch(
                       minHeight: 40.0,
                       minWidth: 100.0,
-                      initialLabelIndex: 0,
+                      initialLabelIndex: Status,
                       cornerRadius: 20.0,
                       activeFgColor: Colors.white,
                       inactiveBgColor: Colors.grey,
@@ -59,6 +72,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         [Color.fromARGB(255, 33, 194, 38)],
                         [Color.fromARGB(255, 235, 57, 45)]
                       ],
+                      onToggle: (index) {
+                        print('switched to: $index');
+                      },
                     ),
                   ],
                 ),
