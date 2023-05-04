@@ -1,4 +1,8 @@
+import 'package:careergy_mobile/models/application.dart';
+import 'package:careergy_mobile/screens/applicant_profile_screen.dart';
 import 'package:careergy_mobile/screens/appointment_screen.dart';
+import 'package:careergy_mobile/screens/profile_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -18,98 +22,86 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  late List<Applicant> userList = [];
+  List<Application> applicantList = [];
 
-  List<Applicant> applicantList = [
-    // Applicant(
-    //     name: "Mohatdy Alehlal",
-    //     email: "Mohtady.Alhelal@gmail.com",
-    //     phone: "0566304423",
-    //     photoUrl: ""),
-    // Applicant(
-    //     name: "Aqeel Almosa",
-    //     email: "Aqeel.Almosa@gmail.com",
-    //     phone: "0500000000",
-    //     photoUrl: "")
+  List<List<String>> tmpList = [
+    ['Aqeel Almosa', 'aqeelalmosa@gmail.com', 'pending'],
+    ['Mohatdy Alehlal', 'Mohtady.Alhelal@gmail.com', 'pending'],
+    ['Ali Jumah', 'Alijumah@gmail.com', 'waiting']
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        // body: ListView.builder(
-        //   itemCount: applicantList.length,
-        //   itemBuilder: (context, index) {
-        //     Applicant applicant = applicantList[index];
-        body: InkWell(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width * 0.3) - 1,
-                    child: ListTile(
-                      title: Text("Aqeel Almosa"),
-                      subtitle: Text('aqeelalmosa@gmail.com'),
-                      leading: CircleAvatar(
-                        child: ClipOval(
-                            child: Image.asset("/avatarPlaceholder.png")),
-                        radius: 50,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+        home: Scaffold(
+      body: ListView.builder(
+          itemCount: tmpList.length,
+          itemBuilder: (context, index) {
+            print(tmpList[index][0]);
+            InkWell(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text("Decline"),
-                      ),
                       SizedBox(
-                        width: 15,
+                        width: (MediaQuery.of(context).size.width * 0.3) - 1,
+                        child: ListTile(
+                          title: Text('${tmpList[index][0]}'),
+                          subtitle: Text('${tmpList[index][1]}'),
+                          leading: CircleAvatar(
+                            child: ClipOval(
+                                child: Image.asset("/avatarPlaceholder.png")),
+                            radius: 50,
+                          ),
+                          mouseCursor: MouseCursor.defer,
+                        ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const AppointmentScreen()),
-                          );
-                        },
-                        child: Text("Accept"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: 20),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.blueGrey,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Text(
+                              '${tmpList[index][2]}',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  // ToggleSwitch(
-                  //   minHeight: 40.0,
-                  //   minWidth: 100.0,
-                  //   initialLabelIndex: 0,
-                  //   cornerRadius: 20.0,
-                  //   activeFgColor: Colors.white,
-                  //   inactiveBgColor: Colors.grey,
-                  //   inactiveFgColor: Colors.white,
-                  //   totalSwitches: 3,
-                  //   labels: ["Pending", "Accept", "Decline"],
-                  //   borderWidth: 2.0,
-                  //   borderColor: [Colors.white],
-                  //   activeBgColors: [
-                  //     [Colors.orange],
-                  //     [Color.fromARGB(255, 33, 194, 38)],
-                  //     [Color.fromARGB(255, 235, 57, 45)]
-                  //   ],
-                  // ),
-                ],
+                ),
               ),
-            ),
-          ),
-          onTap: () {
-            print("object");
-          },
-        ),
-      ),
-    );
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AppointmentScreen(),
+                    ));
+              },
+            );
+            bottomNavigationBar:
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(kBlue)),
+                onPressed: () {},
+                child: Text(
+                  "History",
+                  style: TextStyle(),
+                ),
+              ),
+            );
+          }),
+    ));
   }
 }
