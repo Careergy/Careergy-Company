@@ -24,7 +24,7 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
 
   Future getApplicantInfo(String id) async {
     if (!downloaded) {
-      widget.applicant = await Applicant.getApplicantInfo(id);
+      await Applicant.getApplicantInfo(id);
       downloaded = true;
     }
   }
@@ -66,7 +66,17 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                     child: CircleAvatar(
                                       radius: 90,
                                       child: ClipOval(
-                                          child: widget.applicant!.photo),
+                                        child: widget.applicant!.photoUrl ==
+                                                    null ||
+                                                widget.applicant!.photoUrl == ''
+                                            ? widget.applicant!.photo
+                                            : Image.network(widget.applicant!.photoUrl??'', loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return const CircularProgressIndicator();
+                                            },),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(
@@ -244,20 +254,18 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 const SizedBox(
                                                   height: 20,
                                                 ),
-                                                const Text(
-                                                  'info.job_titles1',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: 20),
-                                                ),
-                                                const Text(
-                                                  'info.job_titles2',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: 20),
-                                                ),
+                                                ListView.builder(
+                                                  itemCount: widget.applicant!.briefcv!['job_title']!.length,
+                                                  itemBuilder: (context, index) {
+                                                  return Text(widget.applicant!.briefcv!['job_title']![index]??'');
+                                                },),
+                                                // const Text(
+                                                //   'info.job_titles2',
+                                                //   style: TextStyle(
+                                                //       fontWeight:
+                                                //           FontWeight.normal,
+                                                //       fontSize: 20),
+                                                // ),
                                               ],
                                             ),
                                             const SizedBox(

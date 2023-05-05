@@ -14,7 +14,7 @@ class Applicant with ChangeNotifier {
   late final String? photoUrl;
   late String? bio;
   late Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
-  late Map<String, dynamic>? briefcv;
+  Map<String, List?>? briefcv;
 
   Applicant({
     required this.uid,
@@ -23,7 +23,9 @@ class Applicant with ChangeNotifier {
     this.phone,
     this.photoUrl,
     this.bio,
-  }) {}
+  }) {
+    getApplicantInfo(uid);
+  }
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final fs = FirebaseStorage.instance.ref();
@@ -40,13 +42,29 @@ class Applicant with ChangeNotifier {
         email: data['email'] ?? '',
         bio: data['bio'] ?? '',
         phone: data['phone'] ?? '',
-        photoUrl: id,
+        photoUrl: data['photoUrl'] ?? '',
       );
     }, onError: (e) => print(e));
     final ref2 = db.collection('briefcvs').doc(id);
-    await ref2.get().then((value) => applicant!.briefcv = value.data(),
-        onError: (e) => print(e));
+    await ref2
+        .get()
+        .then((value) {
+          final data = value.data();
+          if (data != null) {
+            applicant!.briefcv = {
+              'job_title' : data['job_title']??[],
+              'majors' : data['majors']??[],
+              'major_skills' : data['major_skills']??[],
+              'soft_skills' : data['soft_skills']??[],
+              'intrests' : data['intrests']??[],
+              'prefered_locations' : data['prefered_locations']??[],
+              'other_skills' : data['other_skills']??[],
+            };
+          }
+          applicant!.briefcv = null;
+        }, onError: (e) => applicant!.briefcv = null);
 
+    print(applicant!.briefcv!['job_title']);
     return applicant;
   }
 
