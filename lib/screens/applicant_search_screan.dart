@@ -54,12 +54,13 @@ class _ApplicantSearchScreenState extends State<ApplicantSearchScreen> {
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               AnimatedContainer(
                 duration: const Duration(seconds: 1),
                 width: deviceSize.width -
                     deviceSize.width * 0.2 -
-                    deviceSize.width * 0.025,
+                    deviceSize.width * 0.01,
                 height: _height,
                 curve: Curves.fastOutSlowIn,
                 child: Column(
