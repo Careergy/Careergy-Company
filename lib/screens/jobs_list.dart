@@ -57,7 +57,7 @@ class _JobsListState extends State<JobsList> {
               setState(() {
                 isLoading = true;
               });
-              await Post().deletePost(id);
+              await Post.deletePost(id);
               setState(() {
                 isLoading = false;
                 Navigator.of(ctx).pop();
@@ -177,7 +177,7 @@ class _JobsListState extends State<JobsList> {
                           setState(() {
                             isLoading = true;
                           });
-                          await Post().toggleStatus(widget.job.id);
+                          await Post.toggleStatus(widget.job.id);
                           setState(() {
                             isLoading = false;
                             widget.job.isActive = !widget.job.isActive;

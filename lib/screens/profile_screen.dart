@@ -11,7 +11,6 @@ import 'package:careergy_mobile/widgets/sidebar_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'notifications_screen.dart';
 import '../widgets/custom_drawer.dart';
 
 import '../providers/auth_provider.dart';
@@ -72,7 +71,7 @@ class _profileScreenState extends State<profileScreen> {
                                         padding:
                                             const EdgeInsets.only(left: 15),
                                         child: Text(
-                                          info.email,
+                                          info.email ?? 'Not Available',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal,
                                               fontSize: 20),
@@ -120,7 +119,7 @@ class _profileScreenState extends State<profileScreen> {
                                           child: Text(
                                             info.bio == ''
                                                 ? 'No Bio'
-                                                : info.bio,
+                                                : info.bio ?? 'No Bio',
                                             style: TextStyle(
                                                 fontWeight: info.bio == ''
                                                     ? FontWeight.w100
@@ -147,20 +146,30 @@ class _profileScreenState extends State<profileScreen> {
                                         fit: BoxFit.fill,
                                         child: CircleAvatar(
                                           radius: 120,
-                                          child: ClipOval(child: info.photo
-                                              // (info.hasPhoto && false)
-                                              //     ? info.photo
-                                              //     : const Image(
-                                              //         image: AssetImage(
-                                              //             '/avatarPlaceholder.png'),
-                                              //       ),
-                                              ),
+                                          child: ClipOval(
+                                            child: info.photoUrl == null ||
+                                                    info.photoUrl == ''
+                                                ? info.photo
+                                                : Image.network(
+                                                    info.photoUrl ?? '',
+                                                    loadingBuilder: (context,
+                                                        child,
+                                                        loadingProgress) {
+                                                      if (loadingProgress ==
+                                                          null) {
+                                                        return child;
+                                                      } else {
+                                                        return const CircularProgressIndicator();
+                                                      }
+                                                    },
+                                                  ),
+                                          ),
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          info.name,
+                                          info.name ?? 'No Data',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),
@@ -226,21 +235,19 @@ class _editProfileState extends State<editProfile> {
   Widget build(BuildContext context) {
     final info = Provider.of<Company>(context);
     if (!_isInitialized) {
-      nameCtrl =
-          TextEditingController.fromValue(TextEditingValue(text: info.name));
-      emailCtrl =
-          TextEditingController.fromValue(TextEditingValue(text: info.email));
+      nameCtrl = TextEditingController.fromValue(
+          TextEditingValue(text: info.name ?? ''));
+      emailCtrl = TextEditingController.fromValue(
+          TextEditingValue(text: info.email ?? ''));
       phoneCtrl = TextEditingController.fromValue(
           TextEditingValue(text: info.phone ?? ''));
-      bioCtrl = TextEditingController.fromValue(TextEditingValue(text: info.bio));
+      bioCtrl = TextEditingController.fromValue(
+          TextEditingValue(text: info.bio ?? ''));
       _isInitialized = true;
     }
-    if (photo == null) {
-      print('object');
-      photo = info.hasPhoto
-          ? info.photo
-          : const Image(image: AssetImage('/avatarPlaceholder.png'));
-    }
+    photo ??= info.hasPhoto
+        ? info.photo
+        : const Image(image: AssetImage('/avatarPlaceholder.png'));
     return currentPage == '/profile'
         ? const profileScreen()
         : Scaffold(
@@ -322,10 +329,20 @@ class _editProfileState extends State<editProfile> {
                                   child: Stack(
                                     children: [
                                       ClipOval(
-                                        child: photo ??
-                                            const Image(
-                                                image: AssetImage(
-                                                    '/avatarPlaceholder.png')),
+                                        child: info.photoUrl == null ||
+                                                info.photoUrl == ''
+                                            ? info.photo
+                                            : Image.network(
+                                                info.photoUrl ?? '',
+                                                loadingBuilder: (context, child,
+                                                    loadingProgress) {
+                                                      if (loadingProgress == null) {
+                                                        return child;
+                                                      } else {
+                                                        return const CircularProgressIndicator();
+                                                      }
+                                                    },
+                                              ),
                                       ),
                                       Positioned(
                                         bottom: 15,

@@ -40,7 +40,7 @@ class Applicant with ChangeNotifier {
         email: data['email'] ?? '',
         bio: data['bio'] ?? '',
         phone: data['phone'] ?? '',
-        photoUrl: id,
+        photoUrl: data['photoUrl'] ?? '',
       );
     }, onError: (e) => print(e));
     final ref2 = db.collection('briefcvs').doc(id);

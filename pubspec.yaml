@@ -46,6 +46,8 @@ dependencies:
   syncfusion_flutter_calendar: ^21.1.41
   flutter_time_picker_spinner: ^2.0.0
   flutter_autocomplete_label: ^1.0.0
+  card_loading: ^0.3.0
+  easy_stepper: ^0.5.2+1
  
 
 dev_dependencies:

@@ -1,6 +1,6 @@
 import 'package:careergy_mobile/screens/dashboard_screen.dart';
 import 'package:careergy_mobile/screens/jobs_screen.dart';
-import 'package:careergy_mobile/screens/notifications_screen.dart';
+import 'package:careergy_mobile/screens/applications_screen.dart';
 import 'package:careergy_mobile/screens/profile_screen.dart';
 // import 'package:careergy_mobile/screens/search_screen.dart';
 import './applicant_search_screan.dart';
@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState('/search');
+  State<HomeScreen> createState() => _HomeScreenState('/applications');
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: currentPage == '/profile'
               ? const profileScreen()
               : currentPage == '/applications'
-                  ? const NotificationsScreen()
+                  ? const ApplicationsScreen()
                   : currentPage == '/search'
                       ? const ApplicantSearchScreen()
                       : currentPage == '/dashboard'

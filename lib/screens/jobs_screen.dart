@@ -34,7 +34,7 @@ class _JobsScreenState extends State<JobsScreen> {
   }
 
   Future getPosts() async {
-    jobs = await Post().getPosts() as List;
+    jobs = await Post.getPosts() as List;
   }
 
   // List<Job>? jobs = [
@@ -469,7 +469,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                         _isLoading = true;
                                       });
                                       if (widget.job != null) {
-                                        await Post().editPost(Job(
+                                        await Post.editPost(Job(
                                           id: widget.job!.id,
                                           jobTitle: title.text,
                                           yearsOfExperience:
@@ -479,7 +479,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                           city: city ?? '',
                                         ));
                                       } else {
-                                        await Post().postJob(Job(
+                                        await Post.postJob(Job(
                                           jobTitle: title.text,
                                           yearsOfExperience:
                                               _selectedYear ?? '',
