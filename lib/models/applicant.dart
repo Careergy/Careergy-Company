@@ -8,18 +8,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class Applicant with ChangeNotifier {
   final String uid;
-  late final String name;
-  late final String email;
-  late final String? phone;
-  late final String? photoUrl;
-  late String? bio;
-  late Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
+  final String? name;
+  final String? email;
+  final String? phone;
+  final String? photoUrl;
+  final String? bio;
+  Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
   Map<String, List?>? briefcv;
 
   Applicant({
     required this.uid,
-    required this.name,
-    required this.email,
+    this.name,
+    this.email,
     this.phone,
     this.photoUrl,
     this.bio,
@@ -45,27 +45,48 @@ class Applicant with ChangeNotifier {
         photoUrl: data['photoUrl'] ?? '',
       );
     }, onError: (e) => print(e));
-    final ref2 = db.collection('briefcvs').doc(id);
-    await ref2
-        .get()
-        .then((value) {
-          final data = value.data();
-          if (data != null) {
-            applicant!.briefcv = {
-              'job_title' : data['job_title']??[],
-              'majors' : data['majors']??[],
-              'major_skills' : data['major_skills']??[],
-              'soft_skills' : data['soft_skills']??[],
-              'intrests' : data['intrests']??[],
-              'prefered_locations' : data['prefered_locations']??[],
-              'other_skills' : data['other_skills']??[],
-            };
-          }
-          applicant!.briefcv = null;
-        }, onError: (e) => applicant!.briefcv = null);
+    // final ref2 = db.collection('briefcvs').doc(id);
+    // await ref2
+    //     .get()
+    //     .then((value) {
+    //       if (value.exists) {
+    //         final data = value.data();
+    //         applicant!.briefcv = {
+    //           'job_title' : data!['job_title']??[],
+    //           'majors' : data['majors']??[],
+    //           'major_skills' : data['major_skills']??[],
+    //           'soft_skills' : data['soft_skills']??[],
+    //           'intrests' : data['intrests']??[],
+    //           'prefered_locations' : data['prefered_locations']??[],
+    //           'other_skills' : data['other_skills']??[],
+    //         };
+    //       }
+    //       applicant!.briefcv = null;
+    //     }, onError: (e) => applicant!.briefcv = null);
 
-    print(applicant!.briefcv!['job_title']);
+    // print(applicant!.briefcv!['job_title']);
     return applicant;
+  }
+
+  static Future getBriefCV(String id) async {
+    final FirebaseFirestore db = FirebaseFirestore.instance;
+    final ref = db.collection('briefcvs').doc(id);
+    Map<String, List?>? briefcv;
+    await ref.get().then((value) {
+      if (value.exists) {
+        final data = value.data();
+        briefcv = {
+          'job_title': data!['job_title'] ?? [],
+          'majors': data['majors'] ?? [],
+          'major_skills': data['major_skills'] ?? [],
+          'soft_skills': data['soft_skills'] ?? [],
+          'intrests': data['intrests'] ?? [],
+          'prefered_locations': data['prefered_locations'] ?? [],
+          'other_skills': data['other_skills'] ?? [],
+        };
+      }
+    }, onError: (e) => print(e));
+    return briefcv;
   }
 
   static Future getSearchResults(

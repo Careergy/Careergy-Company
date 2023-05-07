@@ -1,3 +1,4 @@
+import 'package:careergy_mobile/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
@@ -63,40 +64,44 @@ class _SearchResultAreaState extends State<SearchResultArea> {
               ? const Center()
               : result!.isEmpty
                   ? const Center(child: Text('No Results'))
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      width: (MediaQuery.of(context).size.width * 0.8) - 1,
-                      child: Scrollbar(
+                  : Scrollbar(
+                      controller: _scrollController,
+                      child: SingleChildScrollView(
                         controller: _scrollController,
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          child: ListView.builder(
-                            itemCount: result!.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              // print(widget.userList);
-                              return ListTile(
+                        child: ListView.builder(
+                          itemCount: result!.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            // print(widget.userList);
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: ListTile(
                                 contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 6),
-                                leading: ClipOval(
-                                  child: result![index].photoUrl == '' || result![index].photoUrl == null
-                                      ? result![index].photo
-                                      : Image.network(
-                                          result![index].photoUrl ?? '',
-                                          loadingBuilder: (context, child,
-                                              loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return const CircularProgressIndicator(
-                                                color: Colors.blue);
-                                          },
-                                        ),
+                                minLeadingWidth: 50,
+                                leading: CircleAvatar(
+                                  backgroundColor: const Color.fromARGB(0,0,0,0),
+                                  child: ClipOval(
+                                    child: result![index].photoUrl == '' ||
+                                            result![index].photoUrl == null || result![index].photoUrl!.substring(0,4) != 'http'
+                                        ? result![index].photo
+                                        : Image.network(
+                                            result![index].photoUrl ?? '',
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return const CircularProgressIndicator(
+                                                  color: Colors.blue);
+                                            },
+                                          ),
+                                  ),
                                 ),
-                                title: Text(result![index].name),
-                                subtitle: Text(result![index].bio!.length > 20
-                                    ? '${result![index].bio!.substring(0, 20)}...'
-                                    : result![index].bio!),
+                                title: Text(result![index].name??'', style: const TextStyle(color: white)),
+                                subtitle: Text(result![index].bio!.length > 40
+                                    ? '${result![index].bio!.substring(0, 40)}...'
+                                    : result![index].bio!, style: const TextStyle(color: white)),
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
@@ -104,9 +109,12 @@ class _SearchResultAreaState extends State<SearchResultArea> {
                                             applicant: result![index]),
                                   ));
                                 },
-                              );
-                            },
-                          ),
+                                hoverColor: actionColor,
+                                tileColor: canvasColor,
+                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     );

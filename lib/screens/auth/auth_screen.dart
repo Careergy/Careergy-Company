@@ -322,6 +322,11 @@ class _AuthCardState extends State<AuthCard> {
                         onSaved: (value) {
                           _authData['password'] = value!;
                         },
+                        onFieldSubmitted: (value) async {
+                          if (_authMode == AuthMode.Login) {
+                            await _submit();
+                          }
+                        }
                       ),
                       if (_authMode == AuthMode.Signup)
                         TextFormField(

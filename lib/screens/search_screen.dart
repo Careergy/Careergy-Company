@@ -22,11 +22,11 @@
 //     if (userList.isNotEmpty) {
 //       userList.clear();
 //     }
-//     List<Applicant> list = await Applicant.getSearchResults(
-//         mappingList['job_titles'] as List<String>,
-//         mappingList['locations'] as List<String>,
-//         mappingList['level'] as List<String>);
-//     userList.addAll(list);
+//     // List<Applicant> list = await Applicant.getSearchResults(
+//     //     mappingList['job_titles'] as List<String>,
+//     //     mappingList['locations'] as List<String>,
+//     //     mappingList['level'] as List<String>);
+//     // userList.addAll(list);
 //     // print(list);
 //     setState(() {});
 //   }

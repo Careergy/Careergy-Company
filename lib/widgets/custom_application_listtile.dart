@@ -92,7 +92,7 @@ class CustomApplicationListTile extends StatelessWidget {
                             width: deviceSize.width * 0.2 - 76,
                             height: double.infinity,
                             child: ListTile(
-                              title: Text(application.applicant.name,
+                              title: Text(application.applicant.name??'',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
                               textColor: Colors.white,

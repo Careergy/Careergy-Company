@@ -1,7 +1,10 @@
-import 'package:careergy_mobile/providers/keywords_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:flutter_autocomplete_label/autocomplete_label.dart';
+
+import '../providers/keywords_provider.dart';
+
+import '../constants.dart';
 
 class BriefCVField extends StatefulWidget {
   BriefCVField({
@@ -42,37 +45,37 @@ class _BriefCVFieldState extends State<BriefCVField> {
 
   final bool _keepAutofocus = false;
 
-  final AutocompleteLabelController _autocompleteLabelController =
-      AutocompleteLabelController<String>(source: [
-    "Android",
-    "iOS",
-    "Flutter",
-    "Windows",
-    "Web",
-    "Fuchsia",
-    "Dart",
-    "Golang",
-    "Java",
-    "Python",
-    "Ruby",
-    "c/c++",
-    "Kotlin",
-    "Swift",
-    "HTML",
-    "CSS",
-    "JavaScript",
-    "PHP",
-    "GitHub",
-    "Google",
-    "Facebook",
-    "KnowlGraph",
-    "Twitter",
-    "Tiktok",
-    "StackOverflow",
-    "WeiXin",
-    "Alibaba",
-    "youtube",
-  ]);
+  // final AutocompleteLabelController _autocompleteLabelController =
+  //     AutocompleteLabelController<String>(source: [
+  //   "Android",
+  //   "iOS",
+  //   "Flutter",
+  //   "Windows",
+  //   "Web",
+  //   "Fuchsia",
+  //   "Dart",
+  //   "Golang",
+  //   "Java",
+  //   "Python",
+  //   "Ruby",
+  //   "c/c++",
+  //   "Kotlin",
+  //   "Swift",
+  //   "HTML",
+  //   "CSS",
+  //   "JavaScript",
+  //   "PHP",
+  //   "GitHub",
+  //   "Google",
+  //   "Facebook",
+  //   "KnowlGraph",
+  //   "Twitter",
+  //   "Tiktok",
+  //   "StackOverflow",
+  //   "WeiXin",
+  //   "Alibaba",
+  //   "youtube",
+  // ]);
 
   @override
   void didChangeDependencies() {
@@ -202,7 +205,7 @@ class _BriefCVFieldState extends State<BriefCVField> {
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(20.0),
                                       ),
-                                      color: Color.fromARGB(255, 58, 105, 186),
+                                      color: canvasColor,
                                     ),
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 5.0),

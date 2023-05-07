@@ -164,6 +164,12 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "floating_action_bubble",
+      "rootUri": "file:///Users/ali/.pub-cache/hosted/pub.dev/floating_action_bubble-1.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///Users/ali/Development/SDKs/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -302,6 +308,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "sidebarx",
+      "rootUri": "file:///Users/ali/.pub-cache/hosted/pub.dev/sidebarx-0.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/ali/Development/SDKs/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -398,7 +410,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-06T01:19:57.438743Z",
+  "generated": "2023-05-06T18:46:52.680494Z",
   "generator": "pub",
   "generatorVersion": "2.19.2"
 }

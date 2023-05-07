@@ -34,7 +34,10 @@ class MyApp extends StatelessWidget {
         if (snapshot.hasData || false) {
           return MaterialApp(
             title: 'Careergy | Company',
-            theme: ThemeData(primaryColor: kBlue),
+            theme: ThemeData(
+              primaryColor: primaryColor,
+              accentColor: accentCanvasColor,
+            ),
             home: MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(
@@ -80,86 +83,97 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isClicked = false;
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Theme.of(context).primaryColor,
-        actions: [
-          PopupMenuButton<int>(
-            itemBuilder: (context) => [
-              // PopupMenuItem 2
-              PopupMenuItem(
-                value: 2,
-                // row with two children
-                child: Row(
-                  children: const [
-                    Icon(Icons.chrome_reader_mode),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "About",
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 3,
-                // row with two children
-                child: Row(
-                  children: const [
-                    Icon(Icons.logout_rounded),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Logout",
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-              ),
-            ],
-            offset: const Offset(0, 100),
-            color: Theme.of(context).primaryColor,
-            elevation: 2,
-            // shape: CircleBorder(eccentricity: 20),
-            // on selected we show the dialog box
-            onSelected: (value) {
-              // if value 1 show dialog
-              if (value == 1) {
-                // _showDialog(context);
-                // if value 2 show dialog
-              } else if (value == 2) {
-                // _showDialog(context);
-              } else if (value == 3) {
-                auth.logout();
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: Icon(Icons.menu),
+      backgroundColor: const Color(0xFF3E3E61),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      //   backgroundColor: Theme.of(context).primaryColor,
+      //   actions: [
+      //     PopupMenuButton<int>(
+      //       itemBuilder: (context) => [
+      //         // PopupMenuItem 2
+      //         PopupMenuItem(
+      //           value: 2,
+      //           // row with two children
+      //           child: Row(
+      //             children: const [
+      //               Icon(Icons.chrome_reader_mode),
+      //               SizedBox(
+      //                 width: 10,
+      //               ),
+      //               Text(
+      //                 "About",
+      //                 style: TextStyle(color: Colors.white),
+      //               )
+      //             ],
+      //           ),
+      //         ),
+      //         PopupMenuItem(
+      //           value: 3,
+      //           // row with two children
+      //           child: Row(
+      //             children: const [
+      //               Icon(Icons.logout_rounded),
+      //               SizedBox(
+      //                 width: 10,
+      //               ),
+      //               Text(
+      //                 "Logout",
+      //                 style: TextStyle(color: Colors.white),
+      //               )
+      //             ],
+      //           ),
+      //         ),
+      //       ],
+      //       offset: const Offset(0, 100),
+      //       color: Theme.of(context).primaryColor,
+      //       elevation: 2,
+      //       // shape: CircleBorder(eccentricity: 20),
+      //       // on selected we show the dialog box
+      //       onSelected: (value) {
+      //         // if value 1 show dialog
+      //         if (value == 1) {
+      //           // _showDialog(context);
+      //           // if value 2 show dialog
+      //         } else if (value == 2) {
+      //           // _showDialog(context);
+      //         } else if (value == 3) {
+      //           auth.logout();
+      //         }
+      //       },
+      //       child: const Padding(
+      //         padding: EdgeInsets.only(right: 20.0),
+      //         child: Icon(Icons.menu),
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: ElevatedButton(
+          onPressed: () async {
+            await AuthProvider().logout();
+          },
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(const CircleBorder()),
+            padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
+            backgroundColor:
+                MaterialStateProperty.all(const Color.fromARGB(255, 109, 0, 0)), // <-- Button color
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return actionColor; // <-- Splash color
+                }
+              },
             ),
           ),
-        ],
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 12.0),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.18,
-          height: 35,
-          child: ElevatedButton(
-            onPressed: () => Navigator.of(context).pushNamed('/support'),
-            child: const Text('Support', style: TextStyle(fontSize: 16)),
-            // style: ButtonStyle(),
-          ),
+          child: const Icon(Icons.power_settings_new_rounded),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: const HomeScreen(),
     );
   }
