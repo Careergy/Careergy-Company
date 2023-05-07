@@ -44,130 +44,164 @@ class _profileScreenState extends State<profileScreen> {
               : Scaffold(
                   body: ListView(
                     children: [
+                      Stack(
+                        alignment: AlignmentDirectional.bottomStart,
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            color: kBlue,
+                          ),
+                          Positioned(
+                            top: MediaQuery.of(context).size.height * 0.12,
+                            left: 40,
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: CircleAvatar(
+                                  radius: 120,
+                                  child: ClipOval(child: info.photo
+                                      // (info.hasPhoto && false)
+                                      //     ? info.photo
+                                      //     : const Image(
+                                      //         image: AssetImage(
+                                      //             '/avatarPlaceholder.png'),
+                                      //       ),
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20, left: 310),
+                            child: Text(
+                              info.name,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 100,
+                      ),
+                      Divider(),
                       Container(
-                        padding: const EdgeInsets.all(20),
+                        // color: Colors.grey.shade100,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 75),
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 50, bottom: 30, right: 50),
-                                  child: Column(
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Email',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          info.email,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      const Text(
-                                        'Phone Number',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          info.phone ?? 'Not Availabla',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      const Text(
-                                        'About Company',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: SizedBox(
-                                          width: 500,
-                                          child: Text(
-                                            info.bio == ''
-                                                ? 'No Bio'
-                                                : info.bio,
-                                            style: TextStyle(
-                                                fontWeight: info.bio == ''
-                                                    ? FontWeight.w100
-                                                    : FontWeight.normal,
-                                                fontSize: 20),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 50, bottom: 30, right: 50, left: 30),
-                                  child: Column(
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: CircleAvatar(
-                                          radius: 120,
-                                          child: ClipOval(child: info.photo
-                                              // (info.hasPhoto && false)
-                                              //     ? info.photo
-                                              //     : const Image(
-                                              //         image: AssetImage(
-                                              //             '/avatarPlaceholder.png'),
-                                              //       ),
+                                Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.email,
+                                              color: kBlue,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15.0),
+                                              child: Text(
+                                                info.email,
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: 20,
+                                                    color: Colors.grey),
                                               ),
+                                            ),
+                                          ],
                                         ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.phone,
+                                              color: kBlue,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15),
+                                              child: Text(
+                                                info.phone ?? 'Not Available',
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: 20,
+                                                    color: Colors.grey),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: SizedBox(
+                                        width: 1,
+                                        height: 200,
+                                        child: Container(
+                                            color: Colors.grey.shade200),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          info.name,
-                                          style: const TextStyle(
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'About Company',
+                                          style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),
                                         ),
-                                      ),
-                                    ],
-                                  ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: SizedBox(
+                                            width: 500,
+                                            child: Text(
+                                              info.bio == ''
+                                                  ? 'No Bio'
+                                                  : info.bio,
+                                              style: TextStyle(
+                                                  fontWeight: info.bio == ''
+                                                      ? FontWeight.w100
+                                                      : FontWeight.normal,
+                                                  fontSize: 20),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 20,
                                 ),
                               ],
                             ),
@@ -232,7 +266,8 @@ class _editProfileState extends State<editProfile> {
           TextEditingController.fromValue(TextEditingValue(text: info.email));
       phoneCtrl = TextEditingController.fromValue(
           TextEditingValue(text: info.phone ?? ''));
-      bioCtrl = TextEditingController.fromValue(TextEditingValue(text: info.bio));
+      bioCtrl =
+          TextEditingController.fromValue(TextEditingValue(text: info.bio));
       _isInitialized = true;
     }
     if (photo == null) {
