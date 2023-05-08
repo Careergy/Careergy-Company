@@ -76,153 +76,169 @@ class _profileScreenState extends State<profileScreen> {
                           ),
                         ],
                       ),
-                      Column(
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(top: 20, left: 310),
                             child: Text(
                               info.name,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+                                  fontWeight: FontWeight.bold, fontSize: 30),
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStatePropertyAll(kBlue)),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 15),
+                                      child: Text(
+                                        'edit',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    currentPage = '/editProfile';
+                                  });
+                                }),
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: 100,
+                        height: 110,
                       ),
-                      Divider(),
                       Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade100,
+                          ),
+                          BoxShadow(
+                            color: Colors.white,
+                            spreadRadius: -20.0,
+                            blurRadius: 20.0,
+                          ),
+                        ]),
                         // color: Colors.grey.shade100,
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 75),
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                    Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.email,
-                                              color: kBlue,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 15.0),
-                                              child: Text(
-                                                info.email,
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    fontSize: 20,
-                                                    color: Colors.grey),
-                                              ),
-                                            ),
-                                          ],
+                                        Icon(
+                                          Icons.email,
+                                          color: kBlue,
                                         ),
-                                        const SizedBox(
-                                          height: 30,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.phone,
-                                              color: kBlue,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 15),
-                                              child: Text(
-                                                info.phone ?? 'Not Available',
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    fontSize: 20,
-                                                    color: Colors.grey),
-                                              ),
-                                            ),
-                                          ],
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15.0),
+                                          child: Text(
+                                            info.email,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20,
+                                                color: Colors.grey),
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: SizedBox(
-                                        width: 1,
-                                        height: 200,
-                                        child: Container(
-                                            color: Colors.grey.shade200),
-                                      ),
+                                    const SizedBox(
+                                      height: 30,
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                    Row(
                                       children: [
-                                        const Text(
-                                          'About Company',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
+                                        Icon(
+                                          Icons.phone,
+                                          color: kBlue,
                                         ),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 15),
-                                          child: SizedBox(
-                                            width: 500,
-                                            child: Text(
-                                              info.bio == ''
-                                                  ? 'No Bio'
-                                                  : info.bio,
-                                              style: TextStyle(
-                                                  fontWeight: info.bio == ''
-                                                      ? FontWeight.w100
-                                                      : FontWeight.normal,
-                                                  fontSize: 20),
-                                            ),
+                                          child: Text(
+                                            info.phone ?? 'Not Available',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20,
+                                                color: Colors.grey),
                                           ),
                                         ),
                                       ],
-                                    )
+                                    ),
                                   ],
                                 ),
-                                const SizedBox(
-                                  width: 20,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: SizedBox(
+                                    width: 1,
+                                    height: 200,
+                                    child:
+                                        Container(color: Colors.grey.shade200),
+                                  ),
                                 ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'About Company',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 20,
+                                          color: Colors.black),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: SizedBox(
+                                        width: 500,
+                                        child: Text(
+                                          info.bio == '' ? 'No Bio' : info.bio,
+                                          style: TextStyle(
+                                              fontWeight: info.bio == ''
+                                                  ? FontWeight.w100
+                                                  : FontWeight.normal,
+                                              fontSize: 20,
+                                              color: Colors.grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
+                            ),
+                            const SizedBox(
+                              width: 20,
                             ),
                           ],
                         ),
                       ),
                     ],
-                  ),
-                  bottomNavigationBar: Container(
-                    padding: const EdgeInsets.all(32),
-                    // transformAlignment: Alignment.bottomRight,
-                    margin: const EdgeInsets.only(left: 800, right: 60),
-
-                    child: ElevatedButton(
-                        child: const Text('Edit'),
-                        onPressed: () {
-                          setState(() {
-                            currentPage = '/editProfile';
-                            // get profile info from database and show them
-                          });
-                        }),
                   ),
                 );
         });
@@ -407,31 +423,6 @@ class _editProfileState extends State<editProfile> {
                                                 _infoData['name'] = value;
                                               },
                                               controller: nameCtrl,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        children: [
-                                          const Text(
-                                            'Abbreviation (Optional)',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          SizedBox(
-                                            width: 150,
-                                            child: CustomTextField(
-                                              label: "Abbreviation",
-                                              hint:
-                                                  "Enter Company Abbreviation",
-                                              onChanged: (value) {},
                                             ),
                                           ),
                                         ],
