@@ -11,7 +11,7 @@ class Application {
   late final String id;
   late final List<String>? attachments;
   late final String status;
-  late final Timestamp timestamp;
+  late final Timestamp? timestamp;
 
   Application(
       {required this.id,
@@ -19,7 +19,7 @@ class Application {
       required this.status,
       required this.timestamp});
 
-  static Future getApplicantInfo(String id) async {
+  getApplicationInfo() async {
     final FirebaseFirestore db = FirebaseFirestore.instance;
     final fs = FirebaseStorage.instance.ref();
 

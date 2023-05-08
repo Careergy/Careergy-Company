@@ -1,7 +1,29 @@
-2023/05/07-21:24:56.175 80dc Reusing MANIFEST C:\Users\aqeel\AppData\Local\Temp\flutter_tools.10e000bc\flutter_tools_chrome_device.1284393c\Default\Local Storage\leveldb/MANIFEST-000001
-2023/05/07-21:24:56.185 80dc Recovering log #4
-2023/05/07-21:24:56.189 80dc Reusing old log C:\Users\aqeel\AppData\Local\Temp\flutter_tools.10e000bc\flutter_tools_chrome_device.1284393c\Default\Local Storage\leveldb/000004.log 
-2023/05/07-21:24:56.189 80dc Delete type=0 #3
-2023/05/07-21:30:22.508 7f1c Level-0 table #8: started
-2023/05/07-21:30:22.518 7f1c Level-0 table #8: 32895 bytes OK
-2023/05/07-21:30:22.522 7f1c Delete type=0 #4
+2023/05/07-21:40:07.304 1474 Reusing MANIFEST C:\Users\aqeel\AppData\Local\Temp\flutter_tools.2532d850\flutter_tools_chrome_device.9ebe2ffc\Default\Local Storage\leveldb/MANIFEST-000001
+2023/05/07-21:40:07.317 1474 Recovering log #7
+2023/05/07-21:40:07.319 1474 Reusing old log C:\Users\aqeel\AppData\Local\Temp\flutter_tools.2532d850\flutter_tools_chrome_device.9ebe2ffc\Default\Local Storage\leveldb/000007.log 
+2023/05/07-21:40:07.320 1474 Delete type=0 #3
+2023/05/07-21:40:07.320 1474 Delete type=0 #4
+2023/05/07-22:05:12.112 1474 Level-0 table #11: started
+2023/05/07-22:05:12.121 1474 Level-0 table #11: 40024 bytes OK
+2023/05/07-22:05:12.124 1474 Delete type=0 #7
+2023/05/07-22:24:30.624 3c10 Level-0 table #13: started
+2023/05/07-22:24:30.634 3c10 Level-0 table #13: 38706 bytes OK
+2023/05/07-22:24:30.638 3c10 Delete type=0 #10
+2023/05/07-22:49:41.808 82c4 Level-0 table #15: started
+2023/05/07-22:49:41.815 82c4 Level-0 table #15: 54356 bytes OK
+2023/05/07-22:49:41.818 82c4 Delete type=0 #12
+2023/05/07-22:49:48.873 82c4 Level-0 table #17: started
+2023/05/07-22:49:48.880 82c4 Level-0 table #17: 36988 bytes OK
+2023/05/07-22:49:48.884 82c4 Delete type=0 #14
+2023/05/07-22:49:48.885 82c4 Compacting 4@0 + 1@1 files
+2023/05/07-22:49:48.895 82c4 Generated table #18@0: 91 keys, 93585 bytes
+2023/05/07-22:49:48.895 82c4 Compacted 4@0 + 1@1 files => 93585 bytes
+2023/05/07-22:49:48.896 82c4 compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/05/07-22:49:48.898 82c4 Delete type=2 #8
+2023/05/07-22:49:48.898 82c4 Delete type=2 #11
+2023/05/07-22:49:48.898 82c4 Delete type=2 #13
+2023/05/07-22:49:48.898 82c4 Delete type=2 #15
+2023/05/07-22:49:48.898 82c4 Delete type=2 #17
+2023/05/07-22:50:02.319 82c4 Level-0 table #20: started
+2023/05/07-22:50:02.327 82c4 Level-0 table #20: 36714 bytes OK
+2023/05/07-22:50:02.330 82c4 Delete type=0 #16

@@ -1,5 +1,10 @@
 import 'package:careergy_mobile/constants.dart';
+import 'package:careergy_mobile/screens/notifications_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../models/application.dart';
+import '../providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
@@ -14,8 +19,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String? currentPage;
   bool isHovering = false;
   _DashboardScreenState(this.currentPage);
+  // late final Future myFuture;
+  // late final AggregateQuery count;
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   myFuture = getApplicationsCount();
+  // }
+
+  // Future getApplicationsCount() async {
+  //   count = await Application().getApplicationsCount();
+  // }
+
+  // Future refresh() async {
+  //   await getApplicationsCount();
+  //   setState(() {});
+  // }
+
   @override
   Widget build(BuildContext context) {
+    // return FutureBuilder(
+    //   future: Provider.of<Application>(context).getApplicationsCount(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return const Center(child: CircularProgressIndicator());
+    //     } else {
     return Scaffold(
       body: ListView(children: [
         Container(
@@ -157,7 +186,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           SizedBox(
                             width: 150,
                             child: Text(
-                              'Applicants',
+                              'Applications',
                               style: TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'Montserrat_regular'),
@@ -183,7 +212,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           SizedBox(
                             width: 150,
                             child: Text(
-                              '5880',
+                              "5880",
                               style: TextStyle(
                                   fontFamily: 'Montserrat_bold',
                                   fontSize: 50,
@@ -224,28 +253,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     isHovering ? Color.fromARGB(255, 117, 150, 239) : kBlue,
               ),
               onPressed: () {
-                setState(() {});
+                setState(() {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => NotificationsScreen(),
+                  //   ),
+                  // );
+                });
               },
               onHover: (value) {
                 setState(() {
                   isHovering = value;
                 });
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Request for Authentication Mark',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Icon(
-                    Icons.check_circle,
-                    color: Colors.white,
-                  )
-                ],
+              child: Text(
+                'show applications',
+                style: TextStyle(color: Colors.white),
               )),
         )
       ]),
+      //     );
+      //   }
+      // },
     );
   }
 }
