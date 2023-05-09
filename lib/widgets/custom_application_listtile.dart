@@ -32,7 +32,7 @@ class CustomApplicationListTile extends StatelessWidget {
           return const CardLoading(
             height: 100,
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            margin: EdgeInsets.only(bottom: 10),
+            margin: EdgeInsets.only(bottom: 10, top: 10),
             cardLoadingTheme: CardLoadingTheme(colorOne: Colors.white10, colorTwo: Colors.white24),
           );
         } else {
@@ -49,10 +49,10 @@ class CustomApplicationListTile extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               child: Container(
                 height: 100,
-                padding: const EdgeInsets.all(7.0),
+                padding: const EdgeInsets.all(9.0),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [canvasColor, Color.fromRGBO(83, 81, 186, 0.811)],
+                      colors: [Color.fromARGB(255, 17, 14, 59), Color.fromRGBO(46, 45, 121, 0.808)],
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight),
                 ),
@@ -60,7 +60,7 @@ class CustomApplicationListTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: deviceSize.width * 0.1,
+                      width: deviceSize.width * 0.09,
                       height: 80,
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
@@ -142,7 +142,7 @@ class CustomApplicationListTile extends StatelessWidget {
                         title: Text(
                             '${application.post.jobTitle.toTitleCase()} (${application.post.major.toTitleCase()})',
                             style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
+                                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                         textColor: Colors.white,
                         subtitle: Text(
                             '${application.post.location.toTitleCase()} - ${application.post.experienceYears} of experience years'),
@@ -150,7 +150,7 @@ class CustomApplicationListTile extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: deviceSize.width * 0.15,
+                      width: deviceSize.width * 0.12,
                       height: 80,
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(88, 111, 103, 164),
@@ -189,7 +189,7 @@ class CustomApplicationListTile extends StatelessWidget {
                       color: Colors.white12,
                     ),
                     SizedBox(
-                      width: deviceSize.width * 0.15,
+                      width: deviceSize.width * 0.1,
                       height: 80,
                       child: ActionButtons(
                           status: application.status,
@@ -213,27 +213,27 @@ class ActionButtons extends StatelessWidget {
   final String timestamp;
   final String status;
 
-  double factor = 0.15;
+  double factor = 0.1;
 
   @override
   Widget build(BuildContext context) {
     if (DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp))
             .isBefore(DateTime.now()) &&
         status == 'accepted') {
-      factor = 0.07;
+      factor = 0.05;
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        factor == 0.07
+        factor == 0.05
             ? SizedBox(
-                width: MediaQuery.of(context).size.width * 0.07,
+                width: MediaQuery.of(context).size.width * factor,
                 height: 84,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.07,
+                      width: MediaQuery.of(context).size.width * factor,
                       height: 35,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 26, 104, 28),
@@ -252,7 +252,7 @@ class ActionButtons extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.07,
+                      width: MediaQuery.of(context).size.width * factor,
                       height: 35,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 123, 36, 30),
@@ -283,13 +283,13 @@ class ActionButtons extends StatelessWidget {
                 2, const BoxShadow(color: Colors.black26, blurRadius: 0.8)),
           ),
           child: InkWell(
-            child: const Center(
-              child: Text('View', style: TextStyle(fontSize: 20, color: white)),
-            ),
             hoverColor: canvasColor,
             onTap: () {
               
             },
+            child: const Center(
+              child: Text('View', style: TextStyle(fontSize: 20, color: white, fontWeight: FontWeight.w800)),
+            ),
           ),
         ),
       ],

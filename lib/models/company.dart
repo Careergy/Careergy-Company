@@ -17,6 +17,7 @@ class Company with ChangeNotifier {
   String? photoUrl;
   Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
   String? bio;
+  String? address;
   late String? token;
 
   List<Application>? applications;
@@ -53,6 +54,7 @@ class Company with ChangeNotifier {
         email = data['email'] ?? '';
         phone = data['phone'] ?? '';
         photoUrl = data['photoUrl'] ?? '';
+        address = data['address'] ?? '';
         bio = data['bio'] ?? '';
       },
       onError: (e) => print("Error getting document: $e"),
@@ -74,11 +76,13 @@ class Company with ChangeNotifier {
         'email': info['email'],
         'phone': info['phone'],
         'bio': info['bio'] ?? '',
+        'address' : info['address'],
         'photoUrl': photoUrl,
       }).onError((e, _) => print("Error writing document: $e"));
       name = info['name'];
       email = info['email'];
       phone = info['phone'];
+      address = info['address'];
       bio = info['bio'] ?? '';
       notifyListeners();
       return;
@@ -98,6 +102,7 @@ class Company with ChangeNotifier {
       'name': info['name'],
       'email': info['email'],
       'phone': info['phone'],
+      'address' : info['address'],
       'bio': info['bio'] ?? '',
       'photoUrl': info['photoUrl']['fileName'],
     }).onError((e, _) => print("Error writing document: $e"));
@@ -105,7 +110,7 @@ class Company with ChangeNotifier {
     name = info['name'];
     email = info['email'];
     phone = info['phone'];
-    // photoUrl = fileName;
+    address = info['address'];
     bio = info['bio'] ?? '';
     // await getAvatar();
     notifyListeners();
@@ -127,9 +132,7 @@ class Company with ChangeNotifier {
 
   Future getApplications({String? uid}) async {
     List<Application> applications = [];
-    final db = FirebaseFirestore.instance;
     final ref = db.collection('applications');
-    // print('--------------------------');
     await ref
         .where('company_uid', isEqualTo: this.uid)
         .where('status', whereIn: ['pending', 'accepted', 'waiting', 'new'])
@@ -139,40 +142,83 @@ class Company with ChangeNotifier {
           (value) {
             if (value.docs.isNotEmpty) {
               for (var doc in value.docs) {
-                var data = doc.data();
-                // print(data);
                 Application ap = Application(
                   id: doc.id,
                   applicantId: doc.data().toString().contains('applicant_uid')
-                ? doc.get('applicant_uid').toString()
-                : '',
+                      ? doc.get('applicant_uid').toString()
+                      : '',
                   companyId: doc.data().toString().contains('company_uid')
-                ? doc.get('company_uid').toString()
-                : '',
+                      ? doc.get('company_uid').toString()
+                      : '',
                   postId: doc.data().toString().contains('post_uid')
-                ? doc.get('post_uid').toString()
-                : '',
+                      ? doc.get('post_uid').toString()
+                      : '',
                   timestamp: doc.data().toString().contains('timestamp')
-                ? doc.get('timestamp').toString()
-                : '',
+                      ? doc.get('timestamp').toString()
+                      : '',
                   status: doc.data().toString().contains('status')
-                ? doc.get('status').toString()
-                : 'pending',
-                  appointmentTimestamp: doc.data().toString().contains('appointment_timestamp')
-                ? doc.get('appointment_timestamp').toString()
-                : null,
+                      ? doc.get('status').toString()
+                      : 'pending',
+                  appointmentTimestamp:
+                      doc.data().toString().contains('appointment_timestamp')
+                          ? doc.get('appointment_timestamp').toString()
+                          : null,
                   lastUpdated: doc.data().toString().contains('last_updated')
-                ? doc.get('last_updated').toString()
-                : null,
+                      ? doc.get('last_updated').toString()
+                      : null,
                 );
-                // print(ap.applicantId);
                 applications.add(ap);
               }
             }
           },
           onError: (e) => print(e),
         );
-    // print(applications[0].applicantId);
+    return applications;
+  }
+
+  Future getApplicationsHistory({String? uid}) async {
+    List<Application> applications = [];
+    final ref = db.collection('applications');
+    await ref
+        .where('company_uid', isEqualTo: this.uid)
+        .where('status', whereIn: ['approved','rejected'])
+        .orderBy('timestamp')
+        .get()
+        .then(
+          (value) {
+            if (value.docs.isNotEmpty) {
+              for (var doc in value.docs) {
+                Application ap = Application(
+                  id: doc.id,
+                  applicantId: doc.data().toString().contains('applicant_uid')
+                      ? doc.get('applicant_uid').toString()
+                      : '',
+                  companyId: doc.data().toString().contains('company_uid')
+                      ? doc.get('company_uid').toString()
+                      : '',
+                  postId: doc.data().toString().contains('post_uid')
+                      ? doc.get('post_uid').toString()
+                      : '',
+                  timestamp: doc.data().toString().contains('timestamp')
+                      ? doc.get('timestamp').toString()
+                      : '',
+                  status: doc.data().toString().contains('status')
+                      ? doc.get('status').toString()
+                      : 'pending',
+                  appointmentTimestamp:
+                      doc.data().toString().contains('appointment_timestamp')
+                          ? doc.get('appointment_timestamp').toString()
+                          : null,
+                  lastUpdated: doc.data().toString().contains('last_updated')
+                      ? doc.get('last_updated').toString()
+                      : null,
+                );
+                applications.add(ap);
+              }
+            }
+          },
+          onError: (e) => print(e),
+        );
     return applications;
   }
 }

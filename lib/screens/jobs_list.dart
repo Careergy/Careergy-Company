@@ -63,8 +63,6 @@ class _JobsListState extends State<JobsList> {
           ElevatedButton(
            style: ButtonStyle(
                   backgroundColor: const MaterialStatePropertyAll(Color.fromARGB(255, 165, 29, 19)),
-                  // fixedSize: MaterialStatePropertyAll(
-                      // Size(deviceSize.width * 0.2, 45)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20))),

@@ -23,7 +23,7 @@ class _profileScreenState extends State<profileScreen> {
   @override
   Widget build(BuildContext context) {
     final info = Provider.of<Company>(context);
-
+    final deviceSize = MediaQuery.of(context).size;
     return FutureBuilder(
         future: Provider.of<Company>(context).getCompanyInfo(),
         builder: (ctx, snapshot) {
@@ -38,13 +38,15 @@ class _profileScreenState extends State<profileScreen> {
                         clipBehavior: Clip.none,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 40, right: 15, left: 15),
+                            padding: const EdgeInsets.only(
+                                top: 40, right: 15, left: 15),
                             child: Container(
                               width: double.infinity,
                               height: 150,
                               decoration: const BoxDecoration(
                                 color: primaryColor,
-                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
                               ),
                             ),
                           ),
@@ -193,6 +195,28 @@ class _profileScreenState extends State<profileScreen> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.map_rounded,
+                                          color: kBlue,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            info.address ?? 'Not Available',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20,
+                                                color: Colors.white70),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                                 Padding(
@@ -222,7 +246,7 @@ class _profileScreenState extends State<profileScreen> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: SizedBox(
-                                        width: 500,
+                                        width: deviceSize.width * 0.4,
                                         child: Text(
                                           info.bio == ''
                                               ? 'No Bio'
@@ -267,6 +291,7 @@ class _editProfileState extends State<editProfile> {
     'email': '',
     'name': '',
     'phone': '',
+    'address': '',
     'photoUrl': null
   };
   bool _isLoading = false;
@@ -278,10 +303,12 @@ class _editProfileState extends State<editProfile> {
   TextEditingController? emailCtrl;
   TextEditingController? phoneCtrl;
   TextEditingController? bioCtrl;
+  TextEditingController? addressCtrl;
 
   _editProfileState(this.currentPage);
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     final info = Provider.of<Company>(context);
     if (!_isInitialized) {
       nameCtrl = TextEditingController.fromValue(
@@ -292,240 +319,305 @@ class _editProfileState extends State<editProfile> {
           TextEditingValue(text: info.phone ?? ''));
       bioCtrl = TextEditingController.fromValue(
           TextEditingValue(text: info.bio ?? ''));
+      addressCtrl = TextEditingController.fromValue(
+          TextEditingValue(text: info.address ?? ''));
       _isInitialized = true;
     }
     photo ??= info.hasPhoto
-          ? info.photo
-          : const Image(image: AssetImage('/avatarPlaceholder.png'));
+        ? info.photo
+        : const Image(image: AssetImage('/avatarPlaceholder.png'));
     return currentPage == '/profile'
         ? const profileScreen()
         : Scaffold(
             backgroundColor: accentCanvasColor,
-            body: ListView(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+              child: Container(
+                padding: const EdgeInsets.only(top: 8.0),
+                decoration: const BoxDecoration(
+                    color: canvasColor,
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: deviceSize.width * 0.2,
+                      decoration: const BoxDecoration(
+                        color: titleBackground,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: const Center(
+                          child: Text('Edit Profile',
+                              style: TextStyle(
+                                  color: white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800))),
+                    ),
+                    const SizedBox(height: 8),
+                    divider,
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 30, right: 10, left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 30, right: 50, left: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Email*',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                SizedBox(
-                                  width: 300,
-                                  child: CustomTextField(
-                                    label: "Email",
-                                    hint: "Enter Email",
-                                    onChanged: (value) {
-                                      _infoData['email'] = value;
-                                    },
-                                    controller: emailCtrl,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text(
-                                  'Phone Number*',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  child: CustomTextField(
-                                    label: "Phone Number",
-                                    hint: "Enter Phone",
-                                    onChanged: (value) {
-                                      _infoData['phone'] = value;
-                                    },
-                                    controller: phoneCtrl,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 50, bottom: 30, right: 50),
-                            child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 240,
-                                  width: 240,
-                                  child: Stack(
-                                    children: [
-                                      ClipOval(
-                                        child: photo ??
-                                            const Image(
-                                                image: AssetImage(
-                                                    '/avatarPlaceholder.png')),
-                                      ),
-                                      Positioned(
-                                        bottom: 15,
-                                        right: 20,
-                                        child: MaterialButton(
-                                          minWidth: 30,
-                                          onPressed: () {
-                                            setState(() {
-                                              pickFile();
-                                              print(photo);
-                                            });
-                                          },
-                                          child: const Icon(
-                                            Icons.camera_alt,
-                                            size: 30,
-                                            color: kBlue,
-                                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                height: 240,
+                                width: 240,
+                                child: Stack(
+                                  children: [
+                                    ClipOval(
+                                      child: photo ??
+                                          const Image(
+                                              image: AssetImage(
+                                                  '/avatarPlaceholder.png')),
+                                    ),
+                                    Positioned(
+                                      bottom: 15,
+                                      right: 20,
+                                      child: MaterialButton(
+                                        minWidth: 30,
+                                        onPressed: () {
+                                          setState(() {
+                                            pickFile();
+                                            print(photo);
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.camera_alt,
+                                          size: 30,
+                                          color: kBlue,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          const Text(
-                                            'Company Name*',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        const Text(
+                                          'Company Name:',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: white,
                                           ),
-                                          const SizedBox(
-                                            height: 10,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        SizedBox(
+                                          width: 220,
+                                          child: CustomTextField(
+                                            label: "Company Name",
+                                            hint: "Enter Company Name",
+                                            onChanged: (value) {
+                                              _infoData['name'] = value;
+                                            },
+                                            controller: nameCtrl,
                                           ),
-                                          SizedBox(
-                                            width: 250,
-                                            child: CustomTextField(
-                                              label: "Company Name",
-                                              hint: "Enter Company Name",
-                                              onChanged: (value) {
-                                                _infoData['name'] = value;
-                                              },
-                                              controller: nameCtrl,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Email:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: white,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                width: 260,
+                                child: CustomTextField(
+                                  label: "Email",
+                                  hint: "Enter Email",
+                                  onChanged: (value) {
+                                    _infoData['email'] = value;
+                                  },
+                                  controller: emailCtrl,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text(
+                                'Phone Number:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: white,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                width: 260,
+                                child: CustomTextField(
+                                  label: "Phone Number",
+                                  hint: "Enter Phone",
+                                  onChanged: (value) {
+                                    _infoData['phone'] = value;
+                                  },
+                                  controller: phoneCtrl,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text(
+                                'Address:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: white,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                width: 260,
+                                child: CustomTextField(
+                                  label: "Address",
+                                  hint: "Enter Address",
+                                  maxLines: 3,
+                                  onChanged: (value) {
+                                    _infoData['address'] = value;
+                                  },
+                                  controller: addressCtrl,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'About Company:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: white,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                width: 500,
+                                child: CustomTextField(
+                                  label: "About Company",
+                                  hint: "Enter Bio",
+                                  maxLines: 14,
+                                  onChanged: (value) {
+                                    _infoData['bio'] = value;
+                                  },
+                                  controller: bioCtrl,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, bottom: 30, right: 50),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'About Company*',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  const MaterialStatePropertyAll(primaryColor),
+                              fixedSize: MaterialStatePropertyAll(
+                                  Size(deviceSize.width * 0.1, 45)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
                             ),
-                            const SizedBox(
-                              height: 20,
+                            onPressed: () async {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              _infoData['name'] = nameCtrl!.text;
+                              _infoData['email'] = emailCtrl!.text;
+                              _infoData['phone'] = phoneCtrl!.text;
+                              _infoData['bio'] = bioCtrl!.text;
+                              _infoData['address'] = addressCtrl!.text;
+                              // print(_infoData);
+                              await info.setCompanyInfo(_infoData);
+                              setState(() {
+                                _isLoading = false;
+                                currentPage = '/profile';
+                                // save the image in the database
+                              });
+                            },
+                            child: _isLoading
+                                ? const CircularProgressIndicator()
+                                : const Text('Save'),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: const MaterialStatePropertyAll(
+                                  Colors.blueGrey),
+                              fixedSize: MaterialStatePropertyAll(
+                                  Size(deviceSize.width * 0.1, 45)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
                             ),
-                            SizedBox(
-                              width: 500,
-                              child: CustomTextField(
-                                label: "About Company",
-                                hint: "Enter Bio",
-                                maxLines: 10,
-                                onChanged: (value) {
-                                  _infoData['bio'] = value;
-                                },
-                                controller: bioCtrl,
-                              ),
-                            ),
-                          ],
-                        ),
+                            onPressed: () {
+                              setState(() {
+                                currentPage = '/profile';
+                              });
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () async {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                _infoData['name'] = nameCtrl!.text;
-                                _infoData['email'] = emailCtrl!.text;
-                                _infoData['phone'] = phoneCtrl!.text;
-
-                                // print(_infoData);
-                                await info.setCompanyInfo(_infoData);
-                                setState(() {
-                                  _isLoading = false;
-                                  currentPage = '/profile';
-                                  // save the image in the database
-                                });
-                              },
-                              child: _isLoading
-                                  ? const CircularProgressIndicator()
-                                  : const Text('Save'),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  currentPage = '/profile';
-                                });
-                              },
-                              child: const Text('Cancel'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           );
   }
 
   Future<void> pickFile() async {
     final result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ['png', 'jpg', 'jpeg']);
-
-    // final result2 = await
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg'],
+    );
 
     if (result == null) {
       ScaffoldMessenger.of(context)

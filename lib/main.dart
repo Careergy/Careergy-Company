@@ -47,9 +47,7 @@ class MyApp extends StatelessWidget {
                   value: Company(),
                 ),
               ],
-              child: const MyHomePage(
-                title: 'Careergy',
-              ),
+              child: const HomeScreen(),
             ),
             routes: {
               '/profile': (ctx) => const profileScreen(),
@@ -69,48 +67,6 @@ class MyApp extends StatelessWidget {
           );
         }
       },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: accentCanvasColor,
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.only(top: 7, right: 20),
-      //   child: ElevatedButton(
-      //     onPressed: () async {
-      //       await AuthProvider().logout();
-      //     },
-      //     style: ButtonStyle(
-      //       shape: MaterialStateProperty.all(const CircleBorder()),
-      //       padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
-      //       backgroundColor: MaterialStateProperty.all(
-      //           const Color.fromARGB(255, 109, 0, 0)), // <-- Button color
-      //       overlayColor: MaterialStateProperty.resolveWith<Color?>(
-      //         (states) {
-      //           if (states.contains(MaterialState.pressed)) {
-      //             return actionColor; // <-- Splash color
-      //           }
-      //         },
-      //       ),
-      //     ),
-      //     child: const Icon(Icons.power_settings_new_rounded),
-      //   ),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      body: HomeScreen(),
     );
   }
 }

@@ -32,17 +32,6 @@ class _ApplicantSearchScreenState extends State<ApplicantSearchScreen> {
   TextfieldTagsController otherSkillsController = TextfieldTagsController();
   TextfieldTagsController locationsController = TextfieldTagsController();
 
-  // Future searchApplicants() async {
-  //   return await Applicant.getSearchResults(
-  //     majorsController.getTags,
-  //     jobTitleController.getTags,
-  //     majorSkillsController.getTags,
-  //     softSkillsController.getTags,
-  //     interestsController.getTags,
-  //     locationsController.getTags,
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -77,16 +66,30 @@ class _ApplicantSearchScreenState extends State<ApplicantSearchScreen> {
                                   color: Colors.black38))),
                       alignment: Alignment.bottomCenter,
                       child: SizedBox(
-                        height: 280,
-                        // width: deviceSize.width * 0.7,
+                        height: 340,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 10, bottom: 15, right: 30, left: 30),
+                          padding: const EdgeInsets.only(top: 7.0, bottom: 12),
                           child: Form(
                             key: _formKey,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Container(
+                                  height: 45,
+                                  width: deviceSize.width * 0.2,
+                                  decoration: const BoxDecoration(
+                                    color: titleBackground,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                  ),
+                                  child: const Center(
+                                      child: Text('Search Applicants',
+                                          style: TextStyle(
+                                              color: white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w800))),
+                                ),
+                                divider,
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -226,11 +229,11 @@ class _ApplicantSearchScreenState extends State<ApplicantSearchScreen> {
                                         ))
                                   ],
                                 ),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 7.0),
                                 InkWell(
                                   onTap: () {
                                     setState(() {
-                                      _height = 280.0;
+                                      _height = 340.0;
                                       animationDone = true;
                                     });
                                     Timer(const Duration(seconds: 1), () {
@@ -240,13 +243,16 @@ class _ApplicantSearchScreenState extends State<ApplicantSearchScreen> {
                                     });
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 4),
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     width: deviceSize.width * 0.2,
                                     decoration: BoxDecoration(
                                       color: primaryColor,
-                                      borderRadius: BorderRadius.circular(20), 
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: const Center(child: Text('Search', style: TextStyle(color: white))),
+                                    child: const Center(
+                                        child: Text('Search',
+                                            style: TextStyle(color: white))),
                                   ),
                                 ),
                               ],

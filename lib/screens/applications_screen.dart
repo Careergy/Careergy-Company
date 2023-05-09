@@ -19,13 +19,9 @@ class ApplicationsScreen extends StatefulWidget {
 
 class _ApplicationsScreenState extends State<ApplicationsScreen> {
   List<Application>? list;
-  // Company? company;
 
   Future getApplications(Company company) async {
     list = await company.getApplications();
-    // for (var element in list!) {
-    //   await element.getApplicantInfo();
-    // }
   }
 
   @override
@@ -45,13 +41,46 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
               backgroundColor: accentCanvasColor,
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  itemCount: list!.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      child: CustomApplicationListTile(application: list![index]),
-                    );
-                  },
+                child: Container(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  decoration: const BoxDecoration(
+                    color: canvasColor,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 45,
+                        width: deviceSize.width * 0.2,
+                        decoration: const BoxDecoration(
+                          color: titleBackground,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: const Center(
+                            child: Text('Current Applications',
+                                style: TextStyle(
+                                    color: white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800))),
+                      ),
+                      const SizedBox(height: 8),
+                      divider,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15, left: 15, bottom: 40),
+                          child: ListView.builder(
+                            itemCount: list!.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                child: CustomApplicationListTile(
+                                    application: list![index]),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               floatingActionButton: ElevatedButton(
@@ -76,9 +105,7 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
                 child: const Text(
                   'Applications History',
                   style: TextStyle(
-                      color: white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold),
+                      color: white, fontSize: 17, fontWeight: FontWeight.bold),
                 ),
               ),
               floatingActionButtonLocation:
