@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
+import 'package:careergy_mobile/constants.dart';
 
 class ApplicationHistotyScreen extends StatefulWidget {
   const ApplicationHistotyScreen({super.key});
@@ -20,10 +20,11 @@ class _ApplicationHistotyScreenState extends State<ApplicationHistotyScreen> {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
+            backgroundColor: accentCanvasColor,
             floatingActionButton: ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.blue[900]),
+                  backgroundColor: const MaterialStatePropertyAll(primaryColor),
                   fixedSize: MaterialStatePropertyAll(
                       Size(deviceSize.width * 0.2, 45)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -33,7 +34,7 @@ class _ApplicationHistotyScreenState extends State<ApplicationHistotyScreen> {
                 child: const Text(
                   'Back',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 )),

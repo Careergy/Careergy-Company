@@ -1,7 +1,9 @@
-import 'package:careergy_mobile/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
+
+
+import '../constants.dart';
+
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -17,10 +19,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: accentCanvasColor,
       body: ListView(children: [
         Container(
-          margin: EdgeInsets.fromLTRB(50, 50, 50, 20),
-          padding: EdgeInsets.all(50),
+          margin: const EdgeInsets.fromLTRB(50, 50, 50, 20),
+          padding: const EdgeInsets.all(50),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: kBlue)),
@@ -30,7 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 160,
                     child: Text(
                       'This Month',
@@ -38,7 +41,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           fontSize: 25, fontFamily: 'Montserrat_bold'),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 50,
                     child: Text(
                       '|',
@@ -50,7 +53,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               'Accepted',
@@ -59,10 +62,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   fontFamily: 'Montserrat_regular'),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 80,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               'Rejected',
@@ -71,10 +74,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   fontFamily: 'Montserrat_regular'),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 80,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               'Jobs',
@@ -86,7 +89,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               '150',
@@ -96,10 +99,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   color: kBlue),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 80,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               '30',
@@ -109,10 +112,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   color: kBlue),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 80,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               '23',
@@ -128,13 +131,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 160,
                     child: Text(
                       'Total',
@@ -142,7 +145,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           fontSize: 25, fontFamily: 'Montserrat_bold'),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 50,
                     child: Text(
                       '|',
@@ -154,7 +157,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               'Applicants',
@@ -163,10 +166,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   fontFamily: 'Montserrat_regular'),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 80,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               'Jobs',
@@ -180,7 +183,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               '5880',
@@ -190,10 +193,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   color: kBlue),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 80,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 150,
                             child: Text(
                               '120',
@@ -221,7 +224,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 backgroundColor:
-                    isHovering ? Color.fromARGB(255, 117, 150, 239) : kBlue,
+                    isHovering ? const Color.fromARGB(255, 117, 150, 239) : kBlue,
               ),
               onPressed: () {
                 setState(() {});
@@ -234,11 +237,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
+                  const Text(
                     'Request for Authentication Mark',
                     style: TextStyle(color: Colors.white),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.check_circle,
                     color: Colors.white,
                   )

@@ -83,98 +83,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isClicked = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF3E3E61),
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      //   backgroundColor: Theme.of(context).primaryColor,
-      //   actions: [
-      //     PopupMenuButton<int>(
-      //       itemBuilder: (context) => [
-      //         // PopupMenuItem 2
-      //         PopupMenuItem(
-      //           value: 2,
-      //           // row with two children
-      //           child: Row(
-      //             children: const [
-      //               Icon(Icons.chrome_reader_mode),
-      //               SizedBox(
-      //                 width: 10,
-      //               ),
-      //               Text(
-      //                 "About",
-      //                 style: TextStyle(color: Colors.white),
-      //               )
-      //             ],
-      //           ),
-      //         ),
-      //         PopupMenuItem(
-      //           value: 3,
-      //           // row with two children
-      //           child: Row(
-      //             children: const [
-      //               Icon(Icons.logout_rounded),
-      //               SizedBox(
-      //                 width: 10,
-      //               ),
-      //               Text(
-      //                 "Logout",
-      //                 style: TextStyle(color: Colors.white),
-      //               )
-      //             ],
-      //           ),
-      //         ),
-      //       ],
-      //       offset: const Offset(0, 100),
-      //       color: Theme.of(context).primaryColor,
-      //       elevation: 2,
-      //       // shape: CircleBorder(eccentricity: 20),
-      //       // on selected we show the dialog box
-      //       onSelected: (value) {
-      //         // if value 1 show dialog
-      //         if (value == 1) {
-      //           // _showDialog(context);
-      //           // if value 2 show dialog
-      //         } else if (value == 2) {
-      //           // _showDialog(context);
-      //         } else if (value == 3) {
-      //           auth.logout();
-      //         }
-      //       },
-      //       child: const Padding(
-      //         padding: EdgeInsets.only(right: 20.0),
-      //         child: Icon(Icons.menu),
+    return const Scaffold(
+      backgroundColor: accentCanvasColor,
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(top: 7, right: 20),
+      //   child: ElevatedButton(
+      //     onPressed: () async {
+      //       await AuthProvider().logout();
+      //     },
+      //     style: ButtonStyle(
+      //       shape: MaterialStateProperty.all(const CircleBorder()),
+      //       padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
+      //       backgroundColor: MaterialStateProperty.all(
+      //           const Color.fromARGB(255, 109, 0, 0)), // <-- Button color
+      //       overlayColor: MaterialStateProperty.resolveWith<Color?>(
+      //         (states) {
+      //           if (states.contains(MaterialState.pressed)) {
+      //             return actionColor; // <-- Splash color
+      //           }
+      //         },
       //       ),
       //     ),
-      //   ],
+      //     child: const Icon(Icons.power_settings_new_rounded),
+      //   ),
       // ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: ElevatedButton(
-          onPressed: () async {
-            await AuthProvider().logout();
-          },
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(const CircleBorder()),
-            padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
-            backgroundColor:
-                MaterialStateProperty.all(const Color.fromARGB(255, 109, 0, 0)), // <-- Button color
-            overlayColor: MaterialStateProperty.resolveWith<Color?>(
-              (states) {
-                if (states.contains(MaterialState.pressed)) {
-                  return actionColor; // <-- Splash color
-                }
-              },
-            ),
-          ),
-          child: const Icon(Icons.power_settings_new_rounded),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      body: const HomeScreen(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      body: HomeScreen(),
     );
   }
 }

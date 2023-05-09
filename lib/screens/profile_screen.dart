@@ -1,25 +1,14 @@
-// import 'dart:html';
-// import 'dart:ui';
-
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:careergy_mobile/constants.dart';
-import 'package:careergy_mobile/models/company.dart';
-import 'package:careergy_mobile/widgets/custom_textfieldform.dart';
-import 'package:careergy_mobile/widgets/sidebar_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import '../widgets/custom_drawer.dart';
-
-import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'package:image_picker_web/image_picker_web.dart';
-
 import 'package:file_picker/file_picker.dart';
-// import 'package:open_file/open_file.dart';
+
+import '../widgets/custom_textfieldform.dart';
+
+import '../models/company.dart';
+
+import '../constants.dart';
 
 class profileScreen extends StatefulWidget {
   const profileScreen({super.key});
@@ -41,163 +30,223 @@ class _profileScreenState extends State<profileScreen> {
           return currentPage == '/editProfile'
               ? const editProfile()
               : Scaffold(
+                  backgroundColor: accentCanvasColor,
                   body: ListView(
                     children: [
+                      Stack(
+                        alignment: AlignmentDirectional.bottomStart,
+                        clipBehavior: Clip.none,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40, right: 15, left: 15),
+                            child: Container(
+                              width: double.infinity,
+                              height: 150,
+                              decoration: const BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: MediaQuery.of(context).size.height * 0.02,
+                            left: 40,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: CircleAvatar(
+                                  radius: 120,
+                                  child: ClipOval(
+                                    child: info.photoUrl == null ||
+                                            info.photoUrl == '' ||
+                                            info.photoUrl!.substring(0, 4) !=
+                                                'http'
+                                        ? info.photo
+                                        : Image.network(
+                                            info.photoUrl ?? '',
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              } else {
+                                                return const CircularProgressIndicator();
+                                              }
+                                            },
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20, left: 310),
+                            child: Text(
+                              info.name ?? '',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: white),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: ElevatedButton(
+                                style: const ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStatePropertyAll(primaryColor),
+                                    shape: MaterialStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))))),
+                                child: Row(
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 15),
+                                      child: Text(
+                                        'Edit',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    currentPage = '/editProfile';
+                                  });
+                                }),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 45,
+                      ),
                       Container(
-                        padding: const EdgeInsets.all(20),
+                        height: 0.5,
+                        color: Colors.white24,
+                      ),
+                      Container(
+                        decoration:
+                            const BoxDecoration(color: accentCanvasColor),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 75),
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 50, bottom: 30, right: 50),
-                                  child: Column(
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Email',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          info.email ?? 'Not Available',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 20),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.email,
+                                          color: kBlue,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      const Text(
-                                        'Phone Number',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          info.phone ?? 'Not Availabla',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      const Text(
-                                        'About Company',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: SizedBox(
-                                          width: 500,
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15.0),
                                           child: Text(
-                                            info.bio == ''
-                                                ? 'No Bio'
-                                                : info.bio ?? 'No Bio',
-                                            style: TextStyle(
-                                                fontWeight: info.bio == ''
-                                                    ? FontWeight.w100
-                                                    : FontWeight.normal,
-                                                fontSize: 20),
+                                            info.email ?? '',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20,
+                                                color: Colors.white70),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.phone,
+                                          color: kBlue,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            info.phone ?? 'Not Available',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20,
+                                                color: Colors.white70),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 50, bottom: 30, right: 50, left: 30),
-                                  child: Column(
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: CircleAvatar(
-                                          radius: 120,
-                                          child: ClipOval(
-                                            child: info.photoUrl == null ||
-                                                    info.photoUrl == ''
-                                                ? info.photo
-                                                : Image.network(
-                                                    info.photoUrl ?? '',
-                                                    loadingBuilder: (context,
-                                                        child,
-                                                        loadingProgress) {
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      } else {
-                                                        return const CircularProgressIndicator();
-                                                      }
-                                                    },
-                                                  ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          info.name ?? 'No Data',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                    ],
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: SizedBox(
+                                    width: 1,
+                                    height: 200,
+                                    child:
+                                        Container(color: Colors.grey.shade200),
                                   ),
                                 ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'About Company',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 20,
+                                          color: white),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: SizedBox(
+                                        width: 500,
+                                        child: Text(
+                                          info.bio == ''
+                                              ? 'No Bio'
+                                              : info.bio ?? 'No Bio',
+                                          style: TextStyle(
+                                              fontWeight: info.bio == ''
+                                                  ? FontWeight.w100
+                                                  : FontWeight.normal,
+                                              fontSize: 20,
+                                              color: Colors.grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
+                            ),
+                            const SizedBox(
+                              width: 20,
                             ),
                           ],
                         ),
                       ),
                     ],
-                  ),
-                  bottomNavigationBar: Container(
-                    padding: const EdgeInsets.all(32),
-                    // transformAlignment: Alignment.bottomRight,
-                    margin: const EdgeInsets.only(left: 800, right: 60),
-
-                    child: ElevatedButton(
-                        child: const Text('Edit'),
-                        onPressed: () {
-                          setState(() {
-                            currentPage = '/editProfile';
-                            // get profile info from database and show them
-                          });
-                        }),
                   ),
                 );
         });
@@ -246,11 +295,12 @@ class _editProfileState extends State<editProfile> {
       _isInitialized = true;
     }
     photo ??= info.hasPhoto
-        ? info.photo
-        : const Image(image: AssetImage('/avatarPlaceholder.png'));
+          ? info.photo
+          : const Image(image: AssetImage('/avatarPlaceholder.png'));
     return currentPage == '/profile'
         ? const profileScreen()
         : Scaffold(
+            backgroundColor: accentCanvasColor,
             body: ListView(
               children: [
                 Container(
@@ -329,20 +379,10 @@ class _editProfileState extends State<editProfile> {
                                   child: Stack(
                                     children: [
                                       ClipOval(
-                                        child: info.photoUrl == null ||
-                                                info.photoUrl == ''
-                                            ? info.photo
-                                            : Image.network(
-                                                info.photoUrl ?? '',
-                                                loadingBuilder: (context, child,
-                                                    loadingProgress) {
-                                                      if (loadingProgress == null) {
-                                                        return child;
-                                                      } else {
-                                                        return const CircularProgressIndicator();
-                                                      }
-                                                    },
-                                              ),
+                                        child: photo ??
+                                            const Image(
+                                                image: AssetImage(
+                                                    '/avatarPlaceholder.png')),
                                       ),
                                       Positioned(
                                         bottom: 15,
@@ -389,31 +429,6 @@ class _editProfileState extends State<editProfile> {
                                                 _infoData['name'] = value;
                                               },
                                               controller: nameCtrl,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        children: [
-                                          const Text(
-                                            'Abbreviation (Optional)',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          SizedBox(
-                                            width: 150,
-                                            child: CustomTextField(
-                                              label: "Abbreviation",
-                                              hint:
-                                                  "Enter Company Abbreviation",
-                                              onChanged: (value) {},
                                             ),
                                           ),
                                         ],

@@ -52,20 +52,20 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Approvement Form",
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Center(
+                const Center(
                   child: Text(
                     "Interview Date",
                     style: TextStyle(fontSize: 25),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Container(
@@ -94,27 +94,27 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Selected Date: ',
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 35,
                     ),
                     Text(
                       "${_calendarController.displayDate!.day} / ${_calendarController.displayDate!.month} / ${_calendarController.displayDate!.year}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 35,
                     ),
                     ElevatedButton(
@@ -124,12 +124,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                 displayTimeDialog(_selectedFromTime);
                           });
                         },
-                        child: Text('from')),
-                    SizedBox(
+                        child: const Text('from')),
+                    const SizedBox(
                       width: 10,
                     ),
                     Text(_selectedFromTime!),
-                    SizedBox(
+                    const SizedBox(
                       width: 35,
                     ),
                     ElevatedButton(
@@ -138,17 +138,17 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             displayTimeDialog(_selectedToTime);
                           });
                         },
-                        child: Text('to')),
-                    SizedBox(
+                        child: const Text('to')),
+                    const SizedBox(
                       width: 10,
                     ),
-                    Text(_selectedToTime!),
-                    SizedBox(
+                    Text(_selectedToTime),
+                    const SizedBox(
                       width: 10,
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 35,
                 ),
                 SizedBox(
@@ -170,14 +170,14 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text("Cancel"),
+                        child: const Text("Cancel"),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       ElevatedButton(
                         onPressed: () {},
-                        child: Text("Send"),
+                        child: const Text("Send"),
                       ),
                     ],
                   ),

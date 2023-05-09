@@ -1,5 +1,5 @@
-import 'package:careergy_mobile/constants.dart';
 import 'package:flutter/material.dart';
+import '../constants.dart';
 
 // A custom text field form that has a label and a hint text.
 // also has a validator to check if the input is empty or not.
@@ -74,17 +74,17 @@ class _AutoCompleteCustomTextFieldState
           return option.contains(textEditingValue.text.toLowerCase());
         });
       },
-      initialValue: TextEditingValue(text: widget.controller!.text),
+      initialValue: TextEditingValue(text: widget.controller!.text.toTitleCase()),
       onSelected: (String selection) {
-        widget.controller!.text = selection;
+        widget.controller!.text = selection.toLowerCase();
         setState(() {});
         debugPrint('You just selected $selection');
       },
-      displayStringForOption: (option) => option,
+      displayStringForOption: (option) => option.toTitleCase(),
       optionsViewBuilder: (context, onSelected, options) {
         return Align(
           alignment: Alignment.topLeft,
-          child: Container(
+          child: SizedBox(
             width: 200,
             height: deviceSize.height * 0.3,
             child: ListView.builder(
@@ -116,9 +116,12 @@ class _AutoCompleteCustomTextFieldState
           controller: textEditingController,
           focusNode: focusNode,
           onEditingComplete: onFieldSubmitted,
+          style: const TextStyle(color: white),
           decoration: InputDecoration(
-            labelText: widget.label,
+            // labelText: widget.label,
+            // labelStyle: const TextStyle(color: Colors.white24),
             hintText: widget.hint,
+            hintStyle: const TextStyle(color: Colors.white30),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
@@ -130,10 +133,10 @@ class _AutoCompleteCustomTextFieldState
               borderRadius: BorderRadius.circular(10),
             ),
             focusColor: Colors.black,
-            fillColor: Colors.black,
+            fillColor: white,
           ),
           validator: (value) {
-            if (!widget.kOptions[widget.keysDoc]!.contains(value)) {
+            if (!widget.kOptions[widget.keysDoc]!.contains(value!.toLowerCase())) {
               return 'Not a valid entry!';
             }
           },

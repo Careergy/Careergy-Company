@@ -1,14 +1,16 @@
 import 'dart:convert';
-import 'dart:ui';
 
-import 'package:careergy_mobile/widgets/autocomplete_custom_textfield.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:card_loading/card_loading.dart';
 import 'package:easy_stepper/easy_stepper.dart';
-import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+
+import './autocomplete_custom_textfield.dart';
 
 import '../models/application.dart';
+
+import '../constants.dart';
 
 class CustomApplicationListTile extends StatelessWidget {
   CustomApplicationListTile({super.key, required this.application});
@@ -29,8 +31,9 @@ class CustomApplicationListTile extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CardLoading(
             height: 100,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
             margin: EdgeInsets.only(bottom: 10),
+            cardLoadingTheme: CardLoadingTheme(colorOne: Colors.white10, colorTwo: Colors.white24),
           );
         } else {
           return Padding(
@@ -48,14 +51,35 @@ class CustomApplicationListTile extends StatelessWidget {
                 height: 100,
                 padding: const EdgeInsets.all(7.0),
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(14, 12, 122, 0.776),
-                    Color.fromRGBO(83, 81, 186, 0.811)
-                  ], begin: Alignment.bottomLeft, end: Alignment.topRight),
+                  gradient: LinearGradient(
+                      colors: [canvasColor, Color.fromRGBO(83, 81, 186, 0.811)],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Container(
+                      width: deviceSize.width * 0.1,
+                      height: 80,
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(88, 111, 103, 164),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${DateFormat.yMMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.timestamp)))}\n${DateFormat.EEEE().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.timestamp)))}\n${DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.timestamp)))}',
+                          style: const TextStyle(color: white, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 60,
+                      color: Colors.white12,
+                    ),
                     Container(
                       width: deviceSize.width * 0.2,
                       height: 80,
@@ -68,11 +92,12 @@ class CustomApplicationListTile extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundColor: Colors.white54,
+                            backgroundColor:
+                                const Color.fromARGB(0, 255, 255, 255),
                             child: ClipOval(
                               child: application.applicant.photoUrl == null ||
                                       application.applicant.photoUrl!
-                                              .substring(0, 3) !=
+                                              .substring(0, 4) !=
                                           'http'
                                   ? application.applicant.photo
                                   : Image.network(
@@ -92,7 +117,7 @@ class CustomApplicationListTile extends StatelessWidget {
                             width: deviceSize.width * 0.2 - 76,
                             height: double.infinity,
                             child: ListTile(
-                              title: Text(application.applicant.name??'',
+                              title: Text(application.applicant.name ?? '',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
                               textColor: Colors.white,
@@ -132,18 +157,30 @@ class CustomApplicationListTile extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
-                        child: Text(application.status.toCapitalized(),
-                            style: TextStyle(
-                                color: application.status == 'pending'
-                                    ? Colors.white
-                                    : application.status == 'waiting'
-                                        ? Colors.amber[300]
-                                        : application.status == 'accepted'
-                                            ? Colors.blue
-                                            : application.status == 'approved'
-                                                ? Colors.green
-                                                : Colors.red,
-                                fontSize: 22)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              application.status.toCapitalized(),
+                              style: TextStyle(
+                                  color: application.status == 'pending'
+                                      ? Colors.white
+                                      : application.status == 'waiting'
+                                          ? Colors.amber[300]
+                                          : application.status == 'accepted'
+                                              ? Colors.blue
+                                              : application.status == 'approved'
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                  fontSize: 22),
+                            ),
+                            Text(application.lastUpdated == null
+                                ? '-----'
+                                : '${DateFormat.yMMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated??'')))} ${DateFormat.EEEE().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated??'')))}\n${DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated??'')))}',
+                                style: const TextStyle(color: white), textAlign: TextAlign.center,
+                                ),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -189,65 +226,67 @@ class ActionButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         factor == 0.07
-                ? SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.07,
-                    height: 84,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.07,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 26, 104, 28),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: List.filled(2, const BoxShadow(color: Colors.black26, blurRadius: 0.8))
-                          ),
-                          child: InkWell(
-                            child: const Center(
-                              child: Text('Approve',
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white)),
-                            ),
-                            onTap: () {
-                              
-                            },
-                          ),
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width * 0.07,
+                height: 84,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.07,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 26, 104, 28),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: List.filled(
+                              2,
+                              const BoxShadow(
+                                  color: Colors.black26, blurRadius: 0.8))),
+                      child: InkWell(
+                        child: const Center(
+                          child: Text('Approved',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.07,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 123, 36, 30),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: List.filled(2, const BoxShadow(color: Colors.black26, blurRadius: 0.8))
-                          ),
-                          child: InkWell(
-                            child: const Center(
-                              child: Text('Reject',
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white)),
-                            ),
-                            onTap: () {
-                              
-                            },
-                          ),
-                        )
-                      ],
+                        onTap: () {},
+                      ),
                     ),
-                  )
-                : const SizedBox(),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.07,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 123, 36, 30),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: List.filled(
+                              2,
+                              const BoxShadow(
+                                  color: Colors.black26, blurRadius: 0.8))),
+                      child: InkWell(
+                        child: const Center(
+                          child: Text('Rejected',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
+                        ),
+                        onTap: () {},
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : const SizedBox(),
         Container(
           width: MediaQuery.of(context).size.width * factor,
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 203, 203, 207),
+            color: primaryColor,
             borderRadius: BorderRadius.circular(20),
-            boxShadow: List.filled(2, const BoxShadow(color: Colors.black26, blurRadius: 0.8))
+            boxShadow: List.filled(
+                2, const BoxShadow(color: Colors.black26, blurRadius: 0.8)),
           ),
           child: InkWell(
             child: const Center(
-              child: Text('View', style: TextStyle(fontSize: 20)),
+              child: Text('View', style: TextStyle(fontSize: 20, color: white)),
             ),
+            hoverColor: canvasColor,
             onTap: () {
               
             },

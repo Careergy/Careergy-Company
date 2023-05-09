@@ -31,9 +31,11 @@ class CustomTextField extends StatelessWidget {
       cursorColor: kBlue,
       maxLines: maxLines,
       controller: controller,
+      style: const TextStyle(color: white),
       decoration: InputDecoration(
-        labelText: label,
+        // labelText: label,
         hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white30),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
@@ -45,7 +47,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         focusColor: Colors.black,
-        fillColor: Colors.black,
+        fillColor: Colors.white,
       ),
       // validator: (value) => validator(value),
       // //TODO: check correctnes of this line

@@ -161,6 +161,9 @@ class Company with ChangeNotifier {
                   appointmentTimestamp: doc.data().toString().contains('appointment_timestamp')
                 ? doc.get('appointment_timestamp').toString()
                 : null,
+                  lastUpdated: doc.data().toString().contains('last_updated')
+                ? doc.get('last_updated').toString()
+                : null,
                 );
                 // print(ap.applicantId);
                 applications.add(ap);

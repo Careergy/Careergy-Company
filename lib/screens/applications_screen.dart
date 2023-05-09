@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +7,8 @@ import '../widgets/custom_application_listtile.dart';
 
 import '../models/company.dart';
 import '../models/application.dart';
+
+import '../constants.dart';
 
 class ApplicationsScreen extends StatefulWidget {
   const ApplicationsScreen({super.key});
@@ -41,6 +42,7 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
             return const Center(child: CircularProgressIndicator());
           } else {
             return Scaffold(
+              backgroundColor: accentCanvasColor,
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
@@ -64,7 +66,7 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
                   );
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.blue[900]),
+                  backgroundColor: const MaterialStatePropertyAll(primaryColor),
                   fixedSize: MaterialStatePropertyAll(
                       Size(deviceSize.width * 0.2, 45)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -74,7 +76,7 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
                 child: const Text(
                   'Applications History',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: white,
                       fontSize: 17,
                       fontWeight: FontWeight.bold),
                 ),

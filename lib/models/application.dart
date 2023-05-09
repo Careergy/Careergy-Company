@@ -12,21 +12,23 @@ class Application {
   String status;
   final String timestamp;
   String? appointmentTimestamp;
+  String? lastUpdated;
 
   late Applicant applicant;
   late Post post;
 
   final db = FirebaseFirestore.instance;
 
-  Application(
-      {
-      required this.id,  
-      required this.applicantId,
-      required this.companyId,
-      required this.postId,
-      required this.timestamp,
-      required this.status,
-      this.appointmentTimestamp});
+  Application({
+    required this.id,
+    required this.applicantId,
+    required this.companyId,
+    required this.postId,
+    required this.timestamp,
+    required this.status,
+    this.appointmentTimestamp,
+    this.lastUpdated,
+  });
 
   Future getApplicantInfo() async {
     applicant = await Applicant.getApplicantInfo(applicantId);
@@ -38,8 +40,10 @@ class Application {
 
   Future changeStatus(String newStatus) async {
     final ref = db.collection('applications').doc(id);
+    final updateTime = DateTime.now();
     await ref.set({
-      'status' : newStatus
-    },SetOptions(merge: true, mergeFields: ['status']));
+      'status': newStatus,
+      'last_updated': updateTime.millisecondsSinceEpoch
+    }, SetOptions(merge: true));
   }
 }
