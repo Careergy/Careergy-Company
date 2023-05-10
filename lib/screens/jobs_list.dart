@@ -132,9 +132,9 @@ class _JobsListState extends State<JobsList> {
                 ),
               ),
               SizedBox(
-                width: 30,
+                width: 100,
                 child: Text(
-                  widget.job.yearsOfExperience,
+                  'Experience:\n${widget.job.yearsOfExperience} year(s)',
                   style: const TextStyle(
                       fontSize: 16, color: white, fontWeight: FontWeight.w800),
                   textAlign: TextAlign.center,

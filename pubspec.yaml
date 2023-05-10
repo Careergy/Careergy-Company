@@ -50,6 +50,7 @@ dependencies:
   easy_stepper: ^0.5.2+1
   sidebarx: ^0.15.0
   floating_action_bubble: ^1.1.4
+  calendar_view: ^1.0.3
  
 
 dev_dependencies:

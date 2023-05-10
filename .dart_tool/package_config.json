@@ -26,6 +26,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "calendar_view",
+      "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/calendar_view-1.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "card_loading",
       "rootUri": "file:///C:/Users/aalju/AppData/Local/Pub/Cache/hosted/pub.dev/card_loading-0.3.0",
       "packageUri": "lib/",
@@ -410,7 +416,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-08T15:22:59.037005Z",
+  "generated": "2023-05-09T08:24:41.317021Z",
   "generator": "pub",
   "generatorVersion": "2.19.3"
 }

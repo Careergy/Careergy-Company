@@ -223,6 +223,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
               child: Container(
+                height: deviceSize.height*0.7,
                 padding: const EdgeInsets.only(top: 8.0),
                 decoration: const BoxDecoration(
                     color: canvasColor,
@@ -444,7 +445,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 70),
+                                    const SizedBox(height: 50),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.end,
