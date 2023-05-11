@@ -156,11 +156,13 @@ class NewJobScreen extends StatefulWidget {
 
 class _NewJobScreenState extends State<NewJobScreen> {
   String? currentPage;
-  final List<String> _years = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
+  final List<String> _years = ['Not Specified','0', '1', '2', '3', '4', '5', '6', '7', '8+'];
+  final List<String> _types = ['Full-time','Part-time','Zero-hour', 'Casual', 'Freelance', 'Union' , 'Executive', 'Fixed-term'];
   late List items = [];
 
-  String? _selectedYear;
-  String? city;
+  String? _selectedYear = 'Not Specified';
+  String? _selectedType = 'Full-time';
+  String? city = 'not specified';
 
   TextEditingController major = TextEditingController();
   TextEditingController title = TextEditingController();
@@ -213,6 +215,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
           TextEditingValue(text: widget.job!.descreption));
       city = widget.job!.city;
       _selectedYear = widget.job!.yearsOfExperience;
+      _selectedType = widget.job!.type;
       isLoaded = true;
     }
     final deviceSize = MediaQuery.of(context).size;
@@ -223,7 +226,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
               child: Container(
-                height: deviceSize.height*0.7,
+                height: deviceSize.height * 0.7,
                 padding: const EdgeInsets.only(top: 8.0),
                 decoration: const BoxDecoration(
                     color: canvasColor,
@@ -288,7 +291,8 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                             const SizedBox(height: 10),
                                             SizedBox(
                                               width: 300,
-                                              child: AutoCompleteCustomTextField(
+                                              child:
+                                                  AutoCompleteCustomTextField(
                                                 label: "Title",
                                                 hint: "Enter Title",
                                                 controller: title,
@@ -309,7 +313,8 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                             const SizedBox(height: 10),
                                             SizedBox(
                                               width: 300,
-                                              child: AutoCompleteCustomTextField(
+                                              child:
+                                                  AutoCompleteCustomTextField(
                                                 label: "Major",
                                                 hint: "Enter Major",
                                                 controller: major,
@@ -335,14 +340,14 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                               ),
                                             ),
                                             const SizedBox(
-                                              height: 10,
+                                              height: 5,
                                             ),
                                             SizedBox(
                                               width: 200,
                                               child: DropdownButton(
                                                 alignment: Alignment.center,
-                                                style:
-                                                    const TextStyle(color: white),
+                                                style: const TextStyle(
+                                                    color: white),
                                                 dropdownColor: primaryColor,
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -365,7 +370,47 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                 }).toList(),
                                               ),
                                             ),
-                                            const SizedBox(height: 60),
+                                            const SizedBox(height: 18),
+                                            const Text(
+                                              'Contract Type:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: white,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            SizedBox(
+                                              width: 200,
+                                              child: DropdownButton(
+                                                alignment: Alignment.center,
+                                                style: const TextStyle(
+                                                    color: white),
+                                                dropdownColor: primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                hint: const Text(
+                                                    'Please choose a type',
+                                                    style: TextStyle(
+                                                        color:
+                                                            white)), // Not necessary for Option 1
+                                                value: _selectedType,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    _selectedType = newValue;
+                                                  });
+                                                },
+                                                items: _types.map((type) {
+                                                  return DropdownMenuItem(
+                                                    value: type,
+                                                    child: Text(type),
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 18),
                                             const Text(
                                               'City:',
                                               style: TextStyle(
@@ -375,14 +420,14 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                               ),
                                             ),
                                             const SizedBox(
-                                              height: 10,
+                                              height: 5,
                                             ),
                                             SizedBox(
                                               width: 200,
                                               child: DropdownButton(
                                                 alignment: Alignment.center,
-                                                style:
-                                                    const TextStyle(color: white),
+                                                style: const TextStyle(
+                                                    color: white),
                                                 dropdownColor: primaryColor,
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -404,7 +449,8 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                         child: Text(
                                                           e
                                                                   .toString()
-                                                                  .substring(0, 1)
+                                                                  .substring(
+                                                                      0, 1)
                                                                   .toUpperCase() +
                                                               e
                                                                   .toString()
@@ -447,8 +493,10 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                     ),
                                     const SizedBox(height: 50),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         ElevatedButton(
                                           style: ButtonStyle(
@@ -456,7 +504,8 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                 const MaterialStatePropertyAll(
                                                     primaryColor),
                                             fixedSize: MaterialStatePropertyAll(
-                                                Size(deviceSize.width * 0.1, 45)),
+                                                Size(deviceSize.width * 0.1,
+                                                    45)),
                                             shape: MaterialStateProperty.all<
                                                     RoundedRectangleBorder>(
                                                 RoundedRectangleBorder(
@@ -481,6 +530,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                 yearsOfExperience:
                                                     _selectedYear ?? '',
                                                 major: major.text,
+                                                type: _selectedType ?? '',
                                                 descreption: description.text,
                                                 city: city ?? '',
                                               ));
@@ -491,6 +541,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                     _selectedYear ?? '',
                                                 major: major.text,
                                                 descreption: description.text,
+                                                type: _selectedType ?? '',
                                                 city: city ?? '',
                                                 isActive: true,
                                               ));
@@ -534,7 +585,8 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                 const MaterialStatePropertyAll(
                                                     Colors.blueGrey),
                                             fixedSize: MaterialStatePropertyAll(
-                                                Size(deviceSize.width * 0.1, 45)),
+                                                Size(deviceSize.width * 0.1,
+                                                    45)),
                                             shape: MaterialStateProperty.all<
                                                     RoundedRectangleBorder>(
                                                 RoundedRectangleBorder(

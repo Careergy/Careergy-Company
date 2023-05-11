@@ -11,19 +11,20 @@ class Post {
   final String jobTitle;
   final String major;
   final String? experienceYears;
+  final String? type;
   final String location;
   final String? description;
   final String timestamp;
 
-  Post({
-    required this.postID,
-    required this.jobTitle,
-    required this.major,
-    required this.location,
-    required this.timestamp,
-    this.description,
-    this.experienceYears,
-  });
+  Post(
+      {required this.postID,
+      required this.jobTitle,
+      required this.major,
+      required this.location,
+      required this.timestamp,
+      this.description,
+      this.experienceYears,
+      this.type});
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -38,6 +39,7 @@ class Post {
       'major': job.major,
       'experience_years': job.yearsOfExperience,
       'city': job.city,
+      'type': job.type,
       'descreption': job.descreption,
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'active': true
@@ -64,6 +66,7 @@ class Post {
               major: value['major'],
               yearsOfExperience: value['experience_years'],
               city: value['city'],
+              type: value['type'],
               descreption: value['descreption'],
               dt: DateTime.fromMillisecondsSinceEpoch(
                   int.parse(value['timestamp'])),
@@ -72,7 +75,7 @@ class Post {
           }
         }
 
-        // print(list[0].city);
+        // print(list[0].id);
       },
       onError: (e) => print(e),
     );
@@ -94,6 +97,7 @@ class Post {
           timestamp: data['timestamp'] ?? '',
           description: data['descreption'] ?? '',
           experienceYears: data['experience_years'] ?? '',
+          type: data['type'] ?? '',
         );
       }
     });
@@ -184,6 +188,7 @@ class Post {
       'major': job.major,
       'experience_years': job.yearsOfExperience,
       'city': job.city,
+      'type' : job.type,
       'descreption': job.descreption,
     }).onError((error, stackTrace) => print(error));
   }

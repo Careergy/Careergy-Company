@@ -2,6 +2,7 @@ class Job {
   String? id;
   String jobTitle;
   String yearsOfExperience;
+  String type;
   String major;
   String descreption;
   String city;
@@ -14,6 +15,7 @@ class Job {
       required this.yearsOfExperience,
       required this.major,
       required this.descreption,
+      required this.type,
       required this.city,
        this.isActive = true});
 }

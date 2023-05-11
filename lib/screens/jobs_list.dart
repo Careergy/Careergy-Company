@@ -134,7 +134,7 @@ class _JobsListState extends State<JobsList> {
               SizedBox(
                 width: 100,
                 child: Text(
-                  'Experience:\n${widget.job.yearsOfExperience} year(s)',
+                  widget.job.yearsOfExperience == '' ? 'Experience:\nNot Specified' : 'Experience:\n${widget.job.yearsOfExperience} year(s)',
                   style: const TextStyle(
                       fontSize: 16, color: white, fontWeight: FontWeight.w800),
                   textAlign: TextAlign.center,
@@ -144,6 +144,15 @@ class _JobsListState extends State<JobsList> {
                 width: 120,
                 child: Text(
                   widget.job.major.toTitleCase(),
+                  style: const TextStyle(
+                      fontSize: 16, color: white, fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                width: 120,
+                child: Text(
+                  'Contract Type:\n${widget.job.type.toTitleCase()}',
                   style: const TextStyle(
                       fontSize: 16, color: white, fontWeight: FontWeight.w800),
                   textAlign: TextAlign.center,
@@ -161,15 +170,15 @@ class _JobsListState extends State<JobsList> {
                 ),
               ),
               SizedBox(
-                width: 270,
+                width: 240,
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: Text(
                     widget.job.descreption.length > MAX_CHARS
-                        ? widget.job.descreption.substring(0, 80) +
-                            " ..show more"
+                        ? "${widget.job.descreption.substring(0, 80)} ..show more"
                         : widget.job.descreption,
                     style: const TextStyle(fontSize: 15, color: white),
+                    textAlign: TextAlign.left,
                   ),
                 ),
               ),

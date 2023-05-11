@@ -18,6 +18,7 @@ class Company with ChangeNotifier {
   Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
   String? bio;
   String? address;
+  String? photoName;
   late String? token;
 
   List<Application>? applications;
@@ -53,9 +54,10 @@ class Company with ChangeNotifier {
         name = data['name'] ?? '';
         email = data['email'] ?? '';
         phone = data['phone'] ?? '';
-        photoUrl = data['photoUrl'] ?? '';
+        photoUrl = data['photoUrl'];
         address = data['address'] ?? '';
         bio = data['bio'] ?? '';
+        photoName = data['photoName'] ?? '';
       },
       onError: (e) => print("Error getting document: $e"),
     );
@@ -76,7 +78,8 @@ class Company with ChangeNotifier {
         'email': info['email'],
         'phone': info['phone'],
         'bio': info['bio'] ?? '',
-        'address' : info['address'],
+        'address': info['address'],
+        'photoName': photoName,
         'photoUrl': photoUrl,
       }).onError((e, _) => print("Error writing document: $e"));
       name = info['name'];
@@ -87,24 +90,27 @@ class Company with ChangeNotifier {
       notifyListeners();
       return;
     }
-
-    await Storage()
-        .uploadFile('photos/', info['photoUrl']['bytes'], uid)
-        .onError((error, stackTrace) => print(error));
-    // await Storage().deleteFile('photos/', photoUrl);
-    photoUrl = await fs.child('photos/$uid').getDownloadURL();
-    await ref.set({
-      'photoUrl': photoUrl,
-    }, SetOptions(merge: true)).onError(
-        (e, _) => print("Error writing document: $e"));
+    var temp;
+    await Storage().uploadFile('photos/', info['photoUrl']['bytes'], uid).then(
+        (value) => temp = value.toString(),
+        onError: (error) => print(error));
+    if (photoUrl != null) {
+      await Storage().deleteFile('photos/', photoName ?? '');
+    }
+    photoUrl = await fs.child('photos/$temp').getDownloadURL();
+    // await ref.set({
+    //   'photoUrl': photoUrl,
+    // }, SetOptions(merge: true)).onError(
+    //     (e, _) => print("Error writing document: $e"));
 
     await ref.set({
       'name': info['name'],
       'email': info['email'],
       'phone': info['phone'],
-      'address' : info['address'],
+      'address': info['address'],
       'bio': info['bio'] ?? '',
-      'photoUrl': info['photoUrl']['fileName'],
+      'photoUrl': photoUrl,
+      'photoName' : temp,
     }).onError((e, _) => print("Error writing document: $e"));
 
     name = info['name'];
@@ -112,6 +118,7 @@ class Company with ChangeNotifier {
     phone = info['phone'];
     address = info['address'];
     bio = info['bio'] ?? '';
+    photoName = temp;
     // await getAvatar();
     notifyListeners();
   }
@@ -136,7 +143,7 @@ class Company with ChangeNotifier {
     await ref
         .where('company_uid', isEqualTo: this.uid)
         .where('status', whereIn: ['pending', 'accepted', 'waiting', 'new'])
-        .orderBy('timestamp')
+        .orderBy('timestamp', descending: true)
         .get()
         .then(
           (value) {
@@ -181,7 +188,7 @@ class Company with ChangeNotifier {
     final ref = db.collection('applications');
     await ref
         .where('company_uid', isEqualTo: this.uid)
-        .where('status', whereIn: ['approved','rejected'])
+        .where('status', whereIn: ['approved', 'rejected'])
         .orderBy('timestamp')
         .get()
         .then(
