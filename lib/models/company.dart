@@ -62,6 +62,7 @@ class Company with ChangeNotifier {
       onError: (e) => print("Error getting document: $e"),
     );
     // await getAvatar();
+    print('getCompany');
     notifyListeners();
   }
 
@@ -180,6 +181,7 @@ class Company with ChangeNotifier {
           },
           onError: (e) => print(e),
         );
+        print('getApplications');
     return applications;
   }
 
@@ -226,6 +228,7 @@ class Company with ChangeNotifier {
           },
           onError: (e) => print(e),
         );
+        print('getHistory');
     return applications;
   }
 }

@@ -1,5 +1,6 @@
-import 'package:careergy_mobile/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../constants.dart';
 
 // A custom text field form that has a label and a hint text.
 // also has a validator to check if the input is empty or not.

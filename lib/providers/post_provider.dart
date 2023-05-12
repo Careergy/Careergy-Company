@@ -79,6 +79,7 @@ class Post {
       },
       onError: (e) => print(e),
     );
+    print('getPosts');
     return list;
   }
 
@@ -101,6 +102,7 @@ class Post {
         );
       }
     });
+    print('getPost');
     return post;
   }
 

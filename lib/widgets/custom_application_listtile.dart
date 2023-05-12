@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:card_loading/card_loading.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:intl/intl.dart';
@@ -13,9 +12,11 @@ import '../models/application.dart';
 import '../constants.dart';
 
 class CustomApplicationListTile extends StatelessWidget {
-  CustomApplicationListTile({super.key, required this.application});
+  CustomApplicationListTile(
+      {super.key, required this.application, required this.viewApplication});
 
   Application application;
+  Function viewApplication;
 
   Future getApplicant() async {
     await application.getApplicantInfo();
@@ -33,7 +34,8 @@ class CustomApplicationListTile extends StatelessWidget {
             height: 100,
             borderRadius: BorderRadius.all(Radius.circular(20)),
             margin: EdgeInsets.only(bottom: 10, top: 10),
-            cardLoadingTheme: CardLoadingTheme(colorOne: Colors.white10, colorTwo: Colors.white24),
+            cardLoadingTheme: CardLoadingTheme(
+                colorOne: Colors.white10, colorTwo: Colors.white24),
           );
         } else {
           return Padding(
@@ -51,10 +53,10 @@ class CustomApplicationListTile extends StatelessWidget {
                 height: 100,
                 padding: const EdgeInsets.all(9.0),
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Color.fromARGB(255, 17, 14, 59), Color.fromRGBO(46, 45, 121, 0.808)],
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight),
+                  gradient: LinearGradient(colors: [
+                    Color.fromARGB(255, 17, 14, 59),
+                    Color.fromRGBO(46, 45, 121, 0.808)
+                  ], begin: Alignment.bottomLeft, end: Alignment.topRight),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,8 +143,8 @@ class CustomApplicationListTile extends StatelessWidget {
                       child: ListTile(
                         title: Text(
                             '${application.post.jobTitle.toTitleCase()} (${application.post.major.toTitleCase()})',
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16)),
                         textColor: Colors.white,
                         subtitle: Text(
                             '${application.post.location.toTitleCase()} - ${application.post.experienceYears} of experience years'),
@@ -174,11 +176,13 @@ class CustomApplicationListTile extends StatelessWidget {
                                                   : Colors.red,
                                   fontSize: 22),
                             ),
-                            Text(application.lastUpdated == null
-                                ? '-----'
-                                : '${DateFormat.yMMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated??'')))} ${DateFormat.EEEE().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated??'')))}\n${DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated??'')))}',
-                                style: const TextStyle(color: white), textAlign: TextAlign.center,
-                                ),
+                            Text(
+                              application.lastUpdated == null
+                                  ? '-----'
+                                  : '${DateFormat.yMMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated ?? '')))} ${DateFormat.EEEE().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated ?? '')))}\n${DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(application.lastUpdated ?? '')))}',
+                              style: const TextStyle(color: white),
+                              textAlign: TextAlign.center,
+                            ),
                           ],
                         ),
                       ),
@@ -192,9 +196,9 @@ class CustomApplicationListTile extends StatelessWidget {
                       width: deviceSize.width * 0.1,
                       height: 80,
                       child: ActionButtons(
-                          status: application.status,
-                          timestamp: application.appointmentTimestamp ??
-                              '999999999999999'),
+                        application: application,
+                        viewApplication: viewApplication,
+                      ),
                     )
                   ],
                 ),
@@ -208,18 +212,22 @@ class CustomApplicationListTile extends StatelessWidget {
 }
 
 class ActionButtons extends StatelessWidget {
-  ActionButtons({super.key, required this.timestamp, required this.status});
+  ActionButtons({
+    super.key,
+    required this.viewApplication,
+    required this.application,
+  });
 
-  final String timestamp;
-  final String status;
+  final Application application;
+  final Function viewApplication;
 
   double factor = 0.1;
 
   @override
   Widget build(BuildContext context) {
-    if (DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp))
+    if (DateTime.fromMillisecondsSinceEpoch(int.parse(application.appointmentTimestamp??'999999999999999'))
             .isBefore(DateTime.now()) &&
-        status == 'accepted') {
+        application.status == 'accepted') {
       factor = 0.05;
     }
     return Row(
@@ -285,10 +293,12 @@ class ActionButtons extends StatelessWidget {
           child: InkWell(
             hoverColor: canvasColor,
             onTap: () {
-              
+              viewApplication(context, application);
             },
             child: const Center(
-              child: Text('View', style: TextStyle(fontSize: 20, color: white, fontWeight: FontWeight.w800)),
+              child: Text('View',
+                  style: TextStyle(
+                      fontSize: 20, color: white, fontWeight: FontWeight.w800)),
             ),
           ),
         ),

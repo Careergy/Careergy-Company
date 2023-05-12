@@ -19,6 +19,8 @@ class ApplicationHistotyScreen extends StatefulWidget {
 class _ApplicationHistotyScreenState extends State<ApplicationHistotyScreen> {
   List<Application>? list;
 
+  void viewApplication() {}
+
   Future getApplicationsHistory(Company company) async {
     list = await company.getApplicationsHistory();
   }
@@ -91,7 +93,9 @@ class _ApplicationHistotyScreenState extends State<ApplicationHistotyScreen> {
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     child: CustomApplicationListTile(
-                                        application: list![index]),
+                                      application: list![index],
+                                      viewApplication: viewApplication,
+                                    ),
                                   );
                                 },
                               ),

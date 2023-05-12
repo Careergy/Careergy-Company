@@ -1,15 +1,15 @@
-import 'package:careergy_mobile/providers/keywords_provider.dart';
-import 'package:careergy_mobile/providers/post_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
-import '../constants.dart';
+import '../providers/keywords_provider.dart';
+import '../providers/post_provider.dart';
 import '../models/job.dart';
+
 import '../widgets/custom_textfieldform.dart';
 import '../widgets/autocomplete_custom_textfield.dart';
 import 'jobs_list.dart';
+
+import '../constants.dart';
 
 class JobsScreen extends StatefulWidget {
   const JobsScreen({super.key});
@@ -156,8 +156,28 @@ class NewJobScreen extends StatefulWidget {
 
 class _NewJobScreenState extends State<NewJobScreen> {
   String? currentPage;
-  final List<String> _years = ['Not Specified','0', '1', '2', '3', '4', '5', '6', '7', '8+'];
-  final List<String> _types = ['Full-time','Part-time','Zero-hour', 'Casual', 'Freelance', 'Union' , 'Executive', 'Fixed-term'];
+  final List<String> _years = [
+    'Not Specified',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8+'
+  ];
+  final List<String> _types = [
+    'Full-time',
+    'Part-time',
+    'Zero-hour',
+    'Casual',
+    'Freelance',
+    'Union',
+    'Executive',
+    'Fixed-term'
+  ];
   late List items = [];
 
   String? _selectedYear = 'Not Specified';
@@ -181,31 +201,29 @@ class _NewJobScreenState extends State<NewJobScreen> {
       _kOptions[type] = await Keywords().getKeywords(type);
       listType = type;
     }
-
-    setState(() {});
-    // print(_kOptions);
     return _kOptions;
   }
 
   bool isLoaded = false;
   late final Future myFuture;
 
-  @override
-  void initState() {
-    super.initState();
-    // Assign that variable your Future.
-    myFuture = getCities();
-  }
-
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Assign that variable your Future.
+  //   myFuture = getCities();
+  // }
+  bool isActive = false;
   Future<void> getCities() async {
-    items = await Keywords().getKeywords('locations');
+    if (!isActive) {
+      items = await Keywords().getKeywords('locations');
+      isActive = true;
+    }
   }
 
   _NewJobScreenState(this.currentPage);
   @override
   Widget build(BuildContext context) {
-    getCities();
-
     if ((widget.job != null) && !isLoaded) {
       major = TextEditingController.fromValue(
           TextEditingValue(text: widget.job!.major));
@@ -251,7 +269,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                     const SizedBox(height: 8),
                     divider,
                     FutureBuilder(
-                      future: myFuture,
+                      future: getCities(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

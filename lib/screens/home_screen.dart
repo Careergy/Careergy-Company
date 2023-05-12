@@ -43,7 +43,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   final _controller = SidebarXController(
-      selectedIndex: 0, extended: true); // temporary selected 4
+      selectedIndex: 2, extended: true); // temporary selected 4
   final _key = GlobalKey<ScaffoldState>();
 
   @override

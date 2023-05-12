@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './application_history_screen.dart';
+import './application_screen.dart';
 
 import '../widgets/custom_application_listtile.dart';
 
@@ -19,6 +20,16 @@ class ApplicationsScreen extends StatefulWidget {
 
 class _ApplicationsScreenState extends State<ApplicationsScreen> {
   List<Application>? list;
+
+  void viewApplication(BuildContext cxt, Application application) {
+    Navigator.of(cxt).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ApplicationScreen(application: application);
+        },
+      ),
+    );
+  }
 
   Future getApplications(Company company) async {
     list = await company.getApplications();
@@ -40,7 +51,7 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
             return Scaffold(
               backgroundColor: accentCanvasColor,
               body: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Container(
                   padding: const EdgeInsets.only(top: 8.0),
                   decoration: const BoxDecoration(
@@ -67,13 +78,16 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
                       divider,
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 15, left: 15, bottom: 40),
+                          padding: const EdgeInsets.only(
+                              right: 15, left: 15, bottom: 40),
                           child: ListView.builder(
-                            itemCount: list!.length,
+                            itemCount: 1,//list!.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 child: CustomApplicationListTile(
-                                    application: list![index]),
+                                  application: list![1],
+                                  viewApplication: viewApplication,
+                                ),
                               );
                             },
                           ),

@@ -201,7 +201,7 @@ class _profileScreenState extends State<profileScreen> {
                                     Row(
                                       children: [
                                         const Icon(
-                                          Icons.map_rounded,
+                                          Icons.pin_drop_rounded,
                                           color: kBlue,
                                         ),
                                         Padding(
@@ -233,16 +233,16 @@ class _profileScreenState extends State<profileScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      'About Company',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 20,
-                                          color: white),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
+                                    // const Text(
+                                    //   'About The Company:',
+                                    //   style: TextStyle(
+                                    //       fontWeight: FontWeight.normal,
+                                    //       fontSize: 20,
+                                    //       color: white),
+                                    // ),
+                                    // const SizedBox(
+                                    //   height: 20,
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: SizedBox(
@@ -551,7 +551,7 @@ class _editProfileState extends State<editProfile> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
-                                      'About Company:',
+                                      'About The Company:',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,

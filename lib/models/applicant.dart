@@ -23,9 +23,7 @@ class Applicant with ChangeNotifier {
     this.phone,
     this.photoUrl,
     this.bio,
-  }) {
-    getApplicantInfo(uid);
-  }
+  });
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final fs = FirebaseStorage.instance.ref();
@@ -65,6 +63,7 @@ class Applicant with ChangeNotifier {
     //     }, onError: (e) => applicant!.briefcv = null);
 
     // print(applicant!.briefcv!['job_title']);
+    print('getApplicant');
     return applicant;
   }
 
@@ -86,6 +85,7 @@ class Applicant with ChangeNotifier {
         };
       }
     }, onError: (e) => print(e));
+    print('getBrief');
     return briefcv;
   }
 
@@ -194,7 +194,7 @@ class Applicant with ChangeNotifier {
         onError: (e) => print("Error getting document: $e"),
       );
     }
-    // print(list);
+    print('getSearchresult');
     return applicantList;
   }
 }
