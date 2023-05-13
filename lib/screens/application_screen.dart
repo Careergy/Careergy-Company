@@ -1128,7 +1128,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                                     : 'Starts:\t${DateFormat.yMMMMd().format(app!.startTime)}  ${DateFormat.jms().format(app!.startTime)}\nEnds:\t\t${DateFormat.yMMMMd().format(app!.endTime)}  ${DateFormat.jms().format(app!.endTime)}',
                                                 style: const TextStyle(
                                                     color: white),
-                                                textAlign: TextAlign.justify,
+                                                textAlign: TextAlign.center,
                                               )),
                                             ),
                                             ElevatedButton(

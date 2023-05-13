@@ -211,7 +211,7 @@ class CustomApplicationListTile extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatelessWidget {
+class ActionButtons extends StatefulWidget {
   ActionButtons({
     super.key,
     required this.viewApplication,
@@ -221,13 +221,78 @@ class ActionButtons extends StatelessWidget {
   final Application application;
   final Function viewApplication;
 
+  @override
+  State<ActionButtons> createState() => _ActionButtonsState();
+}
+
+class _ActionButtonsState extends State<ActionButtons> {
   double factor = 0.115;
+
+  Future<void> _showDialog(Application application, String title,
+      String subtitle, String button) async {
+    bool isLoading = false;
+    if (application == null) {
+      return;
+    }
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: primaryColor,
+        title: Text(title,
+            style: const TextStyle(
+                color: white, fontSize: 14, fontWeight: FontWeight.w800)),
+        content: Text(subtitle, style: const TextStyle(color: white)),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel', style: TextStyle(color: white)),
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(button == 'Reject'
+                  ? const Color.fromARGB(255, 165, 29, 19)
+                  : const Color.fromARGB(255, 16, 150, 34)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+            ),
+            onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
+              if (button == 'Reject') {
+                await application.changeStatus(newStatus: 'rejected');
+              }
+              if (button == 'Approve') {
+                await application.changeStatus(newStatus: 'approved');
+              }
+              setState(() {
+                isLoading = false;
+                Navigator.of(ctx).pop();
+              });
+            },
+            child: isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : Text(
+                    button,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (DateTime.fromMillisecondsSinceEpoch(int.parse(application.appointmentTimestamp??'999999999999999'))
+    if (DateTime.fromMillisecondsSinceEpoch(int.parse(
+                widget.application.appointmentTimestamp ?? '999999999999999'))
             .isBefore(DateTime.now()) &&
-        application.status == 'accepted') {
+        widget.application.status == 'accepted') {
       factor = 0.054;
     }
     return Row(
@@ -252,11 +317,14 @@ class ActionButtons extends StatelessWidget {
                                   color: Colors.black26, blurRadius: 0.2))),
                       child: InkWell(
                         child: const Center(
-                          child: Text('Approved',
+                          child: Text('Approve',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.white)),
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          await _showDialog(widget.application, 'Conformation!',
+                              'Confirm approve?', 'Approve');
+                        },
                       ),
                     ),
                     Container(
@@ -271,11 +339,14 @@ class ActionButtons extends StatelessWidget {
                                   color: Colors.black26, blurRadius: 0.2))),
                       child: InkWell(
                         child: const Center(
-                          child: Text('Rejected',
+                          child: Text('Reject',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.white)),
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          await _showDialog(widget.application, 'Warning!',
+                              'Confirm reject?', 'Reject');
+                        },
                       ),
                     )
                   ],
@@ -293,7 +364,7 @@ class ActionButtons extends StatelessWidget {
           child: InkWell(
             hoverColor: canvasColor,
             onTap: () {
-              viewApplication(context, application);
+              widget.viewApplication(context, widget.application);
             },
             child: const Center(
               child: Text('View',
