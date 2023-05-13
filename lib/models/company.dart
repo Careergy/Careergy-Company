@@ -190,7 +190,7 @@ class Company with ChangeNotifier {
     final ref = db.collection('applications');
     await ref
         .where('company_uid', isEqualTo: this.uid)
-        .where('status', whereIn: ['approved', 'rejected'])
+        .where('status', whereIn: ['approved', 'rejected', 'canceled'])
         .orderBy('timestamp')
         .get()
         .then(

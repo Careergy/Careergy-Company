@@ -38,12 +38,22 @@ class Application {
     post = await Post.getPost(postId);
   }
 
-  Future changeStatus(String newStatus) async {
+  Future changeStatus({String? newStatus}) async {
     final ref = db.collection('applications').doc(id);
     final updateTime = DateTime.now();
-    await ref.set({
-      'status': newStatus,
-      'last_updated': updateTime.millisecondsSinceEpoch
-    }, SetOptions(merge: true));
+    if (appointmentTimestamp != null) {
+      await ref.set({
+        'status': newStatus,
+        'last_updated': updateTime.millisecondsSinceEpoch,
+        'appointment_timestamp' : int.parse(appointmentTimestamp??''),
+        'seen' : false
+      }, SetOptions(merge: true));
+    } else {
+      await ref.set({
+        'status': newStatus,
+        'last_updated': updateTime.millisecondsSinceEpoch,
+        'seen' : false
+      }, SetOptions(merge: true));
+    }
   }
 }

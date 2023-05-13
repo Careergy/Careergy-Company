@@ -28,7 +28,14 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
           return ApplicationScreen(application: application);
         },
       ),
-    );
+    ).then((value) {
+      if (value == null) {
+        return;
+      }
+      if (!value) {
+        setState(() {});
+      }
+    });
   }
 
   Future getApplications(Company company) async {
@@ -81,11 +88,11 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
                           padding: const EdgeInsets.only(
                               right: 15, left: 15, bottom: 40),
                           child: ListView.builder(
-                            itemCount: 1,//list!.length,
+                            itemCount: list!.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 child: CustomApplicationListTile(
-                                  application: list![1],
+                                  application: list![index],
                                   viewApplication: viewApplication,
                                 ),
                               );

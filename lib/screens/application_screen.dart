@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
+import './applicant_profile_screen.dart';
 import './jobs_list.dart';
+
+import '../providers/meetings_provider.dart';
 
 import '../models/application.dart';
 
@@ -17,9 +22,51 @@ class ApplicationScreen extends StatefulWidget {
 }
 
 class _ApplicationScreenState extends State<ApplicationScreen> {
+  ScrollController? _scrollController;
+
+  final CalendarController _calendarController = CalendarController();
+  Appointment? app;
+  final List<Appointment> apps = <Appointment>[];
+  MeetingDataSource? _events;
+
+  List<Appointment> _getDataSource() {
+    final DateTime start = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(widget.application.appointmentTimestamp ?? '0'));
+    final DateTime end = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(widget.application.appointmentTimestamp ?? '0') + 3600000);
+    app = Appointment(
+      subject: widget.application.applicant.name ?? '',
+      startTime: start,
+      endTime: end,
+      color: const Color(0xFF0F8644),
+      isAllDay: false,
+    );
+    apps.add(app!);
+    // print(app!.startTime.millisecondsSinceEpoch);
+
+    return apps;
+  }
+
+  bool _isNew = true;
+
+  bool _acceptIsLoading = false;
+  bool _rejectIsLoading = false;
+  bool _approveIsLoading = false;
+  bool _saveIsLoading = false;
+
+  bool _update = true;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contet) {
     final deviceSize = MediaQuery.of(context).size;
+    if (widget.application.appointmentTimestamp != null &&
+        widget.application.appointmentTimestamp != '' &&
+        _isNew) {
+      _events = MeetingDataSource(_getDataSource());
+      _isNew = false;
+    } else {
+      _events = MeetingDataSource(apps);
+    }
     return Scaffold(
       backgroundColor: accentCanvasColor,
       floatingActionButton: Padding(
@@ -38,7 +85,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                 },
               ),
             ),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pop(_update),
             child: const Icon(Icons.arrow_back_rounded)),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
@@ -201,7 +248,185 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                     children: [
                                       Container(
                                         height: deviceSize.height * 0.28,
-                                        width: deviceSize.width*0.17,
+                                        width: deviceSize.width * 0.18,
+                                        padding: const EdgeInsets.all(18),
+                                        decoration: const BoxDecoration(
+                                          gradient: LinearGradient(
+                                              colors: [
+                                                Color.fromARGB(
+                                                    197, 129, 56, 255),
+                                                Color.fromARGB(66, 110, 49, 216)
+                                              ],
+                                              begin: Alignment.bottomLeft,
+                                              end: Alignment.topRight),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                        ),
+                                        child: Scrollbar(
+                                          controller: _scrollController,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            controller: _scrollController,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    CircleAvatar(
+                                                      radius: 30,
+                                                      backgroundColor:
+                                                          const Color.fromARGB(
+                                                              0, 255, 255, 255),
+                                                      child: ClipOval(
+                                                        child: widget
+                                                                        .application
+                                                                        .applicant
+                                                                        .photoUrl ==
+                                                                    null ||
+                                                                widget
+                                                                        .application
+                                                                        .applicant
+                                                                        .photoUrl!
+                                                                        .substring(
+                                                                            0,
+                                                                            4) !=
+                                                                    'http'
+                                                            ? widget.application
+                                                                .applicant.photo
+                                                            : Image.network(
+                                                                widget
+                                                                        .application
+                                                                        .applicant
+                                                                        .photoUrl ??
+                                                                    '',
+                                                                loadingBuilder:
+                                                                    (context,
+                                                                        child,
+                                                                        loadingProgress) {
+                                                                  if (loadingProgress ==
+                                                                      null) {
+                                                                    return child;
+                                                                  } else {
+                                                                    return const CircularProgressIndicator();
+                                                                  }
+                                                                },
+                                                              ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Column(
+                                                      children: [
+                                                        Text(
+                                                          widget
+                                                                  .application
+                                                                  .applicant
+                                                                  .name ??
+                                                              ''.toTitleCase(),
+                                                          style: const TextStyle(
+                                                              color: white,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                                  return ApplicantProfileScreen(
+                                                                    applicant: widget
+                                                                        .application
+                                                                        .applicant,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            );
+                                                          },
+                                                          style: ButtonStyle(
+                                                            backgroundColor:
+                                                                const MaterialStatePropertyAll(
+                                                                    primaryColor),
+                                                            fixedSize:
+                                                                MaterialStatePropertyAll(
+                                                              Size(
+                                                                deviceSize
+                                                                        .width *
+                                                                    0.1,
+                                                                7,
+                                                              ),
+                                                            ),
+                                                            shape: MaterialStateProperty
+                                                                .all<
+                                                                    RoundedRectangleBorder>(
+                                                              RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: const Text(
+                                                              'View Profile'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                divider,
+                                                const Text(
+                                                  'Email: ',
+                                                  style: TextStyle(
+                                                    color: Colors.white60,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  widget.application.applicant
+                                                          .email ??
+                                                      ''.toTitleCase(),
+                                                  style: const TextStyle(
+                                                      color: white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                                const Text(
+                                                  'Phone Number: ',
+                                                  style: TextStyle(
+                                                    color: Colors.white60,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  widget.application.applicant
+                                                          .phone ??
+                                                      ''.toTitleCase(),
+                                                  style: const TextStyle(
+                                                      color: white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: deviceSize.height * 0.28,
+                                        width: deviceSize.width * 0.18,
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 18, vertical: 2.0),
                                         decoration: const BoxDecoration(
@@ -220,27 +445,40 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            Row(children: [
-                                              const Text('Job Title: ',
-                                                  style: TextStyle(
-                                                      color: white,
-                                                      fontSize: 16)),
-                                              Text(
-                                                  widget
-                                                      .application.post.jobTitle
-                                                      .toTitleCase(),
-                                                  style: const TextStyle(
-                                                      color: white,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w800)),
-                                            ]),
                                             Row(
-                                              children: [
-                                                const Text('Major: ',
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text(
+                                                    'Job Title: ',
                                                     style: TextStyle(
-                                                        color: white,
-                                                        fontSize: 16)),
+                                                      color: Colors.white60,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                      widget.application.post
+                                                          .jobTitle
+                                                          .toTitleCase(),
+                                                      style: const TextStyle(
+                                                          color: white,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w800)),
+                                                ]),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Major: ',
+                                                  style: TextStyle(
+                                                    color: Colors.white60,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
                                                 Text(
                                                     widget
                                                         .application.post.major
@@ -252,55 +490,69 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                                             FontWeight.w800))
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        height: deviceSize.height * 0.28,
-                                        width: deviceSize.width*0.17,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 18, vertical: 2.0),
-                                        decoration: const BoxDecoration(
-                                          gradient: LinearGradient(
-                                              colors: [
-                                                Color.fromARGB(
-                                                    197, 129, 56, 255),
-                                                Color.fromARGB(66, 110, 49, 216)
-                                              ],
-                                              begin: Alignment.bottomLeft,
-                                              end: Alignment.topRight),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Row(children: [
-                                              const Text('Job Title: ',
-                                                  style: TextStyle(
-                                                      color: white,
-                                                      fontSize: 16)),
-                                              Text(
-                                                  widget
-                                                      .application.post.jobTitle
-                                                      .toTitleCase(),
-                                                  style: const TextStyle(
-                                                      color: white,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w800)),
-                                            ]),
                                             Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                const Text('Major: ',
-                                                    style: TextStyle(
-                                                        color: white,
-                                                        fontSize: 16)),
+                                                const Text(
+                                                  'Experience Years: ',
+                                                  style: TextStyle(
+                                                    color: Colors.white60,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
                                                 Text(
-                                                    widget
-                                                        .application.post.major
+                                                    widget.application.post
+                                                            .experienceYears ??
+                                                        'Not specified'
+                                                            .toTitleCase(),
+                                                    style: const TextStyle(
+                                                        color: white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w800))
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Location: ',
+                                                  style: TextStyle(
+                                                    color: Colors.white60,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                    widget.application.post
+                                                        .location
                                                         .toTitleCase(),
+                                                    style: const TextStyle(
+                                                        color: white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w800))
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Contract Type: ',
+                                                  style: TextStyle(
+                                                    color: Colors.white60,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                    widget.application.post
+                                                            .type ??
+                                                        ''.toTitleCase(),
                                                     style: const TextStyle(
                                                         color: white,
                                                         fontSize: 16,
@@ -315,6 +567,11 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                   ),
                                   Container(
                                     height: deviceSize.height * 0.28,
+                                    padding: const EdgeInsets.only(
+                                        top: 14,
+                                        right: 18,
+                                        left: 18,
+                                        bottom: 9),
                                     decoration: const BoxDecoration(
                                       gradient: LinearGradient(
                                           colors: [
@@ -326,17 +583,637 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(20)),
                                     ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Description',
+                                          style: TextStyle(
+                                            color: Colors.white60,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        divider,
+                                        const SizedBox(height: 4),
+                                        Expanded(
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                                widget.application.post
+                                                        .description ??
+                                                    'No Desciption.',
+                                                style: const TextStyle(
+                                                    color: white)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            Container(
+                            SizedBox(
                               height: deviceSize.height * 0.75,
                               width: deviceSize.width * 0.37,
-                              decoration: const BoxDecoration(
-                                color: white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                      height: deviceSize.height * 0.05,
+                                      child: widget.application.status ==
+                                                  'waiting' ||
+                                              widget.application.status ==
+                                                  'accepted'
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      _approveIsLoading = true;
+                                                    });
+                                                    await widget.application
+                                                        .changeStatus(
+                                                            newStatus:
+                                                                'approved');
+                                                    setState(() {
+                                                      _approveIsLoading = false;
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    });
+                                                  },
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        const MaterialStatePropertyAll(
+                                                            Color.fromARGB(255,
+                                                                28, 119, 31)),
+                                                    fixedSize:
+                                                        MaterialStatePropertyAll(
+                                                      Size(
+                                                        deviceSize.width * 0.18,
+                                                        deviceSize.height *
+                                                            0.05,
+                                                      ),
+                                                    ),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: _approveIsLoading
+                                                      ? SizedBox(
+                                                          height: deviceSize
+                                                                  .height *
+                                                              0.03,
+                                                          width:
+                                                              deviceSize.width *
+                                                                  0.03,
+                                                          child:
+                                                              const CircularProgressIndicator(
+                                                                  color: white))
+                                                      : const Text('Approve'),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      _rejectIsLoading = true;
+                                                    });
+                                                    await widget.application
+                                                        .changeStatus(
+                                                            newStatus:
+                                                                'rejected');
+                                                    setState(() {
+                                                      _rejectIsLoading = false;
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    });
+                                                  },
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        const MaterialStatePropertyAll(
+                                                            Color.fromARGB(255,
+                                                                124, 21, 21)),
+                                                    fixedSize:
+                                                        MaterialStatePropertyAll(
+                                                      Size(
+                                                        deviceSize.width * 0.18,
+                                                        deviceSize.height *
+                                                            0.05,
+                                                      ),
+                                                    ),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: _rejectIsLoading
+                                                      ? SizedBox(
+                                                          height: deviceSize
+                                                                  .height *
+                                                              0.03,
+                                                          width:
+                                                              deviceSize.width *
+                                                                  0.03,
+                                                          child:
+                                                              const CircularProgressIndicator(
+                                                                  color: white),
+                                                        )
+                                                      : const Text('Reject'),
+                                                ),
+                                              ],
+                                            )
+                                          : widget.application.status ==
+                                                  'pending'
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      onPressed: app == null
+                                                          ? null
+                                                          : () async {
+                                                              setState(() {
+                                                                _acceptIsLoading =
+                                                                    true;
+                                                              });
+                                                              widget.application
+                                                                      .appointmentTimestamp =
+                                                                  app!.startTime
+                                                                      .millisecondsSinceEpoch
+                                                                      .toString();
+                                                              widget.application.lastUpdated = DateTime.now().millisecondsSinceEpoch.toString();
+                                                              widget.application
+                                                                      .status =
+                                                                  'waiting';
+                                                              apps.clear();
+                                                              _isNew = true;
+                                                              await widget
+                                                                  .application
+                                                                  .changeStatus(
+                                                                      newStatus:
+                                                                          'waiting');
+                                                              setState(() {
+                                                                _acceptIsLoading =
+                                                                    false;
+                                                              });
+                                                            },
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            const MaterialStatePropertyAll(
+                                                                primaryColor),
+                                                        fixedSize:
+                                                            MaterialStatePropertyAll(
+                                                          Size(
+                                                            deviceSize.width *
+                                                                0.18,
+                                                            deviceSize.height *
+                                                                0.05,
+                                                          ),
+                                                        ),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: _acceptIsLoading
+                                                          ? SizedBox(
+                                                              height: deviceSize
+                                                                      .height *
+                                                                  0.03,
+                                                              width: deviceSize
+                                                                      .width *
+                                                                  0.03,
+                                                              child:
+                                                                  const CircularProgressIndicator(
+                                                                      color:
+                                                                          white))
+                                                          : const Text(
+                                                              'Accept'),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          _rejectIsLoading =
+                                                              true;
+                                                        });
+                                                        await widget.application
+                                                            .changeStatus(
+                                                                newStatus:
+                                                                    'rejected');
+                                                        setState(() {
+                                                          _rejectIsLoading =
+                                                              false;
+                                                          Navigator.of(context)
+                                                              .pop(false);
+                                                        });
+                                                      },
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            const MaterialStatePropertyAll(
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    124,
+                                                                    21,
+                                                                    21)),
+                                                        fixedSize:
+                                                            MaterialStatePropertyAll(
+                                                          Size(
+                                                            deviceSize.width *
+                                                                0.18,
+                                                            deviceSize.height *
+                                                                0.05,
+                                                          ),
+                                                        ),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: _rejectIsLoading
+                                                          ? SizedBox(
+                                                              height: deviceSize
+                                                                      .height *
+                                                                  0.03,
+                                                              width: deviceSize
+                                                                      .width *
+                                                                  0.03,
+                                                              child:
+                                                                  const CircularProgressIndicator(
+                                                                      color:
+                                                                          white))
+                                                          : const Text(
+                                                              'Reject'),
+                                                    ),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          _approveIsLoading =
+                                                              true;
+                                                        });
+                                                        await widget.application
+                                                            .changeStatus(
+                                                                newStatus:
+                                                                    'approved');
+                                                        setState(() {
+                                                          _approveIsLoading =
+                                                              false;
+                                                          Navigator.of(context)
+                                                              .pop(false);
+                                                        });
+                                                      },
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            const MaterialStatePropertyAll(
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    28,
+                                                                    119,
+                                                                    31)),
+                                                        fixedSize:
+                                                            MaterialStatePropertyAll(
+                                                          Size(
+                                                            deviceSize.width *
+                                                                0.18,
+                                                            deviceSize.height *
+                                                                0.05,
+                                                          ),
+                                                        ),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: _approveIsLoading
+                                                          ? SizedBox(
+                                                              height: deviceSize
+                                                                      .height *
+                                                                  0.03,
+                                                              width: deviceSize
+                                                                      .width *
+                                                                  0.03,
+                                                              child:
+                                                                  const CircularProgressIndicator(
+                                                                      color:
+                                                                          white))
+                                                          : const Text(
+                                                              'Approve'),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          _rejectIsLoading =
+                                                              true;
+                                                        });
+                                                        await widget.application
+                                                            .changeStatus(
+                                                                newStatus:
+                                                                    'rejected');
+                                                        setState(() {
+                                                          _rejectIsLoading =
+                                                              false;
+                                                          Navigator.of(context)
+                                                              .pop(false);
+                                                        });
+                                                      },
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            const MaterialStatePropertyAll(
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    124,
+                                                                    21,
+                                                                    21)),
+                                                        fixedSize:
+                                                            MaterialStatePropertyAll(
+                                                          Size(
+                                                            deviceSize.width *
+                                                                0.18,
+                                                            deviceSize.height *
+                                                                0.05,
+                                                          ),
+                                                        ),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: _rejectIsLoading
+                                                          ? SizedBox(
+                                                              height: deviceSize
+                                                                      .height *
+                                                                  0.03,
+                                                              width: deviceSize
+                                                                      .width *
+                                                                  0.03,
+                                                              child:
+                                                                  const CircularProgressIndicator(
+                                                                      color:
+                                                                          white))
+                                                          : const Text(
+                                                              'Reject'),
+                                                    ),
+                                                  ],
+                                                )),
+                                  Container(
+                                    height: deviceSize.height * 0.6,
+                                    width: deviceSize.width * 0.37,
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: const BoxDecoration(
+                                      color: white,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: SfCalendarTheme(
+                                      data: SfCalendarThemeData(
+                                        backgroundColor: white,
+                                      ),
+                                      child: SfCalendar(
+                                        view: CalendarView.week,
+                                        // allowViewNavigation: true,
+                                        showNavigationArrow: true,
+                                        // showDatePickerButton: true,
+                                        firstDayOfWeek: DateTime.now().weekday,
+                                        initialDisplayDate: app?.startTime,
+                                        allowDragAndDrop: false,
+                                        allowAppointmentResize: false,
+                                        timeSlotViewSettings:
+                                            const TimeSlotViewSettings(
+                                                startHour: 6,
+                                                endHour: 18,
+                                                nonWorkingDays: <int>[
+                                              DateTime.friday,
+                                              DateTime.saturday
+                                            ]),
+                                        dataSource: _events,
+                                        controller: _calendarController,
+                                        onTap: (calendarTapDetails) {
+                                          if (widget.application.status ==
+                                                  'accepted' &&
+                                              int.parse(widget.application
+                                                          .appointmentTimestamp ??
+                                                      '') <
+                                                  DateTime.now()
+                                                      .millisecondsSinceEpoch) {
+                                            return;
+                                          }
+                                          if (app == null) {
+                                            app = Appointment(
+                                                startTime: _calendarController
+                                                    .selectedDate!,
+                                                endTime: _calendarController
+                                                    .selectedDate!
+                                                    .add(const Duration(
+                                                        minutes: 60)),
+                                                subject: 'Selected!',
+                                                color: primaryColor);
+                                            _events?.appointments!.add(app);
+                                            _events?.notifyListeners(
+                                                CalendarDataSourceAction.add,
+                                                <Appointment>[app!]);
+                                          } else {
+                                            app?.startTime =
+                                                calendarTapDetails.date!;
+                                            app?.endTime = calendarTapDetails
+                                                .date!
+                                                .add(const Duration(
+                                                    minutes: 60));
+                                            _events?.notifyListeners(
+                                                CalendarDataSourceAction.reset,
+                                                <Appointment>[app!]);
+                                          }
+                                          setState(() {});
+                                        },
+                                        // onSelectionChanged:
+                                        //     (calendarSelectionDetails) {
+                                        //   // print('change');
+                                        //   _events?.notifyListeners(
+                                        //       CalendarDataSourceAction.reset,
+                                        //       <Appointment>[app!]);
+                                        //   setState(() {});
+                                        // },
+                                        // onAppointmentResizeEnd:
+                                        //     (appointmentResizeEndDetails) {
+                                        //   app?.startTime =
+                                        //       appointmentResizeEndDetails
+                                        //           .startTime!;
+                                        //   app?.endTime =
+                                        //       appointmentResizeEndDetails
+                                        //           .endTime!;
+                                        //           print(appointmentResizeEndDetails.endTime!.millisecondsSinceEpoch);
+                                        //   _events?.notifyListeners(
+                                        //       CalendarDataSourceAction.reset,
+                                        //       <Appointment>[app!]);
+                                        //   // setState(() {});
+                                        // },
+                                        // onDragEnd: (appointmentDragEndDetails) {
+                                        //   app = appointmentDragEndDetails
+                                        //       .appointment as Appointment?;
+                                        //   // setState(() {});
+                                        // },
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: widget.application.status ==
+                                                'waiting' ||
+                                            widget.application.status ==
+                                                'refused' ||
+                                            (widget.application.status ==
+                                                    'accepted' &&
+                                                int.parse(widget.application
+                                                            .appointmentTimestamp ??
+                                                        '') >
+                                                    DateTime.now()
+                                                        .millisecondsSinceEpoch)
+                                        ? [
+                                            Container(
+                                              height: deviceSize.height * 0.05,
+                                              width: deviceSize.width * 0.26,
+                                              decoration: const BoxDecoration(
+                                                  color: titleBackground,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(20))),
+                                              child: Center(
+                                                  child: Text(
+                                                app == null
+                                                    ? 'Not Selected!'
+                                                    : 'Starts:\t${DateFormat.yMMMMd().format(app!.startTime)}  ${DateFormat.jms().format(app!.startTime)}\nEnds:\t\t${DateFormat.yMMMMd().format(app!.endTime)}  ${DateFormat.jms().format(app!.endTime)}',
+                                                style: const TextStyle(
+                                                    color: white),
+                                                textAlign: TextAlign.justify,
+                                              )),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: app == null ||
+                                                      int.parse(widget
+                                                                  .application
+                                                                  .appointmentTimestamp ??
+                                                              '0') ==
+                                                          app?.startTime
+                                                              .millisecondsSinceEpoch
+                                                  ? null
+                                                  : () async {
+                                                      setState(() {
+                                                        _saveIsLoading = true;
+                                                      });
+                                                      widget.application
+                                                              .appointmentTimestamp =
+                                                          app!.startTime
+                                                              .millisecondsSinceEpoch
+                                                              .toString();
+                                                      _update = false;
+                                                      await widget.application
+                                                          .changeStatus(
+                                                              newStatus:
+                                                                  'waiting');
+                                                      setState(() {
+                                                        _saveIsLoading = false;
+                                                      });
+                                                    },
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    const MaterialStatePropertyAll(
+                                                        primaryColor),
+                                                fixedSize:
+                                                    MaterialStatePropertyAll(
+                                                  Size(
+                                                    deviceSize.width * 0.1,
+                                                    deviceSize.height * 0.05,
+                                                  ),
+                                                ),
+                                                shape:
+                                                    MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                ),
+                                              ),
+                                              child: _saveIsLoading
+                                                  ? SizedBox(
+                                                      height:
+                                                          deviceSize.height *
+                                                              0.03,
+                                                      width: deviceSize.width *
+                                                          0.03,
+                                                      child:
+                                                          const CircularProgressIndicator(
+                                                              color: white))
+                                                  : const Text('Save'),
+                                            ),
+                                          ]
+                                        : [
+                                            Container(
+                                              height: deviceSize.height * 0.05,
+                                              width: deviceSize.width * 0.37,
+                                              decoration: const BoxDecoration(
+                                                  color: titleBackground,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(20))),
+                                              child: Center(
+                                                  child: Text(
+                                                app == null
+                                                    ? 'Not Selected!'
+                                                    : 'Starts:\t${DateFormat.yMMMMd().format(app!.startTime)}  ${DateFormat.jms().format(app!.startTime)}\nEnds:\t\t${DateFormat.yMMMMd().format(app!.endTime)}  ${DateFormat.jms().format(app!.endTime)}',
+                                                style: const TextStyle(
+                                                    color: white),
+                                                textAlign: TextAlign.justify,
+                                              )),
+                                            ),
+                                          ],
+                                  ),
+                                ],
                               ),
                             )
                           ],

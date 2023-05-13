@@ -18,6 +18,8 @@ class ApplicantProfileScreen extends StatefulWidget {
 class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
   _ApplicantProfileScreenState();
 
+  final ScrollController _scrollbarController = ScrollController();
+
   List<bool> isSelected = [true, false];
   bool isPersonalShowed = true;
   bool downloaded = false;
@@ -32,86 +34,140 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getApplicantInfo(widget.applicant!.uid),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          return Scaffold(
-            floatingActionButton: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.arrow_back)),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.miniStartTop,
-                body: ListView(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 50, bottom: 30, right: 50, left: 50),
+    final deviceSize = MediaQuery.of(context).size;
+    return Scaffold(
+      backgroundColor: accentCanvasColor,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(const CircleBorder()),
+              padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
+              backgroundColor:
+                  MaterialStateProperty.all(primaryColor), // <-- Button color
+              overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (states) {
+                  if (states.contains(MaterialState.pressed)) {
+                    return actionColor; // <-- Splash color
+                  }
+                },
+              ),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Icon(Icons.arrow_back_rounded)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          padding: const EdgeInsets.only(top: 8.0),
+          decoration: const BoxDecoration(
+            color: canvasColor,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 45,
+                width: deviceSize.width * 0.2,
+                decoration: const BoxDecoration(
+                  color: titleBackground,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: const Center(
+                    child: Text('Applicant Profile',
+                        style: TextStyle(
+                            color: white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800))),
+              ),
+              const SizedBox(height: 8),
+              divider,
+              FutureBuilder(
+                future: getApplicantInfo(widget.applicant!.uid),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: SizedBox(
+                        height: deviceSize.height * 0.72,
+                        child: Scrollbar(
+                          controller: _scrollbarController,
+                          child: SingleChildScrollView(
+                            controller: _scrollbarController,
                             child: Column(
                               // mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.only(
+                                      top: 10, left: 50, bottom: 20),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       FittedBox(
                                         fit: BoxFit.fill,
                                         child: CircleAvatar(
                                           radius: 90,
+                                          backgroundColor:
+                                              const Color.fromARGB(0, 0, 0, 0),
                                           child: ClipOval(
                                             child: widget.applicant!.photoUrl ==
                                                         null ||
-                                                    widget.applicant!.photoUrl == ''
+                                                    widget.applicant!
+                                                            .photoUrl ==
+                                                        ''
                                                 ? widget.applicant!.photo
-                                                : Image.network(widget.applicant!.photoUrl??'', loadingBuilder: (context, child, loadingProgress) {
-                                                  if (loadingProgress == null) {
-                                                    return child;
-                                                  }
-                                                  return const CircularProgressIndicator();
-                                                },),
+                                                : Image.network(
+                                                    widget.applicant!
+                                                            .photoUrl ??
+                                                        '',
+                                                    loadingBuilder: (context,
+                                                        child,
+                                                        loadingProgress) {
+                                                      if (loadingProgress ==
+                                                          null) {
+                                                        return child;
+                                                      }
+                                                      return const CircularProgressIndicator();
+                                                    },
+                                                  ),
                                           ),
                                         ),
                                       ),
                                       const SizedBox(
-                                        width: 50,
+                                        width: 40,
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              widget.applicant!.name??'',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 30),
-                                            ),
-                                          ],
+                                        child: Text(
+                                          widget.applicant!.name ?? '',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 30,
+                                              color: white),
                                         ),
                                       ),
-                                      const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          Icons.email,
-                                          color: kBlue,
-                                        ),
-                                      ),
+                                      // const Padding(
+                                      //   padding: EdgeInsets.all(8.0),
+                                      //   child: Icon(
+                                      //     Icons.email,
+                                      //     color: kBlue,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 30,
                                 ),
-                                const Divider(),
+                                divider,
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Center(
                                   child: ToggleButtons(
                                     borderRadius: BorderRadius.circular(10),
@@ -141,7 +197,8 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                         child: Center(
                                           child: Padding(
                                             padding: EdgeInsets.all(3.0),
-                                            child: Text('Personal Info'),
+                                            child: Text('Personal Info',
+                                                style: TextStyle(color: white)),
                                           ),
                                         ),
                                       ),
@@ -150,7 +207,8 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                         child: Center(
                                           child: Padding(
                                             padding: EdgeInsets.all(3.0),
-                                            child: Text('Applicant Info'),
+                                            child: Text('Applicant Info',
+                                                style: TextStyle(color: white)),
                                           ),
                                         ),
                                       )
@@ -162,7 +220,8 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                 ),
                                 isSelected[0]
                                     ? Padding(
-                                        padding: const EdgeInsets.only(left: 50),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 50),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -170,8 +229,10 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                             const Text(
                                               'About',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Colors.white60,
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 20,
@@ -184,8 +245,10 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                     : widget.applicant!.bio ??
                                                         'Not Available',
                                                 style: const TextStyle(
-                                                    fontWeight: FontWeight.normal,
-                                                    fontSize: 20),
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 20,
+                                                  color: white,
+                                                ),
                                               ),
                                             ),
                                             const SizedBox(
@@ -194,17 +257,21 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                             const Text(
                                               'Email',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Colors.white60,
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 20,
                                             ),
                                             Text(
-                                              widget.applicant!.email??'',
+                                              widget.applicant!.email ?? '',
                                               style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 20),
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20,
+                                                color: white,
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 30,
@@ -212,8 +279,10 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                             const Text(
                                               'Phone Number',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Colors.white60,
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 20,
@@ -224,8 +293,10 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                   : widget.applicant!.phone ??
                                                       'Not Available',
                                               style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 20),
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 20,
+                                                color: white,
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 30,
@@ -234,75 +305,143 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                         ),
                                       )
                                     : Padding(
-                                        padding: const EdgeInsets.only(left: 50),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 50),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Row(
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      'job Title',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    ListView.builder(
-                                                      itemCount: widget.applicant!.briefcv!['job_title']!.length,
-                                                      itemBuilder: (context, index) {
-                                                      return Text(widget.applicant!.briefcv!['job_title']![index]??'');
-                                                    },),
-                                                    // const Text(
-                                                    //   'info.job_titles2',
-                                                    //   style: TextStyle(
-                                                    //       fontWeight:
-                                                    //           FontWeight.normal,
-                                                    //       fontSize: 20),
-                                                    // ),
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  width: 100,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      'Level',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    const Text(
-                                                      'info.level1',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontSize: 20),
-                                                    ),
-                                                    const Text(
-                                                      'info.level2',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontSize: 20),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                            const Text(
+                                              '\tMajor(s):',
+                                              style: TextStyle(
+                                                  color: white, fontSize: 20),
+                                            ),
+                                            SizedBox(
+                                              width: 500,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Wrap(
+                                                    children:
+                                                        widget.applicant!
+                                                            .briefcv!['majors']!
+                                                            .map((e) => Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(10),
+                                                                  child:
+                                                                      Container(
+                                                                    height: 35,
+                                                                    width: 200,
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            10),
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color:
+                                                                          primaryColor,
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(20)),
+                                                                    ),
+                                                                    child: Center(
+                                                                        child: Text(
+                                                                            e,
+                                                                            style:
+                                                                                const TextStyle(color: white))),
+                                                                  ),
+                                                                ))
+                                                            .toList()),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 20
+                                            ),
+                                            const Text(
+                                              '\tJob Titles(s):',
+                                              style: TextStyle(
+                                                  color: white, fontSize: 20),
+                                            ),
+                                            SizedBox(
+                                              width: 500,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Wrap(
+                                                    children:
+                                                        widget.applicant!
+                                                            .briefcv!['job_title']! == null ? [const Text('Not Data')] :
+                                                        widget.applicant!
+                                                            .briefcv!['job_title']!
+                                                            .map((e) => Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(10),
+                                                                  child:
+                                                                      Container(
+                                                                    height: 35,
+                                                                    width: 200,
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            10),
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color:
+                                                                          primaryColor,
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(20)),
+                                                                    ),
+                                                                    child: Center(
+                                                                        child: Text(
+                                                                            e,
+                                                                            style:
+                                                                                const TextStyle(color: white))),
+                                                                  ),
+                                                                ))
+                                                            .toList()),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 100,
+                                              width: 200,
+                                              child: Wrap(
+                                                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Container(
+                                                    color: white,
+                                                    height: 40,
+                                                    width: 40,
+                                                  ),
+                                                  Container(
+                                                    color: white,
+                                                    height: 40,
+                                                    width: 40,
+                                                  ),
+                                                  Container(
+                                                    color: white,
+                                                    height: 40,
+                                                    width: 40,
+                                                  ),
+                                                  Container(
+                                                    color: white,
+                                                    height: 40,
+                                                    width: 40,
+                                                  ),
+                                                  Container(
+                                                    color: white,
+                                                    height: 40,
+                                                    width: 40,
+                                                  ),
+                                                  Container(
+                                                    color: white,
+                                                    height: 40,
+                                                    width: 40,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                             const Divider(),
                                             Row(
@@ -383,7 +522,8 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 const Text(
                                                   'Soft Skills',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 20),
                                                 ),
                                                 const SizedBox(
@@ -392,19 +532,22 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 const Text(
                                                   'info.soft_skills1',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                       fontSize: 20),
                                                 ),
                                                 const Text(
                                                   'info.soft_skills2',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                       fontSize: 20),
                                                 ),
                                                 const Text(
                                                   'info.soft_skills3',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                       fontSize: 20),
                                                 ),
                                               ],
@@ -417,7 +560,8 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 const Text(
                                                   'Intrests',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 20),
                                                 ),
                                                 const SizedBox(
@@ -426,13 +570,15 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 const Text(
                                                   'info.intrests1',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                       fontSize: 20),
                                                 ),
                                                 const Text(
                                                   'info.intrests2',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                       fontSize: 20),
                                                 ),
                                                 const SizedBox(
@@ -441,7 +587,8 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 const Text(
                                                   'preferred locations',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 20),
                                                 ),
                                                 const SizedBox(
@@ -450,13 +597,15 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 const Text(
                                                   'info.locations1',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                       fontSize: 20),
                                                 ),
                                                 const Text(
                                                   'info.locations2',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                       fontSize: 20),
                                                 ),
                                               ],
@@ -475,10 +624,11 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  border: Border.all(color: kBlue)),
+                                                  border:
+                                                      Border.all(color: kBlue)),
                                               child: ListTile(
-                                                title:
-                                                    const Text('Attachment1.pdf'),
+                                                title: const Text(
+                                                    'Attachment1.pdf'),
                                                 leading: CircleAvatar(
                                                   backgroundColor: kBlue,
                                                   child: InkWell(
@@ -500,10 +650,11 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  border: Border.all(color: kBlue)),
+                                                  border:
+                                                      Border.all(color: kBlue)),
                                               child: ListTile(
-                                                title:
-                                                    const Text('Attachment2.pdf'),
+                                                title: const Text(
+                                                    'Attachment2.pdf'),
                                                 leading: CircleAvatar(
                                                   backgroundColor: kBlue,
                                                   child: InkWell(
@@ -524,17 +675,16 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-          );
-        }
-      },
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

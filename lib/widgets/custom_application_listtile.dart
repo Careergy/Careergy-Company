@@ -193,7 +193,7 @@ class CustomApplicationListTile extends StatelessWidget {
                       color: Colors.white12,
                     ),
                     SizedBox(
-                      width: deviceSize.width * 0.1,
+                      width: deviceSize.width * 0.115,
                       height: 80,
                       child: ActionButtons(
                         application: application,
@@ -221,19 +221,19 @@ class ActionButtons extends StatelessWidget {
   final Application application;
   final Function viewApplication;
 
-  double factor = 0.1;
+  double factor = 0.115;
 
   @override
   Widget build(BuildContext context) {
     if (DateTime.fromMillisecondsSinceEpoch(int.parse(application.appointmentTimestamp??'999999999999999'))
             .isBefore(DateTime.now()) &&
         application.status == 'accepted') {
-      factor = 0.05;
+      factor = 0.054;
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        factor == 0.05
+        factor == 0.054
             ? SizedBox(
                 width: MediaQuery.of(context).size.width * factor,
                 height: 84,
@@ -249,12 +249,12 @@ class ActionButtons extends StatelessWidget {
                           boxShadow: List.filled(
                               2,
                               const BoxShadow(
-                                  color: Colors.black26, blurRadius: 0.8))),
+                                  color: Colors.black26, blurRadius: 0.2))),
                       child: InkWell(
                         child: const Center(
                           child: Text('Approved',
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.white)),
+                                  TextStyle(fontSize: 16, color: Colors.white)),
                         ),
                         onTap: () {},
                       ),
@@ -268,12 +268,12 @@ class ActionButtons extends StatelessWidget {
                           boxShadow: List.filled(
                               2,
                               const BoxShadow(
-                                  color: Colors.black26, blurRadius: 0.8))),
+                                  color: Colors.black26, blurRadius: 0.2))),
                       child: InkWell(
                         child: const Center(
                           child: Text('Rejected',
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.white)),
+                                  TextStyle(fontSize: 16, color: Colors.white)),
                         ),
                         onTap: () {},
                       ),
@@ -288,7 +288,7 @@ class ActionButtons extends StatelessWidget {
             color: primaryColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: List.filled(
-                2, const BoxShadow(color: Colors.black26, blurRadius: 0.8)),
+                2, const BoxShadow(color: Colors.black26, blurRadius: 0.2)),
           ),
           child: InkWell(
             hoverColor: canvasColor,

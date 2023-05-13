@@ -208,7 +208,9 @@ class _profileScreenState extends State<profileScreen> {
                                           padding:
                                               const EdgeInsets.only(left: 15),
                                           child: Text(
-                                            info.address == '' ? 'No Address' : info.address ?? 'No Address',
+                                            info.address == ''
+                                                ? 'No Address'
+                                                : info.address ?? 'No Address',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 20,
@@ -597,10 +599,11 @@ class _editProfileState extends State<editProfile> {
                                     fixedSize: MaterialStatePropertyAll(
                                         Size(deviceSize.width * 0.1, 45)),
                                     shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20))),
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
                                   ),
                                   onPressed: () async {
                                     setState(() {
