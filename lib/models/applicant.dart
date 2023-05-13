@@ -13,6 +13,7 @@ class Applicant with ChangeNotifier {
   final String? phone;
   final String? photoUrl;
   final String? bio;
+  final String? address;
   Image photo = const Image(image: AssetImage('/avatarPlaceholder.png'));
   Map<String, List?>? briefcv;
 
@@ -23,6 +24,7 @@ class Applicant with ChangeNotifier {
     this.phone,
     this.photoUrl,
     this.bio,
+    this.address,
   });
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -41,6 +43,7 @@ class Applicant with ChangeNotifier {
         bio: data['bio'] ?? '',
         phone: data['phone'] ?? '',
         photoUrl: data['photoUrl'] ?? '',
+        address: data['address'] ?? '',
       );
     }, onError: (e) => print(e));
     // final ref2 = db.collection('briefcvs').doc(id);

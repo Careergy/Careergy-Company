@@ -52,7 +52,7 @@ class CustomTextField extends StatelessWidget {
       ),
       // validator: (value) => validator(value),
       // //TODO: check correctnes of this line
-      onChanged: (value) => onChanged!(value),
+      // onChanged: (value) => onChanged!(value),
     );
   }
 }

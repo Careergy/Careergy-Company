@@ -21,6 +21,7 @@ class ApplicationScreen extends StatefulWidget {
   State<ApplicationScreen> createState() => _ApplicationScreenState();
 }
 
+
 class _ApplicationScreenState extends State<ApplicationScreen> {
   ScrollController? _scrollController;
 
@@ -278,46 +279,71 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                                       CrossAxisAlignment.end,
                                                   children: [
                                                     CircleAvatar(
-                                                      radius: 30,
-                                                      backgroundColor:
-                                                          const Color.fromARGB(
-                                                              0, 255, 255, 255),
-                                                      child: ClipOval(
-                                                        child: widget
+                                                        radius: 30,
+                                                        backgroundImage: widget
                                                                         .application
                                                                         .applicant
                                                                         .photoUrl ==
+                                                                    null ||
+                                                                widget.application.applicant.photoUrl!.substring(0, 4) !=
+                                                                    'http'
+                                                            ? null
+                                                            : NetworkImage(widget
+                                                                    .application
+                                                                    .applicant
+                                                                    .photoUrl ??
+                                                                ''),
+                                                        child: widget.application.applicant.photoUrl ==
                                                                     null ||
                                                                 widget
                                                                         .application
                                                                         .applicant
                                                                         .photoUrl!
-                                                                        .substring(
-                                                                            0,
-                                                                            4) !=
+                                                                        .substring(0, 4) !=
                                                                     'http'
-                                                            ? widget.application
-                                                                .applicant.photo
-                                                            : Image.network(
-                                                                widget
-                                                                        .application
-                                                                        .applicant
-                                                                        .photoUrl ??
-                                                                    '',
-                                                                loadingBuilder:
-                                                                    (context,
-                                                                        child,
-                                                                        loadingProgress) {
-                                                                  if (loadingProgress ==
-                                                                      null) {
-                                                                    return child;
-                                                                  } else {
-                                                                    return const CircularProgressIndicator();
-                                                                  }
-                                                                },
-                                                              ),
-                                                      ),
-                                                    ),
+                                                            ? ClipOval(child: widget.application.applicant.photo)
+                                                            : null),
+                                                    // CircleAvatar(
+                                                    //   radius: 30,
+                                                    //   backgroundColor:
+                                                    //       const Color.fromARGB(
+                                                    //           0, 255, 255, 255),
+                                                    //   child: ClipOval(
+                                                    //     child: widget
+                                                    //                     .application
+                                                    //                     .applicant
+                                                    //                     .photoUrl ==
+                                                    //                 null ||
+                                                    //             widget
+                                                    //                     .application
+                                                    //                     .applicant
+                                                    //                     .photoUrl!
+                                                    //                     .substring(
+                                                    //                         0,
+                                                    //                         4) !=
+                                                    //                 'http'
+                                                    //         ? widget.application
+                                                    //             .applicant.photo
+                                                    //         : Image.network(
+                                                    //             widget
+                                                    //                     .application
+                                                    //                     .applicant
+                                                    //                     .photoUrl ??
+                                                    //                 '',
+                                                    //             loadingBuilder:
+                                                    //                 (context,
+                                                    //                     child,
+                                                    //                     loadingProgress) {
+                                                    //               if (loadingProgress ==
+                                                    //                   null) {
+                                                    //                 return child;
+                                                    //               } else {
+                                                    //                 return const CircularProgressIndicator();
+                                                    //               }
+                                                    //             },
+                                                    //           ),
+                                                    //   ),
+                                                    // ),
                                                     const SizedBox(width: 10),
                                                     Column(
                                                       children: [
@@ -620,385 +646,413 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                      height: deviceSize.height * 0.05,
-                                      child: widget.application.status ==
-                                                  'waiting' ||
-                                              widget.application.status ==
-                                                  'accepted'
-                                          ? Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                ElevatedButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      _approveIsLoading = true;
-                                                    });
-                                                    await widget.application
-                                                        .changeStatus(
-                                                            newStatus:
-                                                                'approved');
-                                                    setState(() {
-                                                      _approveIsLoading = false;
-                                                      Navigator.of(context)
-                                                          .pop(false);
-                                                    });
-                                                  },
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        const MaterialStatePropertyAll(
-                                                            Color.fromARGB(255,
-                                                                28, 119, 31)),
-                                                    fixedSize:
-                                                        MaterialStatePropertyAll(
-                                                      Size(
-                                                        deviceSize.width * 0.18,
-                                                        deviceSize.height *
-                                                            0.05,
-                                                      ),
-                                                    ),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                      ),
+                                    height: deviceSize.height * 0.05,
+                                    child: (widget.application.status ==
+                                                'waiting' ||
+                                            widget.application.status ==
+                                                'accepted')
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    _approveIsLoading = true;
+                                                  });
+                                                  await widget.application
+                                                      .changeStatus(
+                                                          newStatus:
+                                                              'approved');
+                                                  setState(() {
+                                                    _approveIsLoading = false;
+                                                    Navigator.of(context)
+                                                        .pop(false);
+                                                  });
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      const MaterialStatePropertyAll(
+                                                          Color.fromARGB(255,
+                                                              28, 119, 31)),
+                                                  fixedSize:
+                                                      MaterialStatePropertyAll(
+                                                    Size(
+                                                      deviceSize.width * 0.18,
+                                                      deviceSize.height * 0.05,
                                                     ),
                                                   ),
-                                                  child: _approveIsLoading
-                                                      ? SizedBox(
-                                                          height: deviceSize
-                                                                  .height *
-                                                              0.03,
-                                                          width:
-                                                              deviceSize.width *
-                                                                  0.03,
-                                                          child:
-                                                              const CircularProgressIndicator(
-                                                                  color: white))
-                                                      : const Text('Approve'),
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      _rejectIsLoading = true;
-                                                    });
-                                                    await widget.application
-                                                        .changeStatus(
-                                                            newStatus:
-                                                                'rejected');
-                                                    setState(() {
-                                                      _rejectIsLoading = false;
-                                                      Navigator.of(context)
-                                                          .pop(false);
-                                                    });
-                                                  },
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        const MaterialStatePropertyAll(
-                                                            Color.fromARGB(255,
-                                                                124, 21, 21)),
-                                                    fixedSize:
-                                                        MaterialStatePropertyAll(
-                                                      Size(
-                                                        deviceSize.width * 0.18,
-                                                        deviceSize.height *
-                                                            0.05,
-                                                      ),
-                                                    ),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                      ),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
                                                     ),
                                                   ),
-                                                  child: _rejectIsLoading
-                                                      ? SizedBox(
-                                                          height: deviceSize
-                                                                  .height *
-                                                              0.03,
-                                                          width:
-                                                              deviceSize.width *
-                                                                  0.03,
-                                                          child:
-                                                              const CircularProgressIndicator(
-                                                                  color: white),
-                                                        )
-                                                      : const Text('Reject'),
                                                 ),
-                                              ],
-                                            )
-                                          : widget.application.status ==
-                                                  'pending'
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    ElevatedButton(
-                                                      onPressed: app == null
-                                                          ? null
-                                                          : () async {
-                                                              setState(() {
-                                                                _acceptIsLoading =
-                                                                    true;
-                                                              });
-                                                              widget.application
-                                                                      .appointmentTimestamp =
-                                                                  app!.startTime
-                                                                      .millisecondsSinceEpoch
-                                                                      .toString();
-                                                              widget.application.lastUpdated = DateTime.now().millisecondsSinceEpoch.toString();
-                                                              widget.application
-                                                                      .status =
-                                                                  'waiting';
-                                                              apps.clear();
-                                                              _isNew = true;
-                                                              await widget
-                                                                  .application
-                                                                  .changeStatus(
-                                                                      newStatus:
-                                                                          'waiting');
-                                                              setState(() {
-                                                                _acceptIsLoading =
-                                                                    false;
-                                                              });
-                                                            },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            const MaterialStatePropertyAll(
-                                                                primaryColor),
-                                                        fixedSize:
-                                                            MaterialStatePropertyAll(
-                                                          Size(
-                                                            deviceSize.width *
-                                                                0.18,
+                                                child: _approveIsLoading
+                                                    ? SizedBox(
+                                                        height:
                                                             deviceSize.height *
-                                                                0.05,
-                                                          ),
-                                                        ),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                          ),
+                                                                0.03,
+                                                        width:
+                                                            deviceSize.width *
+                                                                0.03,
+                                                        child:
+                                                            const CircularProgressIndicator(
+                                                                color: white))
+                                                    : const Text('Approve'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    _rejectIsLoading = true;
+                                                  });
+                                                  await widget.application
+                                                      .changeStatus(
+                                                          newStatus:
+                                                              'rejected');
+                                                  setState(() {
+                                                    _rejectIsLoading = false;
+                                                    Navigator.of(context)
+                                                        .pop(false);
+                                                  });
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      const MaterialStatePropertyAll(
+                                                          Color.fromARGB(255,
+                                                              124, 21, 21)),
+                                                  fixedSize:
+                                                      MaterialStatePropertyAll(
+                                                    Size(
+                                                      deviceSize.width * 0.18,
+                                                      deviceSize.height * 0.05,
+                                                    ),
+                                                  ),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: _rejectIsLoading
+                                                    ? SizedBox(
+                                                        height:
+                                                            deviceSize.height *
+                                                                0.03,
+                                                        width:
+                                                            deviceSize.width *
+                                                                0.03,
+                                                        child:
+                                                            const CircularProgressIndicator(
+                                                                color: white),
+                                                      )
+                                                    : const Text('Reject'),
+                                              ),
+                                            ],
+                                          )
+                                        : widget.application.status == 'pending'
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  ElevatedButton(
+                                                    onPressed: app == null
+                                                        ? null
+                                                        : () async {
+                                                            setState(() {
+                                                              _acceptIsLoading =
+                                                                  true;
+                                                            });
+                                                            widget.application
+                                                                    .appointmentTimestamp =
+                                                                app!.startTime
+                                                                    .millisecondsSinceEpoch
+                                                                    .toString();
+                                                            widget.application
+                                                                    .lastUpdated =
+                                                                DateTime.now()
+                                                                    .millisecondsSinceEpoch
+                                                                    .toString();
+                                                            widget.application
+                                                                    .status =
+                                                                'waiting';
+                                                            apps.clear();
+                                                            _isNew = true;
+                                                            await widget
+                                                                .application
+                                                                .changeStatus(
+                                                                    newStatus:
+                                                                        'waiting');
+                                                            setState(() {
+                                                              _acceptIsLoading =
+                                                                  false;
+                                                              _update = false;
+                                                            });
+                                                          },
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          const MaterialStatePropertyAll(
+                                                              primaryColor),
+                                                      fixedSize:
+                                                          MaterialStatePropertyAll(
+                                                        Size(
+                                                          deviceSize.width *
+                                                              0.18,
+                                                          deviceSize.height *
+                                                              0.05,
                                                         ),
                                                       ),
-                                                      child: _acceptIsLoading
-                                                          ? SizedBox(
-                                                              height: deviceSize
-                                                                      .height *
-                                                                  0.03,
-                                                              width: deviceSize
-                                                                      .width *
-                                                                  0.03,
-                                                              child:
-                                                                  const CircularProgressIndicator(
-                                                                      color:
-                                                                          white))
-                                                          : const Text(
-                                                              'Accept'),
-                                                    ),
-                                                    ElevatedButton(
-                                                      onPressed: () async {
-                                                        setState(() {
-                                                          _rejectIsLoading =
-                                                              true;
-                                                        });
-                                                        await widget.application
-                                                            .changeStatus(
-                                                                newStatus:
-                                                                    'rejected');
-                                                        setState(() {
-                                                          _rejectIsLoading =
-                                                              false;
-                                                          Navigator.of(context)
-                                                              .pop(false);
-                                                        });
-                                                      },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            const MaterialStatePropertyAll(
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    124,
-                                                                    21,
-                                                                    21)),
-                                                        fixedSize:
-                                                            MaterialStatePropertyAll(
-                                                          Size(
-                                                            deviceSize.width *
-                                                                0.18,
-                                                            deviceSize.height *
-                                                                0.05,
-                                                          ),
-                                                        ),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                          ),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
                                                         ),
                                                       ),
-                                                      child: _rejectIsLoading
-                                                          ? SizedBox(
-                                                              height: deviceSize
-                                                                      .height *
-                                                                  0.03,
-                                                              width: deviceSize
-                                                                      .width *
-                                                                  0.03,
-                                                              child:
-                                                                  const CircularProgressIndicator(
-                                                                      color:
-                                                                          white))
-                                                          : const Text(
-                                                              'Reject'),
                                                     ),
-                                                  ],
-                                                )
-                                              : Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    ElevatedButton(
-                                                      onPressed: () async {
-                                                        setState(() {
-                                                          _approveIsLoading =
-                                                              true;
-                                                        });
-                                                        await widget.application
-                                                            .changeStatus(
-                                                                newStatus:
-                                                                    'approved');
-                                                        setState(() {
-                                                          _approveIsLoading =
-                                                              false;
-                                                          Navigator.of(context)
-                                                              .pop(false);
-                                                        });
-                                                      },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            const MaterialStatePropertyAll(
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    28,
-                                                                    119,
-                                                                    31)),
-                                                        fixedSize:
-                                                            MaterialStatePropertyAll(
-                                                          Size(
-                                                            deviceSize.width *
-                                                                0.18,
-                                                            deviceSize.height *
-                                                                0.05,
-                                                          ),
-                                                        ),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                          ),
+                                                    child: _acceptIsLoading
+                                                        ? SizedBox(
+                                                            height: deviceSize
+                                                                    .height *
+                                                                0.03,
+                                                            width: deviceSize
+                                                                    .width *
+                                                                0.03,
+                                                            child:
+                                                                const CircularProgressIndicator(
+                                                                    color:
+                                                                        white))
+                                                        : const Text('Accept'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        _rejectIsLoading = true;
+                                                      });
+                                                      await widget.application
+                                                          .changeStatus(
+                                                              newStatus:
+                                                                  'rejected');
+                                                      setState(() {
+                                                        _rejectIsLoading =
+                                                            false;
+                                                        Navigator.of(context)
+                                                            .pop(false);
+                                                      });
+                                                    },
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          const MaterialStatePropertyAll(
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  124,
+                                                                  21,
+                                                                  21)),
+                                                      fixedSize:
+                                                          MaterialStatePropertyAll(
+                                                        Size(
+                                                          deviceSize.width *
+                                                              0.18,
+                                                          deviceSize.height *
+                                                              0.05,
                                                         ),
                                                       ),
-                                                      child: _approveIsLoading
-                                                          ? SizedBox(
-                                                              height: deviceSize
-                                                                      .height *
-                                                                  0.03,
-                                                              width: deviceSize
-                                                                      .width *
-                                                                  0.03,
-                                                              child:
-                                                                  const CircularProgressIndicator(
-                                                                      color:
-                                                                          white))
-                                                          : const Text(
-                                                              'Approve'),
-                                                    ),
-                                                    ElevatedButton(
-                                                      onPressed: () async {
-                                                        setState(() {
-                                                          _rejectIsLoading =
-                                                              true;
-                                                        });
-                                                        await widget.application
-                                                            .changeStatus(
-                                                                newStatus:
-                                                                    'rejected');
-                                                        setState(() {
-                                                          _rejectIsLoading =
-                                                              false;
-                                                          Navigator.of(context)
-                                                              .pop(false);
-                                                        });
-                                                      },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            const MaterialStatePropertyAll(
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    124,
-                                                                    21,
-                                                                    21)),
-                                                        fixedSize:
-                                                            MaterialStatePropertyAll(
-                                                          Size(
-                                                            deviceSize.width *
-                                                                0.18,
-                                                            deviceSize.height *
-                                                                0.05,
-                                                          ),
-                                                        ),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                          ),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
                                                         ),
                                                       ),
-                                                      child: _rejectIsLoading
-                                                          ? SizedBox(
-                                                              height: deviceSize
-                                                                      .height *
-                                                                  0.03,
-                                                              width: deviceSize
-                                                                      .width *
-                                                                  0.03,
-                                                              child:
-                                                                  const CircularProgressIndicator(
-                                                                      color:
-                                                                          white))
-                                                          : const Text(
-                                                              'Reject'),
                                                     ),
-                                                  ],
-                                                )),
+                                                    child: _rejectIsLoading
+                                                        ? SizedBox(
+                                                            height: deviceSize
+                                                                    .height *
+                                                                0.03,
+                                                            width: deviceSize
+                                                                    .width *
+                                                                0.03,
+                                                            child:
+                                                                const CircularProgressIndicator(
+                                                                    color:
+                                                                        white))
+                                                        : const Text('Reject'),
+                                                  ),
+                                                ],
+                                              )
+                                            : widget.application.status ==
+                                                        'approved' ||
+                                                    widget.application.status ==
+                                                        'rejected'
+                                                ? SizedBox(
+                                                    height: deviceSize.height *
+                                                        0.05,
+                                                    width:
+                                                        deviceSize.width * 0.37,
+                                                    child: Center(
+                                                        child: widget
+                                                                    .application
+                                                                    .status ==
+                                                                'approved'
+                                                            ? const Text(
+                                                                'This application was approved.',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white70))
+                                                            : const Text(
+                                                                'This application was rejected.',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white70))),
+                                                  )
+                                                : Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            _approveIsLoading =
+                                                                true;
+                                                          });
+                                                          await widget
+                                                              .application
+                                                              .changeStatus(
+                                                                  newStatus:
+                                                                      'approved');
+                                                          setState(() {
+                                                            _approveIsLoading =
+                                                                false;
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(false);
+                                                          });
+                                                        },
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              const MaterialStatePropertyAll(
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          28,
+                                                                          119,
+                                                                          31)),
+                                                          fixedSize:
+                                                              MaterialStatePropertyAll(
+                                                            Size(
+                                                              deviceSize.width *
+                                                                  0.18,
+                                                              deviceSize
+                                                                      .height *
+                                                                  0.05,
+                                                            ),
+                                                          ),
+                                                          shape: MaterialStateProperty
+                                                              .all<
+                                                                  RoundedRectangleBorder>(
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: _approveIsLoading
+                                                            ? SizedBox(
+                                                                height: deviceSize
+                                                                        .height *
+                                                                    0.03,
+                                                                width: deviceSize
+                                                                        .width *
+                                                                    0.03,
+                                                                child: const CircularProgressIndicator(
+                                                                    color:
+                                                                        white))
+                                                            : const Text(
+                                                                'Approve'),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            _rejectIsLoading =
+                                                                true;
+                                                          });
+                                                          await widget
+                                                              .application
+                                                              .changeStatus(
+                                                                  newStatus:
+                                                                      'rejected');
+                                                          setState(() {
+                                                            _rejectIsLoading =
+                                                                false;
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(false);
+                                                          });
+                                                        },
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              const MaterialStatePropertyAll(
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          124,
+                                                                          21,
+                                                                          21)),
+                                                          fixedSize:
+                                                              MaterialStatePropertyAll(
+                                                            Size(
+                                                              deviceSize.width *
+                                                                  0.18,
+                                                              deviceSize
+                                                                      .height *
+                                                                  0.05,
+                                                            ),
+                                                          ),
+                                                          shape: MaterialStateProperty
+                                                              .all<
+                                                                  RoundedRectangleBorder>(
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: _rejectIsLoading
+                                                            ? SizedBox(
+                                                                height: deviceSize
+                                                                        .height *
+                                                                    0.03,
+                                                                width: deviceSize
+                                                                        .width *
+                                                                    0.03,
+                                                                child: const CircularProgressIndicator(
+                                                                    color:
+                                                                        white))
+                                                            : const Text(
+                                                                'Reject'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                  ),
                                   Container(
                                     height: deviceSize.height * 0.6,
                                     width: deviceSize.width * 0.37,
@@ -1208,7 +1262,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                                     : 'Starts:\t${DateFormat.yMMMMd().format(app!.startTime)}  ${DateFormat.jms().format(app!.startTime)}\nEnds:\t\t${DateFormat.yMMMMd().format(app!.endTime)}  ${DateFormat.jms().format(app!.endTime)}',
                                                 style: const TextStyle(
                                                     color: white),
-                                                textAlign: TextAlign.justify,
+                                                textAlign: TextAlign.center,
                                               )),
                                             ),
                                           ],

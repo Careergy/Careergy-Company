@@ -17,6 +17,15 @@ class profileScreen extends StatefulWidget {
   State<profileScreen> createState() => _profileScreenState('/profile');
 }
 
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
+}
+
 class _profileScreenState extends State<profileScreen> {
   String? currentPage;
   _profileScreenState(this.currentPage);
@@ -58,26 +67,17 @@ class _profileScreenState extends State<profileScreen> {
                               child: FittedBox(
                                 fit: BoxFit.fill,
                                 child: CircleAvatar(
-                                  radius: 120,
-                                  child: ClipOval(
-                                    child: info.photoUrl == null ||
-                                            info.photoUrl == '' ||
+                                    radius: 100,
+                                    backgroundImage: info.photoUrl == null ||
                                             info.photoUrl!.substring(0, 4) !=
                                                 'http'
-                                        ? info.photo
-                                        : Image.network(
-                                            info.photoUrl ?? '',
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              } else {
-                                                return const CircularProgressIndicator();
-                                              }
-                                            },
-                                          ),
-                                  ),
-                                ),
+                                        ? null
+                                        : NetworkImage(info.photoUrl ?? ''),
+                                    child: info.photoUrl == null ||
+                                            info.photoUrl!.substring(0, 4) !=
+                                                'http'
+                                        ? ClipOval(child: info.photo)
+                                        : null),
                               ),
                             ),
                           ),

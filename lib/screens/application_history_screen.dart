@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import './application_screen.dart';
+
 import '../widgets/custom_application_listtile.dart';
 
 import '../models/company.dart';
@@ -19,7 +21,22 @@ class ApplicationHistotyScreen extends StatefulWidget {
 class _ApplicationHistotyScreenState extends State<ApplicationHistotyScreen> {
   List<Application>? list;
 
-  void viewApplication() {}
+  void viewApplication(BuildContext ctx, Application application) {
+    Navigator.of(ctx).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ApplicationScreen(application: application);
+        },
+      ),
+    ).then((value) {
+      if (value == null) {
+        return;
+      }
+      if (!value) {
+        setState(() {});
+      }
+    });
+  }
 
   Future getApplicationsHistory(Company company) async {
     list = await company.getApplicationsHistory();

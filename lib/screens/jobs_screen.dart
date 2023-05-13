@@ -10,7 +10,6 @@ import '../widgets/autocomplete_custom_textfield.dart';
 import 'jobs_list.dart';
 
 import '../constants.dart';
-
 class JobsScreen extends StatefulWidget {
   const JobsScreen({super.key});
 
@@ -169,19 +168,19 @@ class _NewJobScreenState extends State<NewJobScreen> {
     '8+'
   ];
   final List<String> _types = [
-    'Full-time',
-    'Part-time',
-    'Zero-hour',
-    'Casual',
-    'Freelance',
-    'Union',
-    'Executive',
-    'Fixed-term'
+    'full-time',
+    'part-time',
+    'zero-hour',
+    'casual',
+    'freelance',
+    'union',
+    'executive',
+    'fixed-term'
   ];
   late List items = [];
 
   String? _selectedYear = 'Not Specified';
-  String? _selectedType = 'Full-time';
+  String? _selectedType = 'full-time';
   String? city = 'not specified';
 
   TextEditingController major = TextEditingController();
@@ -423,7 +422,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
                                                 items: _types.map((type) {
                                                   return DropdownMenuItem(
                                                     value: type,
-                                                    child: Text(type),
+                                                    child: Text(type.toUpperCase()),
                                                   );
                                                 }).toList(),
                                               ),

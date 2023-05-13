@@ -53,11 +53,10 @@ class CustomApplicationListTile extends StatelessWidget {
                 height: 100,
                 padding: const EdgeInsets.all(9.0),
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Color.fromARGB(255, 17, 14, 59),
-                    Color.fromRGBO(46, 45, 121, 0.808)
-                  ], begin: Alignment.bottomLeft, end: Alignment.topRight),
-                ),
+                    gradient: LinearGradient(colors: [
+                  Color.fromARGB(197, 129, 56, 255),
+                  Color.fromARGB(66, 110, 49, 216)
+                ], begin: Alignment.bottomLeft, end: Alignment.topRight)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -66,7 +65,7 @@ class CustomApplicationListTile extends StatelessWidget {
                       height: 80,
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(88, 111, 103, 164),
+                        color: const Color.fromARGB(141, 111, 103, 164),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
@@ -94,27 +93,43 @@ class CustomApplicationListTile extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundColor:
-                                const Color.fromARGB(0, 255, 255, 255),
-                            child: ClipOval(
+                              backgroundImage:
+                                  application.applicant.photoUrl == null ||
+                                          application.applicant.photoUrl!
+                                                  .substring(0, 4) !=
+                                              'http'
+                                      ? null
+                                      : NetworkImage(
+                                          application.applicant.photoUrl ?? ''),
                               child: application.applicant.photoUrl == null ||
                                       application.applicant.photoUrl!
                                               .substring(0, 4) !=
                                           'http'
-                                  ? application.applicant.photo
-                                  : Image.network(
-                                      application.applicant.photoUrl ?? '',
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        } else {
-                                          return const CircularProgressIndicator();
-                                        }
-                                      },
-                                    ),
-                            ),
-                          ),
+                                  ? ClipOval(child: application.applicant.photo)
+                                  : null),
+                          // CircleAvatar(
+                          //   radius: 30,
+                          //   backgroundColor:
+                          //       const Color.fromARGB(0, 255, 255, 255),
+                          //   child: ClipOval(
+                          //     child: application.applicant.photoUrl == null ||
+                          //             application.applicant.photoUrl!
+                          //                     .substring(0, 4) !=
+                          //                 'http'
+                          //         ? application.applicant.photo
+                          //         : Image.network(
+                          //             application.applicant.photoUrl ?? '',
+                          //             loadingBuilder:
+                          //                 (context, child, loadingProgress) {
+                          //               if (loadingProgress == null) {
+                          //                 return child;
+                          //               } else {
+                          //                 return const CircularProgressIndicator();
+                          //               }
+                          //             },
+                          //           ),
+                          //   ),
+                          // ),
                           SizedBox(
                             width: deviceSize.width * 0.2 - 76,
                             height: double.infinity,
@@ -226,7 +241,7 @@ class ActionButtons extends StatefulWidget {
 }
 
 class _ActionButtonsState extends State<ActionButtons> {
-  double factor = 0.115;
+  double factor = 80;
 
   Future<void> _showDialog(Application application, String title,
       String subtitle, String button) async {
@@ -289,25 +304,26 @@ class _ActionButtonsState extends State<ActionButtons> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     if (DateTime.fromMillisecondsSinceEpoch(int.parse(
                 widget.application.appointmentTimestamp ?? '999999999999999'))
             .isBefore(DateTime.now()) &&
         widget.application.status == 'accepted') {
-      factor = 0.054;
+      factor = 35;
     }
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        factor == 0.054
+        factor == 35
             ? SizedBox(
-                width: MediaQuery.of(context).size.width * factor,
-                height: 84,
-                child: Column(
+                width: deviceSize.width * 0.25,
+                height: factor,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * factor,
-                      height: 35,
+                      width: deviceSize.width * 0.115,
+                      height: factor,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 26, 104, 28),
                           borderRadius: BorderRadius.circular(20),
@@ -328,8 +344,8 @@ class _ActionButtonsState extends State<ActionButtons> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * factor,
-                      height: 35,
+                      width: deviceSize.width * 0.115,
+                      height: factor,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 123, 36, 30),
                           borderRadius: BorderRadius.circular(20),
@@ -354,7 +370,8 @@ class _ActionButtonsState extends State<ActionButtons> {
               )
             : const SizedBox(),
         Container(
-          width: MediaQuery.of(context).size.width * factor,
+          width: deviceSize.width * 0.115,
+          height: factor,
           decoration: BoxDecoration(
             color: primaryColor,
             borderRadius: BorderRadius.circular(20),

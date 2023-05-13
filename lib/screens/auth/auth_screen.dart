@@ -1,3 +1,4 @@
+import 'package:careergy_mobile/constants.dart';
 import 'package:careergy_mobile/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,53 +18,59 @@ class AuthScreen extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const Color.fromARGB(255, 64, 72, 226).withOpacity(0.5),
-                  const Color.fromARGB(255, 34, 22, 112).withOpacity(0.9),
+                  canvasColor,
+                  accentCanvasColor,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                stops: const [0, 1],
+                stops: [0, 1],
               ),
             ),
           ),
           SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: deviceSize.height,
               width: deviceSize.width,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Flexible(
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 40.0),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 8.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: const Color.fromARGB(117, 7, 0, 145),
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 8,
-                            color: Color.fromARGB(15, 0, 0, 0),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                      ),
-                      child: const Text(
-                        'Careergy',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 60,
-                          // fontFamily: 'Anton',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                  SizedBox(
+                    height: deviceSize.height * 0.3,
+                    width: deviceSize.width * 0.3,
+                    child: const Image(image: AssetImage('/images/careergy_logo.png')),
                   ),
+                  const SizedBox(height: 20),
+                  // Flexible(
+                  //   child: Container(
+                  //     margin: const EdgeInsets.only(bottom: 40.0),
+                  //     padding: const EdgeInsets.symmetric(
+                  //         vertical: 8.0, horizontal: 8.0),
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       color: const Color.fromARGB(117, 7, 0, 145),
+                  //       boxShadow: const [
+                  //         BoxShadow(
+                  //           blurRadius: 8,
+                  //           color: Color.fromARGB(15, 0, 0, 0),
+                  //           offset: Offset(0, 2),
+                  //         )
+                  //       ],
+                  //     ),
+                  //     child: const Text(
+                  //       'Careergy',
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontSize: 60,
+                  //         // fontFamily: 'Anton',
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
                     child: const AuthCard(),
@@ -310,24 +317,23 @@ class _AuthCardState extends State<AuthCard> {
                         },
                       ),
                       TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: 'Password'),
-                        obscureText: true,
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value!.isEmpty || value.length < 2) {
-                            return 'Password is too short!';
-                          }
-                        },
-                        onSaved: (value) {
-                          _authData['password'] = value!;
-                        },
-                        onFieldSubmitted: (value) async {
-                          if (_authMode == AuthMode.Login) {
-                            await _submit();
-                          }
-                        }
-                      ),
+                          decoration:
+                              const InputDecoration(labelText: 'Password'),
+                          obscureText: true,
+                          controller: _passwordController,
+                          validator: (value) {
+                            if (value!.isEmpty || value.length < 2) {
+                              return 'Password is too short!';
+                            }
+                          },
+                          onSaved: (value) {
+                            _authData['password'] = value!;
+                          },
+                          onFieldSubmitted: (value) async {
+                            if (_authMode == AuthMode.Login) {
+                              await _submit();
+                            }
+                          }),
                       if (_authMode == AuthMode.Signup)
                         TextFormField(
                           enabled: _authMode == AuthMode.Signup,

@@ -80,28 +80,31 @@ class _SearchResultAreaState extends State<SearchResultArea> {
                                     horizontal: 15, vertical: 6),
                                 minLeadingWidth: 50,
                                 leading: CircleAvatar(
-                                  backgroundColor: const Color.fromARGB(0,0,0,0),
-                                  child: ClipOval(
-                                    child: result![index].photoUrl == '' ||
-                                            result![index].photoUrl == null || result![index].photoUrl!.substring(0,4) != 'http'
-                                        ? result![index].photo
-                                        : Image.network(
-                                            result![index].photoUrl ?? '',
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return const CircularProgressIndicator(
-                                                  color: Colors.blue);
-                                            },
-                                          ),
-                                  ),
-                                ),
-                                title: Text(result![index].name??'', style: const TextStyle(color: white)),
-                                subtitle: Text(result![index].bio!.length > 40
-                                    ? '${result![index].bio!.substring(0, 40)}...'
-                                    : result![index].bio!, style: const TextStyle(color: white)),
+                                    radius: 30,
+                                    backgroundImage: result![index].photoUrl ==
+                                                null ||
+                                            result![index].photoUrl!
+                                                    .substring(0, 4) !=
+                                                'http'
+                                        ? null
+                                        : NetworkImage(
+                                            result![index].photoUrl ??
+                                                ''),
+                                    child: result![index].photoUrl ==
+                                                null ||
+                                            result![index].photoUrl!
+                                                    .substring(0, 4) !=
+                                                'http'
+                                        ? ClipOval(
+                                            child: result![index].photo)
+                                        : null),
+                                title: Text(result![index].name ?? '',
+                                    style: const TextStyle(color: white)),
+                                subtitle: Text(
+                                    result![index].bio!.length > 40
+                                        ? '${result![index].bio!.substring(0, 40)}...'
+                                        : result![index].bio!,
+                                    style: const TextStyle(color: white)),
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
@@ -111,7 +114,9 @@ class _SearchResultAreaState extends State<SearchResultArea> {
                                 },
                                 hoverColor: actionColor,
                                 tileColor: canvasColor,
-                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
                               ),
                             );
                           },
