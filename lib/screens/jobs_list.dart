@@ -46,6 +46,7 @@ class _JobsListState extends State<JobsList> {
     if (id == null) {
       return;
     }
+
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -54,19 +55,21 @@ class _JobsListState extends State<JobsList> {
             style: TextStyle(
                 color: white, fontSize: 14, fontWeight: FontWeight.w800)),
         content: const Text('Confirm Delete?', style: TextStyle(color: white)),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: const Text('Cancel', style: TextStyle(color: white)),
           ),
           ElevatedButton(
-           style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll(Color.fromARGB(255, 165, 29, 19)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                ),
+            style: ButtonStyle(
+              backgroundColor: const MaterialStatePropertyAll(
+                  Color.fromARGB(255, 165, 29, 19)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+            ),
             onPressed: () async {
               setState(() {
                 isLoading = true;

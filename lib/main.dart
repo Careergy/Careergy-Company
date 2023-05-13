@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
             title: 'Careergy | Company',
             theme: ThemeData(
               primaryColor: primaryColor,
-              accentColor: accentCanvasColor,
+              // accentColor: accentCanvasColor,
             ),
             home: MultiProvider(
               providers: [

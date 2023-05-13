@@ -1,18 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-
+import 'package:careergy_mobile/providers/post_provider.dart';
+import 'package:careergy_mobile/screens/DatabaseManager.dart';
 import '../constants.dart';
+import '../models/job.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<DashboardScreen> createState() =>
+      _DashboardScreenState("/DashboardScreen");
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
+  String? currentPage;
+
+  _DashboardScreenState(this.currentPage);
+  late List jobs = [];
+  late final Future myFuture;
+
+  void initState() {
+    super.initState();
+    myFuture = getPosts();
+  }
+
+  Future getPosts() async {
+    jobs = await Post.getPosts() as List;
+  }
+
+  Future refresh() async {
+    await getPosts();
+    setState(() {});
+  }
+
+  Job? editJob;
+  Future editingPage(Job job) async {
+    currentPage = '/new_job';
+    editJob = job;
+    setState(() {});
+  }
+
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
@@ -23,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                   height: deviceSize.height * 0.26,
@@ -33,18 +64,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                 ),
                 Container(
-                  height: deviceSize.height * 0.26,
+                  height: deviceSize.height * 0.52,
                   width: deviceSize.width * 0.4,
                   decoration: const BoxDecoration(
                       color: canvasColor,
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                ),
-                Container(
-                  height: deviceSize.height * 0.26,
-                  width: deviceSize.width * 0.4,
-                  decoration: const BoxDecoration(
-                      color: canvasColor,
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: Column(
+                    children: [
+                      FutureBuilder(
+                          future: myFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    top: deviceSize.height * 0.345),
+                                child: const Center(
+                                    child: CircularProgressIndicator()),
+                              );
+                            } else {
+                              return Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.all(9.0),
+                                  height: deviceSize.height * 0.52,
+                                  width: deviceSize.width * 0.4,
+                                  child: ListView.builder(
+                                    itemCount: jobs.length,
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return JobsList(
+                                        job: jobs[index],
+                                        refresh: refresh,
+                                        editingPage: editingPage,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                          }),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -59,7 +120,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: SfCalendarTheme(
                   data: SfCalendarThemeData(
                     backgroundColor: white,
-
                   ),
                   child: SfCalendar(
                     view: CalendarView.week,
