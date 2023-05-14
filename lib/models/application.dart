@@ -13,6 +13,10 @@ class Application {
   final String timestamp;
   String? appointmentTimestamp;
   String? lastUpdated;
+  List<String>? attachments; 
+
+  String? address;
+  String? note;
 
   late Applicant applicant;
   late Post post;
@@ -28,6 +32,9 @@ class Application {
     required this.status,
     this.appointmentTimestamp,
     this.lastUpdated,
+    this.address,
+    this.note,
+    this.attachments,
   });
 
   Future getApplicantInfo() async {
@@ -46,6 +53,8 @@ class Application {
         'status': newStatus,
         'last_updated': updateTime.millisecondsSinceEpoch,
         'appointment_timestamp' : int.parse(appointmentTimestamp??''),
+        'address' : address,
+        'note' : note,
         'seen' : false
       }, SetOptions(merge: true));
     } else {

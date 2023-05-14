@@ -6,6 +6,8 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import './applicant_profile_screen.dart';
 import './jobs_list.dart';
 
+import '../widgets/custom_textfieldform.dart';
+
 import '../providers/meetings_provider.dart';
 
 import '../models/application.dart';
@@ -20,7 +22,6 @@ class ApplicationScreen extends StatefulWidget {
   @override
   State<ApplicationScreen> createState() => _ApplicationScreenState();
 }
-
 
 class _ApplicationScreenState extends State<ApplicationScreen> {
   ScrollController? _scrollController;
@@ -57,6 +58,11 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
 
   bool _update = true;
 
+  bool _textChanged = false;
+
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+
   @override
   Widget build(BuildContext contet) {
     final deviceSize = MediaQuery.of(context).size;
@@ -67,6 +73,10 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
       _isNew = false;
     } else {
       _events = MeetingDataSource(apps);
+    }
+    if (!_textChanged) {
+      _addressController.text = widget.application.address ?? '';
+      _noteController.text = widget.application.note ?? '';
     }
     return Scaffold(
       backgroundColor: accentCanvasColor,
@@ -1054,7 +1064,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                                   ),
                                   ),
                                   Container(
-                                    height: deviceSize.height * 0.6,
+                                    height: deviceSize.height * 0.35,
                                     width: deviceSize.width * 0.37,
                                     padding: const EdgeInsets.all(8.0),
                                     decoration: const BoxDecoration(
@@ -1067,10 +1077,11 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                         backgroundColor: white,
                                       ),
                                       child: SfCalendar(
-                                        view: CalendarView.week,
+                                        view: CalendarView.workWeek,
                                         // allowViewNavigation: true,
                                         showNavigationArrow: true,
                                         // showDatePickerButton: true,
+
                                         firstDayOfWeek: DateTime.now().weekday,
                                         initialDisplayDate: app?.startTime,
                                         allowDragAndDrop: false,
@@ -1152,6 +1163,88 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                       ),
                                     ),
                                   ),
+                                  Container(
+                                    height: deviceSize.height * 0.27,
+                                    padding: const EdgeInsets.only(
+                                        top: 5, right: 18, left: 18, bottom: 5),
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                          colors: [
+                                            Color.fromARGB(197, 129, 56, 255),
+                                            Color.fromARGB(66, 110, 49, 216)
+                                          ],
+                                          begin: Alignment.bottomLeft,
+                                          end: Alignment.topRight),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Address:',
+                                          style: TextStyle(
+                                            color: Colors.white60,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        divider,
+                                        const SizedBox(height: 4),
+                                        TextField(
+                                          decoration: const InputDecoration(
+                                              filled: true,
+                                              fillColor: titleBackground,
+                                              border: OutlineInputBorder(
+                                                  borderSide: BorderSide.none,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              10)))),
+                                          style: const TextStyle(color: white),
+                                          controller: _addressController,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _textChanged = true;
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const Text(
+                                          'Note',
+                                          style: TextStyle(
+                                            color: Colors.white60,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        divider,
+                                        const SizedBox(height: 4),
+                                        SizedBox(
+                                          height: deviceSize.height * 0.12,
+                                          child: TextField(
+                                            decoration: const InputDecoration(
+                                                filled: true,
+                                                fillColor: titleBackground,
+                                                border: OutlineInputBorder(
+                                                    borderSide: BorderSide.none,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)))),
+                                            style:
+                                                const TextStyle(color: white),
+                                            controller: _noteController,
+                                            maxLines: 15,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _textChanged = true;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -1186,13 +1279,14 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                               )),
                                             ),
                                             ElevatedButton(
-                                              onPressed: app == null ||
-                                                      int.parse(widget
-                                                                  .application
-                                                                  .appointmentTimestamp ??
-                                                              '0') ==
-                                                          app?.startTime
-                                                              .millisecondsSinceEpoch
+                                              onPressed: (app == null ||
+                                                          (int.parse(widget
+                                                                      .application
+                                                                      .appointmentTimestamp ??
+                                                                  '0') ==
+                                                              app?.startTime
+                                                                  .millisecondsSinceEpoch)) &&
+                                                      !_textChanged
                                                   ? null
                                                   : () async {
                                                       setState(() {
@@ -1203,6 +1297,12 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                                           app!.startTime
                                                               .millisecondsSinceEpoch
                                                               .toString();
+                                                      widget.application
+                                                              .address =
+                                                          _addressController
+                                                              .text;
+                                                      widget.application.note =
+                                                          _noteController.text;
                                                       _update = false;
                                                       await widget.application
                                                           .changeStatus(

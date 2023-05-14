@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CircleAvatar(
-                    backgroundColor: white,
+                    backgroundColor: canvasColor,
                     radius: 50,
                     child: ClipOval(
                       child: company.photoUrl == null ||

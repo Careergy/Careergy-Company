@@ -111,7 +111,7 @@ class Company with ChangeNotifier {
       'address': info['address'],
       'bio': info['bio'] ?? '',
       'photoUrl': photoUrl,
-      'photoName' : temp,
+      'photoName': temp,
     }).onError((e, _) => print("Error writing document: $e"));
 
     name = info['name'];
@@ -174,14 +174,22 @@ class Company with ChangeNotifier {
                   lastUpdated: doc.data().toString().contains('last_updated')
                       ? doc.get('last_updated').toString()
                       : null,
+                  address: doc.data().toString().contains('address')
+                      ? doc.get('address').toString()
+                      : null,
+                  note: doc.data().toString().contains('note')
+                      ? doc.get('note').toString()
+                      : null,
+                  // attachments: doc.data()['attachments'],
                 );
+                print(ap.attachments);
                 applications.add(ap);
               }
             }
           },
           onError: (e) => print(e),
         );
-        print('getApplications');
+    print('getApplications');
     return applications;
   }
 
@@ -228,7 +236,7 @@ class Company with ChangeNotifier {
           },
           onError: (e) => print(e),
         );
-        print('getHistory');
+    print('getHistory');
     return applications;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 // import './search_screen.dart';
+import './file_view_screen.dart';
 
 import '../models/applicant.dart';
 
@@ -1081,12 +1082,13 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                             //     ),
                                             //   ],
                                             // ),
-                                            const Divider(),
+                                            divider,
                                             const Text(
                                               'Attachments',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
+                                                  fontSize: 20,
+                                                  color: white),
                                             ),
                                             const SizedBox(
                                               height: 20,
@@ -1103,7 +1105,16 @@ class _ApplicantProfileScreenState extends State<ApplicantProfileScreen> {
                                                 leading: CircleAvatar(
                                                   backgroundColor: kBlue,
                                                   child: InkWell(
-                                                    onTap: () {},
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return const FileViewer();
+                                                          },
+                                                        ),
+                                                      );
+                                                    },
                                                     child: const ClipOval(
                                                       child: Icon(
                                                         Icons.download,
