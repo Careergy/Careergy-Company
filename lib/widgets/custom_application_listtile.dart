@@ -53,10 +53,11 @@ class CustomApplicationListTile extends StatelessWidget {
                 height: 100,
                 padding: const EdgeInsets.all(9.0),
                 decoration: const BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Color.fromARGB(197, 129, 56, 255),
-                  Color.fromARGB(66, 110, 49, 216)
-                ], begin: Alignment.bottomLeft, end: Alignment.topRight)),
+                  gradient: LinearGradient(colors: [
+                    Color.fromARGB(255, 17, 14, 59),
+                    Color.fromRGBO(46, 45, 121, 0.808)
+                  ], begin: Alignment.bottomLeft, end: Alignment.topRight),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -65,7 +66,7 @@ class CustomApplicationListTile extends StatelessWidget {
                       height: 80,
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(141, 111, 103, 164),
+                        color: const Color.fromARGB(88, 111, 103, 164),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
@@ -93,43 +94,27 @@ class CustomApplicationListTile extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                              backgroundImage:
-                                  application.applicant.photoUrl == null ||
-                                          application.applicant.photoUrl!
-                                                  .substring(0, 4) !=
-                                              'http'
-                                      ? null
-                                      : NetworkImage(
-                                          application.applicant.photoUrl ?? ''),
+                            backgroundColor:
+                                const Color.fromARGB(0, 255, 255, 255),
+                            child: ClipOval(
                               child: application.applicant.photoUrl == null ||
                                       application.applicant.photoUrl!
                                               .substring(0, 4) !=
                                           'http'
-                                  ? ClipOval(child: application.applicant.photo)
-                                  : null),
-                          // CircleAvatar(
-                          //   radius: 30,
-                          //   backgroundColor:
-                          //       const Color.fromARGB(0, 255, 255, 255),
-                          //   child: ClipOval(
-                          //     child: application.applicant.photoUrl == null ||
-                          //             application.applicant.photoUrl!
-                          //                     .substring(0, 4) !=
-                          //                 'http'
-                          //         ? application.applicant.photo
-                          //         : Image.network(
-                          //             application.applicant.photoUrl ?? '',
-                          //             loadingBuilder:
-                          //                 (context, child, loadingProgress) {
-                          //               if (loadingProgress == null) {
-                          //                 return child;
-                          //               } else {
-                          //                 return const CircularProgressIndicator();
-                          //               }
-                          //             },
-                          //           ),
-                          //   ),
-                          // ),
+                                  ? application.applicant.photo
+                                  : Image.network(
+                                      application.applicant.photoUrl ?? '',
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          return const CircularProgressIndicator();
+                                        }
+                                      },
+                                    ),
+                            ),
+                          ),
                           SizedBox(
                             width: deviceSize.width * 0.2 - 76,
                             height: double.infinity,
@@ -226,7 +211,7 @@ class CustomApplicationListTile extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatefulWidget {
+class ActionButtons extends StatelessWidget {
   ActionButtons({
     super.key,
     required this.viewApplication,
@@ -236,94 +221,28 @@ class ActionButtons extends StatefulWidget {
   final Application application;
   final Function viewApplication;
 
-  @override
-  State<ActionButtons> createState() => _ActionButtonsState();
-}
-
-class _ActionButtonsState extends State<ActionButtons> {
-  double factor = 80;
-
-  Future<void> _showDialog(Application application, String title,
-      String subtitle, String button) async {
-    bool isLoading = false;
-    if (application == null) {
-      return;
-    }
-    await showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: primaryColor,
-        title: Text(title,
-            style: const TextStyle(
-                color: white, fontSize: 14, fontWeight: FontWeight.w800)),
-        content: Text(subtitle, style: const TextStyle(color: white)),
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20))),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel', style: TextStyle(color: white)),
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(button == 'Reject'
-                  ? const Color.fromARGB(255, 165, 29, 19)
-                  : const Color.fromARGB(255, 16, 150, 34)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20))),
-            ),
-            onPressed: () async {
-              setState(() {
-                isLoading = true;
-              });
-              if (button == 'Reject') {
-                await application.changeStatus(newStatus: 'rejected');
-              }
-              if (button == 'Approve') {
-                await application.changeStatus(newStatus: 'approved');
-              }
-              setState(() {
-                isLoading = false;
-                Navigator.of(ctx).pop();
-              });
-            },
-            child: isLoading
-                ? const CircularProgressIndicator(
-                    color: Colors.white,
-                  )
-                : Text(
-                    button,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-          )
-        ],
-      ),
-    );
-  }
+  double factor = 0.115;
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    if (DateTime.fromMillisecondsSinceEpoch(int.parse(
-                widget.application.appointmentTimestamp ?? '999999999999999'))
+    if (DateTime.fromMillisecondsSinceEpoch(int.parse(application.appointmentTimestamp??'999999999999999'))
             .isBefore(DateTime.now()) &&
-        widget.application.status == 'accepted') {
-      factor = 35;
+        application.status == 'accepted') {
+      factor = 0.054;
     }
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        factor == 35
+        factor == 0.054
             ? SizedBox(
-                width: deviceSize.width * 0.25,
-                height: factor,
-                child: Row(
+                width: MediaQuery.of(context).size.width * factor,
+                height: 84,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: deviceSize.width * 0.115,
-                      height: factor,
+                      width: MediaQuery.of(context).size.width * factor,
+                      height: 35,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 26, 104, 28),
                           borderRadius: BorderRadius.circular(20),
@@ -333,19 +252,16 @@ class _ActionButtonsState extends State<ActionButtons> {
                                   color: Colors.black26, blurRadius: 0.2))),
                       child: InkWell(
                         child: const Center(
-                          child: Text('Approve',
+                          child: Text('Approved',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.white)),
                         ),
-                        onTap: () async {
-                          await _showDialog(widget.application, 'Conformation!',
-                              'Confirm approve?', 'Approve');
-                        },
+                        onTap: () {},
                       ),
                     ),
                     Container(
-                      width: deviceSize.width * 0.115,
-                      height: factor,
+                      width: MediaQuery.of(context).size.width * factor,
+                      height: 35,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 123, 36, 30),
                           borderRadius: BorderRadius.circular(20),
@@ -355,14 +271,11 @@ class _ActionButtonsState extends State<ActionButtons> {
                                   color: Colors.black26, blurRadius: 0.2))),
                       child: InkWell(
                         child: const Center(
-                          child: Text('Reject',
+                          child: Text('Rejected',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.white)),
                         ),
-                        onTap: () async {
-                          await _showDialog(widget.application, 'Warning!',
-                              'Confirm reject?', 'Reject');
-                        },
+                        onTap: () {},
                       ),
                     )
                   ],
@@ -370,8 +283,7 @@ class _ActionButtonsState extends State<ActionButtons> {
               )
             : const SizedBox(),
         Container(
-          width: deviceSize.width * 0.115,
-          height: factor,
+          width: MediaQuery.of(context).size.width * factor,
           decoration: BoxDecoration(
             color: primaryColor,
             borderRadius: BorderRadius.circular(20),
@@ -381,7 +293,7 @@ class _ActionButtonsState extends State<ActionButtons> {
           child: InkWell(
             hoverColor: canvasColor,
             onTap: () {
-              widget.viewApplication(context, widget.application);
+              viewApplication(context, application);
             },
             child: const Center(
               child: Text('View',
