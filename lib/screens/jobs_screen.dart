@@ -170,6 +170,7 @@ class _NewJobScreenState extends State<NewJobScreen> {
   final List<String> _types = [
     'full-time',
     'part-time',
+    'internship',
     'zero-hour',
     'casual',
     'freelance',

@@ -1,8 +1,9 @@
 import 'package:careergy_mobile/constants.dart';
+import 'package:careergy_mobile/screens/search_applicant_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
-import '../screens/applicant_profile_screen.dart';
+import '../screens/applicant_search_screan.dart';
 
 import '../models/applicant.dart';
 
@@ -108,8 +109,7 @@ class _SearchResultAreaState extends State<SearchResultArea> {
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                        ApplicantProfileScreen(
-                                            applicant: result![index]),
+                                        ApplicantSearchProfileScreen(applicant: result![index])
                                   ));
                                 },
                                 hoverColor: actionColor,

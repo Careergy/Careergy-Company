@@ -1,13 +1,5 @@
-2023/05/13-23:58:07.987 11f8 Reusing MANIFEST C:\Users\aalju\AppData\Local\Temp\flutter_tools.f6c36616\flutter_tools_chrome_device.d5115692\Default\Local Storage\leveldb/MANIFEST-000001
-2023/05/13-23:58:07.991 11f8 Recovering log #3
-2023/05/13-23:58:07.991 11f8 Level-0 table #3: started
-2023/05/13-23:58:07.998 11f8 Level-0 table #3: 192 bytes OK
-2023/05/13-23:58:07.998 11f8 Recovering log #4
-2023/05/13-23:58:07.999 11f8 Level-0 table #4: started
-2023/05/13-23:58:08.005 11f8 Level-0 table #4: 6199 bytes OK
-2023/05/13-23:58:08.005 11f8 Recovering log #7
-2023/05/13-23:58:08.009 11f8 Reusing old log C:\Users\aalju\AppData\Local\Temp\flutter_tools.f6c36616\flutter_tools_chrome_device.d5115692\Default\Local Storage\leveldb/000007.log 
-2023/05/13-23:58:08.012 11f8 Delete type=0 #3
-2023/05/13-23:58:08.013 11f8 Delete type=0 #4
-2023/05/13-23:58:08.013 11f8 Delete type=2 #5
-2023/05/13-23:58:08.013 11f8 Delete type=2 #8
+2023/05/14-10:00:28.787 2e03 Reusing MANIFEST /private/var/folders/f2/y_v6b9j15vxblbxchg5z7l_c0000gn/T/flutter_tools.Gtj5Jz/flutter_tools_chrome_device.H80WCI/Default/Local Storage/leveldb/MANIFEST-000001
+2023/05/14-10:00:28.788 2e03 Recovering log #4
+2023/05/14-10:00:28.789 2e03 Reusing old log /private/var/folders/f2/y_v6b9j15vxblbxchg5z7l_c0000gn/T/flutter_tools.Gtj5Jz/flutter_tools_chrome_device.H80WCI/Default/Local Storage/leveldb/000004.log 
+2023/05/14-10:00:28.790 2e03 Delete type=0 #3
+2023/05/14-10:00:28.790 2e03 Delete type=2 #5

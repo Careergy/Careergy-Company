@@ -602,7 +602,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                     ],
                                   ),
                                   Container(
-                                    height: deviceSize.height * 0.28,
+                                    height: deviceSize.height * 0.30,
                                     padding: const EdgeInsets.only(
                                         top: 14,
                                         right: 18,
@@ -670,6 +670,8 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                                   setState(() {
                                                     _approveIsLoading = true;
                                                   });
+                                                  widget.application.address = _addressController.text;
+                                                  widget.application.note = _noteController.text;
                                                   await widget.application
                                                       .changeStatus(
                                                           newStatus:
@@ -1211,7 +1213,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         const Text(
-                                          'Note',
+                                          'Notes:',
                                           style: TextStyle(
                                             color: Colors.white60,
                                             fontSize: 14,

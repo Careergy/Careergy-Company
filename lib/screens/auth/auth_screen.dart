@@ -205,7 +205,7 @@ class _AuthCardState extends State<AuthCard> {
               children: _authMode == AuthMode.Signup
                   ? <Widget>[
                       TextFormField(
-                        decoration: const InputDecoration(labelText: 'Name'),
+                        decoration: const InputDecoration(labelText: 'Company\'s Name'),
                         onSaved: (value) {
                           _authData['name'] = value!;
                         },

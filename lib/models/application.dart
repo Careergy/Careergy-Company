@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import './applicant.dart';
 import '../providers/post_provider.dart';
@@ -61,8 +62,36 @@ class Application {
       await ref.set({
         'status': newStatus,
         'last_updated': updateTime.millisecondsSinceEpoch,
+        'note' : note,
+        'address' : address,
         'seen' : false
       }, SetOptions(merge: true));
     }
+    final ref2 = db.collection('notifications');
+    await ref2.add({
+      'application_uid' : id,
+      'company_uid' : companyId,
+      'applicant_uid' : applicantId,
+      'post_uid' : postId,
+      'status' : newStatus,
+      'note' : note,
+      'seen' : false,
+      'timestamp' : DateTime.now().millisecondsSinceEpoch,
+    });
+  }
+
+  static Future getAppointments(String id) async {
+    final db = FirebaseFirestore.instance;
+    final ref = db.collection('applications');
+    List<Appointment> list = [];
+    await ref.where('company_uid', isEqualTo: id).orderBy('appointment_timestamp').get().then((value) {
+      if (value.docs.isNotEmpty) {
+        for (var element in value.docs) {
+          final data = element.data();
+          list.add(Appointment(subject: 'Meeting',startTime: DateTime.fromMillisecondsSinceEpoch(int.parse(data['appointment_timestamp'])) , endTime: DateTime.fromMillisecondsSinceEpoch(int.parse(data['appointment_timestamp'])).add(Duration(hours: 1))));
+        }
+      }
+    });
+    return list;
   }
 }

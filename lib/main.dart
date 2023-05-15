@@ -14,6 +14,8 @@ import './providers/auth_provider.dart';
 import 'firebase_options.dart';
 import 'constants.dart';
 
+// flutter run -d chrome --web-renderer html
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

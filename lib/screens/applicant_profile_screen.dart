@@ -5,12 +5,14 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import './file_view_screen.dart';
 
 import '../models/applicant.dart';
+import '../models/application.dart';
 
 import '../constants.dart';
 
 class ApplicantProfileScreen extends StatefulWidget {
-  ApplicantProfileScreen({super.key, this.toggle, this.applicant});
+  ApplicantProfileScreen({super.key, this.toggle, this.application, this.applicant  });
 
+  Application? application;
   Applicant? applicant;
   Function? toggle;
 
